@@ -5,6 +5,14 @@ This cluster uses cores on your local machine.
 Follow official install instructions at
 https://github.com/kubernetes/minikube, or try what follows.
 
+The tutorial stores docker images in Google's
+cloud, so until that changes you'll still
+need to install the [gcloud] program to upload the
+container images.
+
+[gcloud]: https://cloud.google.com/sdk/
+
+
 <!-- @removeOldMinikube -->
 ```
 /bin/rm -rf  $HOME/.minikube/
@@ -13,8 +21,9 @@ mv -f $HOME/bin/minikube
 
 <!-- @installLatest -->
 ```
+apis=https://storage.googleapis.com
 curl -Lo $HOME/bin/minikube \
-    https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    $apis/minikube/releases/latest/minikube-linux-amd64
 chmod +x $HOME/bin/minikube
 ```
 
@@ -24,12 +33,27 @@ $HOME/bin/minikube version
 minikube version
 ```
 
-<!-- @defineClusterEnvVars -->
+<!-- @initializeKubeConfig -->
 ```
-export KUBECONFIG=$HOME/.kube/minikube-config
+# Don't want to stomp on your normal config
+export KUBECONFIG=$HOME/.kube/tut-minikube-config
 rm -f $KUBECONFIG
+```
+
+<!-- @defineOtherMiniKubeEnvVars -->
+```
+# Where .minikube directory will live
 export MINIKUBE_HOME=$HOME
+
+# See comments around use of the following variable at
+# https://github.com/kubernetes/minikube/blob/master/cmd/minikube/cmd/start.go#L315
 export CHANGE_MINIKUBE_NONE_USER=true
+```
+
+<!-- @defineProjectId -->
+```
+# Used for making container images
+export TUT_PROJECT_ID=minikube
 ```
 
 <!-- @startTheCluster -->

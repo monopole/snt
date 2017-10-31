@@ -33,8 +33,8 @@ behaviors:
   `spec.clusterIp:spec.ports[*].port`.
 
 * The example below uses `LoadBalancer`, which will
-  round-robin requests to backend pods.  Like most
-  other things, balancer creation is (like most other things) asynchronous.
+  round-robin requests to backend pods.  Balancer
+  creation is (like most other things) asynchronous.
   Information about it appears in the
   `status.loadBalancer` field.
 
@@ -102,7 +102,11 @@ Grab the load balancer's ingress IP address:
 ```
 function tut_SetLbAddressVar {
   echo "This takes around 30 sec after service creation to work."
-  local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'
+  if [ "$TUT_PROJECT_ID" == "minikube" ]; then
+    local tmpl='{{.spec.clusterIP}}'
+  else
+    local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'
+  fi
   TUT_LB_ADDRESS=""
   while [ -z "$TUT_LB_ADDRESS" ]; do
     TUT_LB_ADDRESS=$(kubectl get -o go-template="$tmpl" service $TUT_SERVICE_NAME)
@@ -132,6 +136,8 @@ function tut_Query {
   $cmd
 }
 ```
+
+
 
 Hit your server:
 <!-- @curlService -->

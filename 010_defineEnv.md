@@ -49,5 +49,4 @@ TUT_CON_HOST=gcr.io
 
 # Arbitrary name for the cluster made below.
 TUT_CLUSTER_NAME=cluster-spinach
-
 ```

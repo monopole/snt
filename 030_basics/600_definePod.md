@@ -12,7 +12,7 @@ Each container in a pod can specify the CPU and memory
 resources it needs via the `resources.requests` and
 `resources.limits` variables.  The values assigned to
 `requests` and `limits` for a container determine that
-container's _quality of service_ class, aka _QoS_
+container's _quality of service_ class, aka QoS
 class.
 
 In turn, a pod is given a QoS level matching the
@@ -225,8 +225,7 @@ tut_CreatePod
 kubectl get -o go-template="$tmpl" pod $TUT_POD_NAME
 ```
 
-Aside: A pod that does some job and then goes away
-(i.e.  doesn't want to be reanimated) is called a
-[Job].
-
 [Job]: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion
+
+Aside: A pod that does some job and then goes away
+(i.e.  doesn't want to be reanimated) is called a [Job].

@@ -1,5 +1,11 @@
 # Make docker images
 
+Define a tag to use with the docker container:
+
+```
+TUT_IMG_TAG=$TUT_CON_HOST/$TUT_PROJECT_ID/$TUT_IMG_NAME
+```
+
 Web server in hand, dockerize it.
 
 <!-- @removeAllLocalDockerImages -->
