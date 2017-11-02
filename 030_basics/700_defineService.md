@@ -90,19 +90,25 @@ kubectl describe service $TUT_SERVICE_NAME
 Crucial aspects of the output are
 
 * Endpoints - the cluster addresses of the services the
-  loadbalancer will talk to.  If this isn't set, the
-  either the labels are wrong, or the targetPort is
-  wrong (in the pod spec), or something more dramatic
-  is wrong.
+  loadbalancer will talk to.  If this isn't set, then
+  no pods are running with the given labels, or the
+  pod targetPorts are wrong.
 * Ingress - the external IP of the service.
 
 Grab the load balancer's ingress IP address:
+
+<!-- @hackToDetermineWhichAddressToUse -->
+```
+tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
+firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
+echo $firstNodeName
+```
 
 <!-- @defineFunctionToSetLbAddressVar -->
 ```
 function tut_SetLbAddressVar {
   echo "This takes around 30 sec after service creation to work."
-  if [ "$TUT_PROJECT_ID" == "minikube" ]; then
+  if [ "$firstNodeName" == "minikube" ]; then
     local tmpl='{{.spec.clusterIP}}'
   else
     local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'

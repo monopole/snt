@@ -29,7 +29,7 @@ kind: ReplicaSet
 metadata:
   name: $TUT_REPSET_NAME
 spec:
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       name: $TUT_POD_NAME

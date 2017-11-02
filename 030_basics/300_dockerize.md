@@ -15,8 +15,10 @@ docker rmi $TUT_IMG_TAG:$TUT_IMG_V1
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
 ```
 
-<!-- @assureNoContainersRunningLocally -->
+<!-- @peekAtCurrentlyRunningContainers -->
 ```
+# If running a local minikube, there will be many processes.
+# If running on GKE, there might not be anything here.
 docker ps -a
 ```
 
@@ -52,7 +54,7 @@ Run the image locally to test it:
 <!-- @runDockerImage -->
 ```
 docker run -d -p 8080:8080 $TUT_IMG_TAG:$TUT_IMG_V1
-docker ps # Should show our server
+docker ps | grep $TUT_IMG_TAG
 
 # Handy trick:
 #   docker ps -a # get container ID
@@ -60,8 +62,10 @@ docker ps # Should show our server
 # then cd /tmp to examine logs
 
 tut_RequestAndQuit 8080 kingGhidorah
-sleep 1
-docker ps # Should show no processes running
+sleep 4
+
+# Confirm gone
+docker ps | grep $TUT_IMG_TAG
 ```
 
 Build another image at version 2
@@ -103,17 +107,14 @@ gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V1
 gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V2
 ```
 
-The files in `$TUT_DIR` are no longer needed:
+The container images and source code in `$TUT_DIR` are no longer needed:
 
 <!-- @lsTutDir -->
 ```
-ls -sh $TUT_DIR
+ls -sh $TUT_DIR/${TUT_IMG_NAME}*
+rm $TUT_DIR/${TUT_IMG_NAME}*
 ```
 
-<!-- @cleanTutDir -->
-```
-rm $TUT_DIR/*
-```
 
 List the cloud-homed images:
 

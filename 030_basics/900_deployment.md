@@ -19,12 +19,12 @@ Kubernetes is built as a series of layers.
   changing hardware, so one invents a _replicaset_ to
   do the job.
 
-* The next level up - a _deployment_, concerns itself
+* The next level up - a deployment - concerns itself
   with creating replicasets, scaling them, upgrading or
   downgrading the pods therein, etc.
 
-Deployment yaml looks like replicaset yaml, except
-the the `kind` changes:
+Deployment yaml looks like replicaset yaml.
+Only the `kind` changes:
 
 <!-- @createDeployment -->
 ```yaml
@@ -34,7 +34,7 @@ kind: Deployment
 metadata:
   name: $TUT_DEPLOY_NAME
 spec:
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       name: $TUT_POD_NAME

@@ -5,60 +5,64 @@ This cluster uses cores on your local machine.
 Follow official install instructions at
 https://github.com/kubernetes/minikube, or try what follows.
 
-The tutorial stores docker images in Google's
-cloud, so until that changes you'll still
-need to install the [gcloud] program to upload the
-container images.
+The tutorial (at the moment) stores docker images in
+Google's cloud.  Until that changes you'll still need
+to install the [gcloud] program to upload the container
+images.
 
 [gcloud]: https://cloud.google.com/sdk/
 
 
-<!-- @removeOldMinikube -->
+<!-- @possiblyCleanUpPreviousVmUsage -->
 ```
-/bin/rm -rf  $HOME/.minikube/
-mv -f $HOME/bin/minikube
+vboxmanage list vms
+# vboxmanage startvm minikube --type emergencystop
+# vboxmanage unregistervm {idFromPreviousCommand}  -delete
+```
+
+<!-- @removeOldMinikubeState -->
+```
+# Where .minikube directory will live
+export MINIKUBE_HOME=$TUT_DIR
+rm -rf $MINIKUBE_HOME/.minikube
+```
+
+<!-- @overrideKubeConfigAndWipeIt -->
+```
+# Don't want to stomp on your normal kube config (if any)
+export KUBECONFIG=$TUT_DIR/.kube/tut-minikube-config
+rm -f $KUBECONFIG
 ```
 
 <!-- @installLatest -->
 ```
 apis=https://storage.googleapis.com
-curl -Lo $HOME/bin/minikube \
+curl -Lo $MINIKUBE_HOME/minikube \
     $apis/minikube/releases/latest/minikube-linux-amd64
-chmod +x $HOME/bin/minikube
+chmod +x $MINIKUBE_HOME/minikube
+alias minikube=$MINIKUBE_HOME/minikube
 ```
 
 <!-- @confirmVersionAndPath -->
 ```
-$HOME/bin/minikube version
+which minikube
 minikube version
-```
-
-<!-- @initializeKubeConfig -->
-```
-# Don't want to stomp on your normal config
-export KUBECONFIG=$HOME/.kube/tut-minikube-config
-rm -f $KUBECONFIG
 ```
 
 <!-- @defineOtherMiniKubeEnvVars -->
 ```
-# Where .minikube directory will live
-export MINIKUBE_HOME=$HOME
+# Suppress prompts to report error messages.
+export MINIKUBE_WANTREPORTERRORPROMPT=false
 
 # See comments around use of the following variable at
 # https://github.com/kubernetes/minikube/blob/master/cmd/minikube/cmd/start.go#L315
 export CHANGE_MINIKUBE_NONE_USER=true
 ```
 
-<!-- @defineProjectId -->
+<!-- @startTheClusterOnVirtualBox -->
 ```
-# Used for making container images
-export TUT_PROJECT_ID=minikube
-```
-
-<!-- @startTheCluster -->
-```
-sudo -E $HOME/bin/minikube start --vm-driver=none
+# sudo -E $HOME/bin/minikube start --vm-driver=none
+minikube start --vm-driver=virtualbox
 ```
 
 Wait for it if need be:

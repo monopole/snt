@@ -93,24 +93,26 @@ for n in $nodes; do
 done
 ```
 
-As an example of filtering output from a list, grab the
-"external ips" from the nodes
+As an example of filtering output
+from a list, grab IP data from the nodes:
 
-<!-- @getNodeExternalIp -->
+<!-- @getNodeIps -->
 ```
-tmpl=`cat <<EOF
+function getIps {
+  local tmpl=`cat <<EOF
 {{range .items -}}
 {{\\\$n := .metadata.name -}}
   {{range .status.addresses -}}
-    {{if eq .type "ExternalIP"}}{{\\\$n}} {{.address}}{{end -}}
+    {{if eq .type "$1"}}{{\\\$n}} {{.address}}{{end -}}
   {{end}}
 {{end}}
 EOF
 `
-kubectl get -o go-template="$tmpl" nodes
+  kubectl get -o go-template="$tmpl" nodes
+}
+getIps InternalIP
+getIps ExternalIP
 ```
-
-OK, end aside.
 
 Now define a function to create a pod, do so, then
 `get` the pod:
