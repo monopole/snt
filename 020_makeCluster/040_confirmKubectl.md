@@ -11,13 +11,10 @@ installing gcloud, you can try
 ```
 apis=https://storage.googleapis.com
 version=$(curl -s $apis/kubernetes-release/release/stable.txt)
-curl -Lo $HOME/bin/kubectl \
+curl -Lo $TUT_DIR/kubectl \
   $apis/kubernetes-release/release/$version/bin/linux/amd64/kubectl
-chmod +x $HOME/bin/kubectl
-```
-
-```
-PATH=$HOME/bin:$PATH
+chmod +x $TUT_DIR/kubectl
+alias kubectl=$TUT_DIR/kubectl
 ```
 
 Confirm you have at least one node, but no pods.

@@ -114,7 +114,7 @@ getIps InternalIP
 getIps ExternalIP
 ```
 
-Now define a function to create a pod, do so, then
+Define a function to create a pod, do so, then
 `get` the pod:
 
 <!-- @defineFunctionToCreatePod-->
@@ -131,7 +131,7 @@ metadata:
     #  Not used, but including to see it in output.
     env: monkey-staging
 spec:
-  # A pod must have at least one container.
+  # Pod must have at least one container.
   containers:
     - name: $TUT_CON_NAME
       image: $TUT_IMG_TAG:$TUT_IMG_V1

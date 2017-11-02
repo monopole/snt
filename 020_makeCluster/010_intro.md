@@ -8,10 +8,7 @@ Instructions follow for setting up
  * a remote cluster hosted on GKE.
 
 Regardless of platform, one needs `kubectl`
-to talk to the cluster, and we're going to
-use GCR for storing containers in the cloud
-(pods grab their containers from the cloud),
-so it's necessary to
+to talk to the cluster.
 
 [gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
 [gcloud sdk]: https://cloud.google.com/sdk/
@@ -42,5 +39,3 @@ curl -Lo $TUT_DIR/kubectl \
 chmod +x $TUT_DIR/kubectl
 alias kubectl=$TUT_DIR/kubectl
 ```
-
-but it's not clear that's useful given one needs gcloud anyway for GCR.

@@ -29,10 +29,15 @@ rm -rf $MINIKUBE_HOME/.minikube
 
 <!-- @overrideKubeConfigAndWipeIt -->
 ```
-# Don't want to stomp on your normal kube config (if any)
+# Don't stomp on your existing kube config (if any)
 export KUBECONFIG=$TUT_DIR/.kube/tut-minikube-config
 rm -f $KUBECONFIG
 ```
+
+```
+cat $KUBECONFIG
+```
+
 
 <!-- @installLatest -->
 ```
@@ -83,4 +88,14 @@ awaitMinikube
 <!-- @confirmMinikubeRunning -->
 ```
 minikube status
+```
+
+<!-- @examineKubeConfig -->
+```
+cat $KUBECONFIG
+```
+
+<!-- @checkFirewall -->
+```
+sudo iptables -L INPUT
 ```

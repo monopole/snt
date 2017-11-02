@@ -1,16 +1,38 @@
 # Make docker images
 
-Define a tag to use with the docker container:
+Kubernetes is built to allow nodes to pull their images from a server.
 
+[Google container registry]: http://gcr.io
+
+Below make a choice between running a local server vs. using
+the [Google container registry].
+
+For demos or tests, it makes more sense to use a local registry.
+
+<!-- @defineRegistryContainerHostEnvVar -->
+```
+# Pick one
+TUT_CON_HOST=gcr.io
+TUT_CON_HOST=localhost:5000
+```
+
+Define an image tag to use as an argument to various
+docker commands and as the value of the `image` field
+in kubernetes pod definitions.
+
+<!-- @defineImageTag -->
 ```
 TUT_IMG_TAG=$TUT_CON_HOST/$TUT_PROJECT_ID/$TUT_IMG_NAME
+echo "TUT_IMG_TAG=$TUT_IMG_TAG"
 ```
 
-Web server in hand, dockerize it.
+## Create images
+
+Place the web server into a container image.
 
 <!-- @removeAllLocalDockerImages -->
 ```
-docker rm $(docker stop $(docker ps -aq))
+# docker rm $(docker stop $(docker ps -aq))
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V1
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
 ```
@@ -84,7 +106,42 @@ docker images | grep ${TUT_IMG_NAME}
 ```
 
 
-### Upload docker images
+## Push the images to the container registry
+
+
+### Using a local registry
+
+Flag `-p` publishes the container port (5000 in this case) to the host.
+Optionally add flag `--restart always` if it crashes for some reason.
+The `--name` flag assignes the name, and `registry:2` is the
+[container's tag](https://hub.docker.com/_/registry/).
+
+
+<!-- @runLocalRegistry -->
+```
+docker run -d -p 5000:5000 --name registry registry:2
+# Stop it with: docker stop registry
+```
+
+<!-- @pushToLocalRegistry -->
+```
+docker push $TUT_IMG_TAG:$TUT_IMG_V1
+docker push $TUT_IMG_TAG:$TUT_IMG_V2
+```
+
+For fun, list it, remove it from the local cache, see its gone from the list,
+pull it, see it return to the list:
+
+<!-- @listDeleteListPullList -->
+```
+docker images | grep $TUT_IMG_TAG
+docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
+docker images | grep $TUT_IMG_TAG
+docker pull $TUT_IMG_TAG:$TUT_IMG_V2
+docker images | grep $TUT_IMG_TAG
+```
+
+### Using Google container registry
 
 Perhaps start by deleting old images:
 
@@ -107,14 +164,6 @@ gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V1
 gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V2
 ```
 
-The container images and source code in `$TUT_DIR` are no longer needed:
-
-<!-- @lsTutDir -->
-```
-ls -sh $TUT_DIR/${TUT_IMG_NAME}*
-rm $TUT_DIR/${TUT_IMG_NAME}*
-```
-
 
 List the cloud-homed images:
 
@@ -127,4 +176,14 @@ gcloud container images list-tags $TUT_IMG_TAG
 echo "--------------------"
 gcloud container images list-tags --format='get(digest)' $TUT_IMG_TAG
 )
+```
+
+## Cleanup
+
+The container images and source code in `$TUT_DIR` are no longer needed:
+
+<!-- @lsTutDir -->
+```
+ls -C1 $TUT_DIR/${TUT_IMG_NAME}*
+rm $TUT_DIR/${TUT_IMG_NAME}*
 ```
