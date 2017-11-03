@@ -135,7 +135,7 @@ spec:
   containers:
     - name: $TUT_CON_NAME
       image: $TUT_IMG_TAG:$TUT_IMG_V1
-      imagePullPolicy: Always
+      imagePullPolicy: IfNotPresent
       resources:
         limits:
           cpu: $TUT_CON_CPU

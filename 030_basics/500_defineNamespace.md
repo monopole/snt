@@ -75,7 +75,7 @@ Create and switch to a new namespace
 kubectl create namespace $TUT_NAMESPACE_NAME
 ```
 
-<!-- @changeNamespace -->
+<!-- @changeDefaultNamespace -->
 ```
 kubectl --namespace=$TUT_NAMESPACE_NAME \
     config set-context $(kubectl config current-context)

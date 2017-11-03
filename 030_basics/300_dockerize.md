@@ -1,19 +1,36 @@
 # Make docker images
 
-Kubernetes is built to allow nodes to pull their images from a server.
+Kubernetes is built to allow nodes to pull their images
+from a container registry (a server that stores and
+returns images).
 
 [Google container registry]: http://gcr.io
 
-Below make a choice between running a local server vs. using
-the [Google container registry].
+Running a local demo using minikube
+implicitly means running a docker daemon inside minikube.
 
-For demos or tests, it makes more sense to use a local registry.
+When the kubernetes running inside the minikube VM
+attempts to pull an image to run a pod, it will consult
+the docker cache in said VM.
+
+The trick to remaining completely local is
+
+ 1. configure your local docker client to talk to the
+    docker deamon in the running minikube - pushing
+    images to it rather than to some cloud registry,
+
+ 2. create pods with `imagePullPolicy: IfNotPresent`
+
+Below make a choice between using the registry that
+minikube a local registry vs. using the [Google
+container registry].
+
 
 <!-- @defineRegistryContainerHostEnvVar -->
 ```
 # Pick one
-TUT_CON_HOST=gcr.io
-TUT_CON_HOST=localhost:5000
+TUT_CON_HOST="gcr.io"
+TUT_CON_HOST=""
 ```
 
 Define an image tag to use as an argument to various
@@ -22,13 +39,22 @@ in kubernetes pod definitions.
 
 <!-- @defineImageTag -->
 ```
-TUT_IMG_TAG=$TUT_CON_HOST/$TUT_PROJECT_ID/$TUT_IMG_NAME
+if [ -n "$TUT_CON_HOST" ]; then
+  TUT_IMG_TAG=$TUT_CON_HOST/$TUT_PROJECT_ID/$TUT_IMG_NAME
+  # use remote registry
+else
+  TUT_IMG_TAG=$TUT_PROJECT_ID/$TUT_IMG_NAME
+  # use VM registry
+  eval $(minikube docker-env)
+fi
 echo "TUT_IMG_TAG=$TUT_IMG_TAG"
 ```
 
+<!-- maybe use non-VM but local registry via `minikube start --insecure-registry` -->
+
 ## Create images
 
-Place the web server into a container image.
+Put the web server into a container image.
 
 <!-- @removeAllLocalDockerImages -->
 ```
@@ -111,17 +137,20 @@ docker images | grep ${TUT_IMG_NAME}
 
 ### Using a local registry
 
+<!--
+
+
 Flag `-p` publishes the container port (5000 in this case) to the host.
 Optionally add flag `--restart always` if it crashes for some reason.
 The `--name` flag assignes the name, and `registry:2` is the
 [container's tag](https://hub.docker.com/_/registry/).
 
 
-<!-- @runLocalRegistry -->
 ```
 docker run -d -p 5000:5000 --name registry registry:2
 # Stop it with: docker stop registry
 ```
+-->
 
 <!-- @pushToLocalRegistry -->
 ```
