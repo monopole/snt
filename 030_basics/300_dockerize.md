@@ -1,29 +1,30 @@
 # Make docker images
 
-Kubernetes is built to allow nodes to pull their images
-from a container registry (a server that stores and
-returns images).
+Kubernetes is built to allow pods to pull their
+container images from a (presumably remote and
+trustworthy) server called a container registry.
 
 [Google container registry]: http://gcr.io
 
-Running a local demo using minikube
-implicitly means running a docker daemon inside minikube.
+Below make a choice between using a local registry (to
+avoid testing complexity), and using the [Google
+container registry] (you'd want to use an independent,
+dedicated service in real life).
 
-When the kubernetes running inside the minikube VM
-attempts to pull an image to run a pod, it will consult
-the docker cache in said VM.
+minikube runs a docker daemon in its VM to maintain
+images it needs.  When the kubernetes "cluster" running
+inside the minikube VM attempts to pull an image to run
+a pod, it will consult the docker cache in said VM.
 
-The trick to remaining completely local is
+To remain completely local:
 
- 1. configure your local docker client to talk to the
-    docker deamon in the running minikube - pushing
-    images to it rather than to some cloud registry,
+ 1. Configure your local docker client (the one you use
+    when you run docker at the command line) to talk
+    to the docker deamon in the running minikube.
+    Then, when you enter `docker push` you'll push directly
+    into minikube's docker storage.
 
  2. create pods with `imagePullPolicy: IfNotPresent`
-
-Below make a choice between using the registry that
-minikube a local registry vs. using the [Google
-container registry].
 
 
 <!-- @defineRegistryContainerHostEnvVar -->
@@ -40,14 +41,15 @@ in kubernetes pod definitions.
 <!-- @defineImageTag -->
 ```
 if [ -n "$TUT_CON_HOST" ]; then
-  TUT_IMG_TAG=$TUT_CON_HOST/$TUT_PROJECT_ID/$TUT_IMG_NAME
   # use remote registry
+  TUT_IMG_TAG=$TUT_CON_HOST/$TUT_PROJECT_ID/$TUT_IMG_NAME
 else
+  # use local registry
   TUT_IMG_TAG=$TUT_PROJECT_ID/$TUT_IMG_NAME
-  # use VM registry
   eval $(minikube docker-env)
 fi
 echo "TUT_IMG_TAG=$TUT_IMG_TAG"
+echo "DOCKER_HOST=$DOCKER_HOST"
 ```
 
 <!-- maybe use non-VM but local registry via `minikube start --insecure-registry` -->
@@ -74,18 +76,16 @@ docker ps -a
 ```
 function tut_BuildDockerImage {
   local tag=$TUT_IMG_TAG:$1  # Add version to tag
-  local dockerFile=$TUT_DIR/Dockerfile
+  local dockerFile=$TUT_DIR/src/Dockerfile
   cat <<EOF >$dockerFile
 FROM scratch
 ADD ${TUT_IMG_NAME} /
 CMD ["/${TUT_IMG_NAME}"]
 EOF
-  docker build -t $tag -f $dockerFile $TUT_DIR
+  docker build -t $tag -f $dockerFile $TUT_DIR/src
   rm $dockerFile
 }
 ```
-
-TODO: convert to https, install certs/secrets
 
 <!-- @createDockerImageVersion1 -->
 ```
@@ -109,8 +109,8 @@ docker ps | grep $TUT_IMG_TAG
 #   docker exec -it {containerId} bash
 # then cd /tmp to examine logs
 
-tut_RequestAndQuit 8080 kingGhidorah
-sleep 4
+curl -m 1 $(minikube ip):8080/kingGhidorah
+curl -m 1 $(minikube ip):8080/quit
 
 # Confirm gone
 docker ps | grep $TUT_IMG_TAG
@@ -128,6 +128,7 @@ tut_BuildDockerImage $TUT_IMG_V2
 <!-- @confirmLocalDockerCache -->
 ```
 ls -1sh $TUT_DIR
+ls -1sh $TUT_DIR/src
 docker images | grep ${TUT_IMG_NAME}
 ```
 
@@ -152,23 +153,32 @@ docker run -d -p 5000:5000 --name registry registry:2
 ```
 -->
 
-<!-- @pushToLocalRegistry -->
-```
-docker push $TUT_IMG_TAG:$TUT_IMG_V1
-docker push $TUT_IMG_TAG:$TUT_IMG_V2
-```
 
-For fun, list it, remove it from the local cache, see its gone from the list,
-pull it, see it return to the list:
+__TODO: remove this:__
 
-<!-- @listDeleteListPullList -->
-```
-docker images | grep $TUT_IMG_TAG
-docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
-docker images | grep $TUT_IMG_TAG
-docker pull $TUT_IMG_TAG:$TUT_IMG_V2
-docker images | grep $TUT_IMG_TAG
-```
+In this case we've built the containers right in the
+daemon that plans to use them. If we were using a
+remote registry, we'd push to it now:
+
+> ```
+> docker push $TUT_IMG_TAG:$TUT_IMG_V1
+> docker push $TUT_IMG_TAG:$TUT_IMG_V2
+> ```
+>
+> For fun, list it an image, remove it from the local cache, see
+> its gone from the list, pull it, see it return to the
+> list:
+>
+> ```
+> docker images | grep $TUT_IMG_TAG
+> docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
+> docker images | grep $TUT_IMG_TAG
+> docker pull $TUT_IMG_TAG:$TUT_IMG_V2
+> docker images | grep $TUT_IMG_TAG
+> ```
+
+
+
 
 ### Using Google container registry
 
@@ -213,6 +223,6 @@ The container images and source code in `$TUT_DIR` are no longer needed:
 
 <!-- @lsTutDir -->
 ```
-ls -C1 $TUT_DIR/${TUT_IMG_NAME}*
-rm $TUT_DIR/${TUT_IMG_NAME}*
+ls -C1 $TUT_DIR/src/${TUT_IMG_NAME}*
+rm $TUT_DIR/src/${TUT_IMG_NAME}*
 ```

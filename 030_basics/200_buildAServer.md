@@ -18,6 +18,13 @@ will be multiple _versions_ of the binary that differ
 only in the value of a hard coded constant version
 number that appears on the served web page.
 
+
+<!-- @defineEnv -->
+```
+mkdir -p $TUT_DIR/src
+TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
+```
+
 <!-- @makeWebServer -->
 ```
 cat <<'EOF' >${TUT_IMG_PATH}.go

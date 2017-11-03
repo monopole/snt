@@ -5,7 +5,7 @@
 [ServiceSpec]: https://kubernetes.io/docs/api-reference/v1.7/#service-v1-core
 
 
-Kubernetes is built as a series of layers.
+Kubernetes adds layers to avoid toil.
 
 * It is toil to repeatedly install all the libraries
   and data needed to make an app work, so one creates a

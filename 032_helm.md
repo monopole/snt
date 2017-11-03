@@ -16,16 +16,15 @@ Canonical doc [here](https://github.com/kubernetes/helm/blob/master/docs/install
 apis=https://storage.googleapis.com
 tarball=helm-v2.7.0-linux-amd64.tar.gz
 
-cd $TUT_DIR
+mkdir -p $TUT_DIR/bin
+pushd $TUT_DIR
 curl -Lo helm.tgz $apis/kubernetes-helm/$tarball
 gunzip <helm.tgz | tar xvf -
 rm helm.tgz
-mv linux-amd64/helm .
+mv linux-amd64/helm $TUT_DIR/bin
 /bin/rm -rf linux-amd64
-```
-
-```
-alias helm=$TUT_DIR/helm
+popd
+alias helm=$TUT_DIR/bin/helm
 ```
 
 <!-- @initialize -->
@@ -68,6 +67,7 @@ function showSample {
   echo "== $f =="
   echo " "
   cat $f
+  echo " "
 }
 ```
 

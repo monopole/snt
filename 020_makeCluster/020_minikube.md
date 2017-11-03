@@ -1,43 +1,45 @@
 # Minikube cluster
 
+[installation instructions]: https://github.com/kubernetes/minikube
+[virtualbox]: https://www.virtualbox.org/
+
 This cluster uses cores on your local machine.
 
-Follow official install instructions at
-https://github.com/kubernetes/minikube, or try what follows.
+What follows is a condensed and tested version of
+official minikube [installation instructions], with some initial
+cleanup operations.
 
-The tutorial (at the moment) stores docker images in
-Google's cloud.  Until that changes you'll still need
-to install the [gcloud] program to upload the container
-images.
-
-[gcloud]: https://cloud.google.com/sdk/
+These instructions work on ubuntu using minikube with
+the [virtualbox] VM.  minikube's local option
+(`--vm-driver=none`) is awesome but requires `sudo`, so
+not using it here as it would complicate testing.
 
 
 <!-- @possiblyCleanUpPreviousVmUsage -->
 ```
-vboxmanage list vms
+for line in $(vboxmanage list vms); do
+  if [[ $line =~ .*\{[0-9a-f\-]+\}.* ]]; then
+    id=$(echo $line | sed 's/.*{\(.*\)}.*/\1/')
+    vboxmanage unregistervm $id --delete
+  fi
+done
 # vboxmanage startvm minikube --type emergencystop
-# vboxmanage unregistervm {idFromPreviousCommand}  -delete
 ```
 
 <!-- @removeOldMinikubeState -->
 ```
 # Where .minikube directory will live
-export MINIKUBE_HOME=$TUT_DIR
+export MINIKUBE_HOME=$TUT_DIR/mk
 rm -rf $MINIKUBE_HOME/.minikube
+mkdir -p $MINIKUBE_HOME
 ```
 
 <!-- @overrideKubeConfigAndWipeIt -->
 ```
 # Don't stomp on your existing kube config (if any)
-export KUBECONFIG=$TUT_DIR/.kube/tut-minikube-config
+export KUBECONFIG=$TUT_DIR/tut-minikube-config
 rm -f $KUBECONFIG
 ```
-
-```
-cat $KUBECONFIG
-```
-
 
 <!-- @installLatest -->
 ```
@@ -46,11 +48,12 @@ curl -Lo $MINIKUBE_HOME/minikube \
     $apis/minikube/releases/latest/minikube-linux-amd64
 chmod +x $MINIKUBE_HOME/minikube
 alias minikube=$MINIKUBE_HOME/minikube
+find $MINIKUBE_HOME
 ```
 
 <!-- @confirmVersionAndPath -->
 ```
-which minikube
+which minikube  # expect nothing, since aliasing
 minikube version
 ```
 
@@ -59,35 +62,39 @@ minikube version
 # Suppress prompts to report error messages.
 export MINIKUBE_WANTREPORTERRORPROMPT=false
 
-# See comments around use of the following variable at
+# See
 # https://github.com/kubernetes/minikube/blob/master/cmd/minikube/cmd/start.go#L315
 export CHANGE_MINIKUBE_NONE_USER=true
 ```
 
 <!-- @startTheClusterOnVirtualBox -->
 ```
-# sudo -E $HOME/bin/minikube start --vm-driver=none
+# sudo -E minikube start --vm-driver=none
 minikube start --vm-driver=virtualbox
 ```
 
-Wait for it if need be:
+<!-- @optionallyWaitForFullMinikubeStartup -->
 ```
 function awaitMinikube {
   for i in {1..150}; do # timeout for 5 minutes
     kubectl get pods &> /dev/null
-    if [ $? -ne 1 ]; then
+    local foo=$?
+    if [ $foo -eq 0 ]; then
       break
     fi
+    echo "sleep 2"
     sleep 2
   done
 }
 awaitMinikube
-
 ```
+
+Confirm expectations
 
 <!-- @confirmMinikubeRunning -->
 ```
 minikube status
+find $MINIKUBE_HOME
 ```
 
 <!-- @examineKubeConfig -->
@@ -95,7 +102,7 @@ minikube status
 cat $KUBECONFIG
 ```
 
-<!-- @checkFirewall -->
+<!-- @optionallyObserveFirewallChanges -->
 ```
 sudo iptables -L INPUT
 ```

@@ -42,6 +42,12 @@ kubectl delete service $TUT_SERVICE_NAME
 tut_CreateService
 ```
 
+```
+kubectl describe service $TUT_SERVICE_NAME
+TUT_SVC_ADDRESS=$(tut_getServiceAddress)
+echo "Service at $TUT_SVC_ADDRESS"
+```
+
 The loadbalancer, when started, is told which port to
 map to on the various nodes.  If the port value is
 changed in a deployment (which is about to happen), the

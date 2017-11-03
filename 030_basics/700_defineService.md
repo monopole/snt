@@ -93,57 +93,55 @@ Crucial aspects of the output are
   loadbalancer will talk to.  If this isn't set, then
   no pods are running with the given labels, or the
   pod targetPorts are wrong.
-* Ingress - the external IP of the service.
+* Ingress - the external IP of the service;
+  not present in minikube.
 
-Grab the load balancer's ingress IP address:
+Grab an address to use with the service:
 
 <!-- @hackToDetermineWhichAddressToUse -->
 ```
-tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
-firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
-echo $firstNodeName
 ```
 
-<!-- @defineFunctionToSetLbAddressVar -->
+<!-- @defineFunctionToGetServiceAddress -->
 ```
-function tut_SetLbAddressVar {
-  echo "This takes around 30 sec after service creation to work."
+function tut_getServiceAddress {
+  tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
+  firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
   if [ "$firstNodeName" == "minikube" ]; then
-    local tmpl='{{.spec.clusterIP}}'
+    # Running on minikube
+    local tmpl='{{range .spec.ports -}}{{.nodePort}}{{end}}'
+    local nodePort=$(kubectl get -o go-template="$tmpl" service $TUT_SERVICE_NAME)
+    echo $(minikube ip):$nodePort
   else
+    # Running on GKE presumably
     local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'
+    local lbAddress=""
+    while [ -z "$lbAddress" ]; do
+      lbAddress=$(kubectl get -o go-template="$tmpl" service $TUT_SERVICE_NAME)
+      if [ -z "$lbAddress" ]; then
+        sleep 2
+      fi
+    done
+    echo lbAddress:$TUT_EXT_PORT
   fi
-  TUT_LB_ADDRESS=""
-  while [ -z "$TUT_LB_ADDRESS" ]; do
-    TUT_LB_ADDRESS=$(kubectl get -o go-template="$tmpl" service $TUT_SERVICE_NAME)
-    if [ -z "$TUT_LB_ADDRESS" ]; then
-      echo "waiting"
-      sleep 2
-    fi
-  done
 }
 ```
 
 <!-- @setLoadBalancerAddressVar -->
 ```
-tut_SetLbAddressVar
-```
-
-<!-- @viewLoadBalancerAddressVar -->
-```
-echo "Service at $TUT_LB_ADDRESS"
+echo "This may take around 30 sec after service creation to work."
+TUT_SVC_ADDRESS=$(tut_getServiceAddress)
+echo "Service at $TUT_SVC_ADDRESS"
 ```
 
 <!-- @defineFunctionToQueryServer -->
 ```
 function tut_Query {
-  local cmd="curl -m 1 $TUT_LB_ADDRESS:$TUT_EXT_PORT/$1"
+  local cmd="curl -m 1 $TUT_SVC_ADDRESS/$1"
   echo $cmd
   $cmd
 }
 ```
-
-
 
 Hit your server:
 <!-- @curlService -->
@@ -153,11 +151,12 @@ tut_Query bananna
 
 [address list page]: https://console.cloud.google.com/networking/addresses/list
 
-The LB IP address also appears on the [address list
-page] of your developer console, and in the entire
-cluster's information dump:
+If running on GKE, The LB IP address also appears on
+the [address list page] of your developer console, and
+in the entire cluster's information dump:
+
 
 <!-- @dumpClusterInfo -->
 ```
-kubectl cluster-info dump | more
+kubectl cluster-info dump |grep Ingress
 ```
