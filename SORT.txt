@@ -1,7 +1,7 @@
 README
 defineEnv
-basics
 makeCluster
+basics
 helm
 bursting
 kinflateDemo
