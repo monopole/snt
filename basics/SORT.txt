@@ -1,0 +1,11 @@
+buildAServer
+dockerize
+defineNamespace
+definePod
+defineService
+replication
+deployment
+configMap
+ingress
+troubleshooting
+cleanup
