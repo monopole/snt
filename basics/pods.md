@@ -114,6 +114,12 @@ getIps InternalIP
 getIps ExternalIP
 ```
 
+<!-- @defineContainerCapacityVarsForDemo -->
+```
+TUT_CON_CPU=100m     # 10% of a CPU
+TUT_CON_MEMORY=100Mi
+```
+
 Define a function to create a pod, do so, then
 `get` the pod:
 
@@ -124,16 +130,16 @@ cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: $TUT_POD_NAME
+  name: pod-tomato
   labels:
     #  Label critical for this example.
-    app: $TUT_APP_LABEL
+    app: avocado
     #  Not used, but including to see it in output.
     env: monkey-staging
 spec:
   # Pod must have at least one container.
   containers:
-    - name: $TUT_CON_NAME
+    - name: cnt-carrot
       image: $TUT_IMG_TAG:$TUT_IMG_V1
       imagePullPolicy: IfNotPresent
       resources:
@@ -146,9 +152,9 @@ spec:
       # Any one container can open any number of ports
       ports:
         # This container needs to expose only one port.
-        - name: $TUT_CON_PORT_NAME
+        - name: port-pumpkin
         # Specify the default port that the app uses.
-          containerPort: $TUT_CON_PORT_VALUE
+          containerPort: 8080
           protocol: TCP
 EOF
 }
@@ -169,7 +175,7 @@ state, the node it's running on, etc.
 
 <!-- @describeOnePod -->
 ```
-kubectl describe pod $TUT_POD_NAME
+kubectl describe pod pod-tomato
 ```
 
 <!-- @focussedDescribePod -->
@@ -194,7 +200,7 @@ tmpl=`cat <<EOF
 {{end}}
 EOF
 `
-kubectl get -o go-template="$tmpl" pod $TUT_POD_NAME
+kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
 Since this pod was created by hand - not by a _replica
@@ -206,11 +212,11 @@ recreate it after setting `TUT_CON_CPU=1000m`, i.e.:
 
 <!-- @checkScheduling -->
 ```
-kubectl delete pod $TUT_POD_NAME
+kubectl delete pod pod-tomato
 sleep 8
 TUT_CON_CPU=1000m
 tut_CreatePod
-kubectl get -o go-template="$tmpl" pod $TUT_POD_NAME
+kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
 A pod configured to use 1 (entire) CPU is
@@ -220,11 +226,11 @@ percentage of the cpu.
 
 <!-- @recreateThePodWithReasonableCpu -->
 ```
-kubectl delete pod $TUT_POD_NAME
+kubectl delete pod pod-tomato
 sleep 8
 TUT_CON_CPU=100m
 tut_CreatePod
-kubectl get -o go-template="$tmpl" pod $TUT_POD_NAME
+kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
 [Job]: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion

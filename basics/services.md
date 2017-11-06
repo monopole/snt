@@ -45,12 +45,12 @@ cat <<EOF | kubectl create -f -
 kind: Service
 apiVersion: v1
 metadata:
-  name: $TUT_SERVICE_NAME
+  name: svc-eggplant
 
 spec:
   #  Which pods to map to.
   selector:
-    app: $TUT_APP_LABEL
+    app: avocado
 
   type: LoadBalancer
 
@@ -59,10 +59,10 @@ spec:
     - protocol: TCP
 
       # Where this service presents itself the external internet.
-      port: $TUT_EXT_PORT
+      port: 8088
 
       # Set this to match the port believed to be in use on the pods.
-      targetPort: $TUT_CON_PORT_VALUE
+      targetPort: 8080
 EOF
 }
 ```
@@ -84,7 +84,7 @@ The output of this command includes an endPoint.
 
 <!-- @describeService -->
 ```
-kubectl describe service $TUT_SERVICE_NAME
+kubectl describe service svc-eggplant
 ```
 
 Crucial aspects of the output are
@@ -110,19 +110,19 @@ function tut_getServiceAddress {
   if [ "$firstNodeName" == "minikube" ]; then
     # Running on minikube
     local tmpl='{{range .spec.ports -}}{{.nodePort}}{{end}}'
-    local nodePort=$(kubectl get -o go-template="$tmpl" service $TUT_SERVICE_NAME)
+    local nodePort=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
     echo $(minikube ip):$nodePort
   else
     # Running on GKE presumably
     local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'
     local lbAddress=""
     while [ -z "$lbAddress" ]; do
-      lbAddress=$(kubectl get -o go-template="$tmpl" service $TUT_SERVICE_NAME)
+      lbAddress=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
       if [ -z "$lbAddress" ]; then
         sleep 2
       fi
     done
-    echo lbAddress:$TUT_EXT_PORT
+    echo lbAddress:8088
   fi
 }
 ```

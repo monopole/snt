@@ -1,8 +1,8 @@
 buildAServer
 dockerize
-defineNamespace
-definePod
-defineService
+namespaces
+pods
+services
 replication
 deployment
 configMap

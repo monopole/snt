@@ -16,6 +16,9 @@ billable projects.
 <!-- @initializeKubeConfig -->
 ```
 TUT_PROJECT_ID=lyrical-gantry-618
+
+# Arbitrary name for the cluster made below.
+TUT_CLUSTER_NAME=cluster-spinach
 ```
 
 <!-- @initializeKubeConfig -->

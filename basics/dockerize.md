@@ -29,7 +29,7 @@ To remain completely local:
 
 <!-- @defineRegistryContainerHostEnvVar -->
 ```
-# Pick one
+# Pick place to host containers
 TUT_CON_HOST="gcr.io"
 TUT_CON_HOST=""
 ```

@@ -15,6 +15,8 @@ not running.  Create one:
 
 <!-- @createStaticIP -->
 ```
+TUT_STATIC_IP_NAME=peach-static-ip
+
 # Harmless if the IP (with the given name) was already reserved.
 gcloud compute --project=$TUT_PROJECT_ID \
   addresses create $TUT_STATIC_IP_NAME \
@@ -42,19 +44,19 @@ cat <<EOF | kubectl create -f -
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
-  name: $TUT_INGRESS_NAME
+  name: ingress-broccoli
   annotations:
     kubernetes.io/ingress.global-static-ip-name: $TUT_STATIC_IP_NAME
 spec:
   backend:
-    serviceName: $TUT_SERVICE_NAME
-    servicePort: $TUT_EXT_PORT
+    serviceName: svc-eggplant
+    servicePort: 8088
 EOF
 ```
 
 <!-- @describeIngress -->
 ```
-kubectl describe ingress $TUT_INGRESS_NAME
+kubectl describe ingress ingress-broccoli
 ```
 
 <!-- @captureStaticIP -->

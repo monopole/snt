@@ -66,18 +66,18 @@ in it:
 
 <!-- @deleteNamespace -->
 ```
-kubectl delete namespace $TUT_NAMESPACE_NAME
+kubectl delete namespace ns-beansprout
 ```
 
 Create and switch to a new namespace
 <!-- @createNamespace -->
 ```
-kubectl create namespace $TUT_NAMESPACE_NAME
+kubectl create namespace ns-beansprout
 ```
 
 <!-- @changeDefaultNamespace -->
 ```
-kubectl --namespace=$TUT_NAMESPACE_NAME \
+kubectl --namespace=ns-beansprout \
     config set-context $(kubectl config current-context)
 ```
 

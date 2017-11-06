@@ -32,18 +32,18 @@ cat <<EOF | kubectl create -f -
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: $TUT_DEPLOY_NAME
+  name: dep-kale
 spec:
   replicas: 2
   template:
     metadata:
-      name: $TUT_POD_NAME
+      name: pod-tomato
       labels:
-        app: $TUT_APP_LABEL
+        app: avocado
         env: monkey-staging
     spec:
       containers:
-      - name: $TUT_CON_NAME
+      - name: cnt-carrot
         image: $TUT_IMG_TAG:$TUT_IMG_V1
         resources:
           limits:
@@ -53,8 +53,8 @@ spec:
             cpu: $TUT_CON_CPU
             memory: $TUT_CON_MEMORY
         ports:
-        - name: $TUT_CON_PORT_NAME
-          containerPort: $TUT_CON_PORT_VALUE
+        - name: port-pumpkin
+          containerPort: 8080
 EOF
 ```
 
@@ -89,12 +89,12 @@ cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: $TUT_DEPLOY_NAME
+  name: dep-kale
 spec:
   template:
     spec:
       containers:
-      - name: $TUT_CON_NAME
+      - name: cnt-carrot
         image: $TUT_IMG_TAG:$TUT_IMG_V2
 EOF
 ```
@@ -108,5 +108,5 @@ tut_Query tangerine
 When finished playing, delete the deployent.
 <!-- @deleteDeployment -->
 ```
-kubectl delete deployment $TUT_DEPLOY_NAME
+kubectl delete deployment dep-kale
 ```

@@ -14,7 +14,7 @@ cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: $TUT_CFG_NAME_1
+  name: cfg-parsley
 data:
   tutorial.greeting: "bonjour"
   tutorial.enablerisk: "false"
@@ -23,7 +23,7 @@ EOF
 
 <!-- @describeConfigMap -->
 ```
-kubectl describe configmap $TUT_CFG_NAME_1
+kubectl describe configmap cfg-parsley
 ```
 
 To illustrate a point made below, change the image's
@@ -38,12 +38,12 @@ and recreate the service (the loadbalancer):
 
 <!-- @deleteAndRecreateService -->
 ```
-kubectl delete service $TUT_SERVICE_NAME
+kubectl delete service svc-eggplant
 tut_CreateService
 ```
 
 ```
-kubectl describe service $TUT_SERVICE_NAME
+kubectl describe service svc-eggplant
 TUT_SVC_ADDRESS=$(tut_getServiceAddress)
 echo "Service at $TUT_SVC_ADDRESS"
 ```
@@ -63,18 +63,18 @@ cat <<EOF | kubectl create -f -
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: $TUT_DEPLOY_NAME
+  name: dep-kale
 spec:
   replicas: 3
   template:
     metadata:
-      name: $TUT_POD_NAME
+      name: pod-tomato
       labels:
-        app: $TUT_APP_LABEL
+        app: avocado
         env: monkey-staging
     spec:
       containers:
-      - name: $TUT_CON_NAME
+      - name: cnt-carrot
         image: $TUT_IMG_TAG:$TUT_IMG_V2
         # --port value must match container port, so it's not safe
         # to set it via configmap.  But it's wise safe to specify
@@ -90,18 +90,18 @@ spec:
             cpu: $TUT_CON_CPU
             memory: $TUT_CON_MEMORY
         ports:
-        - name: $TUT_CON_PORT_NAME
+        - name: port-pumpkin
           containerPort: $TUT_CON_PORT_VALUE
         env:
         - name: TUTORIAL_GREETING
           valueFrom:
             configMapKeyRef:
-              name: $TUT_CFG_NAME_1
+              name: cfg-parsley
               key: tutorial.greeting
         - name: TUTORIAL_ENABLE_RISK
           valueFrom:
             configMapKeyRef:
-              name: $TUT_CFG_NAME_1
+              name: cfg-parsley
               key: tutorial.enablerisk
 EOF
 ```
@@ -127,7 +127,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: $TUT_CFG_NAME_1
+  name: cfg-parsley
 data:
   tutorial.greeting: "GREETING ONE :-("
   tutorial.enablerisk: "true"
@@ -136,7 +136,7 @@ EOF
 
 <!-- @describeConfig -->
 ```
-kubectl describe configmap $TUT_CFG_NAME_1
+kubectl describe configmap cfg-parsley
 ```
 
 There are no visible changes in the service yet.
@@ -186,7 +186,7 @@ cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: $TUT_CFG_NAME_2
+  name: cfg-cilantro
 data:
   tutorial.greeting: "greeting two :-)"
   tutorial.enablerisk: "false"
@@ -195,7 +195,7 @@ EOF
 
 <!-- @describeConfigMap -->
 ```
-kubectl describe configmap $TUT_CFG_NAME_2
+kubectl describe configmap cfg-cilantro
 ```
 
 Define a function to apply a config change:
@@ -209,12 +209,12 @@ cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: $TUT_DEPLOY_NAME
+  name: dep-kale
 spec:
   template:
     spec:
       containers:
-      - name: $TUT_CON_NAME
+      - name: cnt-carrot
         env:
         - name: TUTORIAL_GREETING
           valueFrom:
@@ -240,7 +240,7 @@ Apply the change:
 
 <!-- @changeDeployToConfig2 -->
 ```
-tut_ApplyConfigChange $TUT_CFG_NAME_2
+tut_ApplyConfigChange cfg-cilantro
 ```
 
 Query again, noting the change in the output brought on by the
@@ -255,7 +255,7 @@ Change it back and forth, and rapidly query to watch the turnover.
 
 <!-- @changeDeployToConfig1 -->
 ```
-tut_ApplyConfigChange $TUT_CFG_NAME_1
+tut_ApplyConfigChange cfg-parsley
 for i in {1..15}; do
   tut_Query movingTo1
   sleep 0.5
@@ -264,7 +264,7 @@ done
 
 <!-- @changeDeployToConfig2 -->
 ```
-tut_ApplyConfigChange $TUT_CFG_NAME_2
+tut_ApplyConfigChange cfg-cilantro
 for i in {1..15}; do
   tut_Query movingTo2
   sleep 0.5

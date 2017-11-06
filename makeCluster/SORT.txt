@@ -1,3 +1,0 @@
-minikube
-GKE
-confirmKubectl

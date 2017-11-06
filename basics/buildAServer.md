@@ -21,8 +21,12 @@ number that appears on the served web page.
 
 <!-- @defineEnv -->
 ```
-mkdir -p $TUT_DIR/src
+TUT_IMG_NAME=radishwine
+TUT_IMG_V1=1
+TUT_IMG_V2=2
 TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
+
+mkdir -p $TUT_DIR/src
 ```
 
 <!-- @makeWebServer -->
