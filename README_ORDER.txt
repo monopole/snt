@@ -1,5 +1,4 @@
 makeCluster
 basics
 helm
-bursting
-kinflateDemo
+kinflate
