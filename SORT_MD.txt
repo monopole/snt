@@ -1,7 +1,5 @@
-defineEnv
 makeCluster
 basics
 helm
 bursting
 kinflateDemo
-moveResourcePackage
