@@ -1,41 +1,35 @@
-# Establish a cluster
+# Starting a bare cluster
 
-Kubernetes runs on a variety of platforms.
+[minikube]: https://github.com/kubernetes/minikube/releases
+[GKE]: https://cloud.google.com/container-engine
 
-Instructions follow for setting up
+A k8s tutorial requires a working, albeit bare,
+cluster.  This section has instructions for starting
 
- * a locally hosted cluster (minikube),
- * a remote cluster hosted on GKE.
+ * a locally hosted cluster on [minikube].
+ * a remote cluster hosted on [GKE].
 
-Regardless of platform, one needs `kubectl`
-to talk to the cluster.
+Here, _starting_ a cluster means doing the minimal
+setup necessary to bring up a k8s API server and nodes
+on some hardware somewhere, with no actual services
+running save those native to k8s. _Configuring_ a
+cluster is bringing up and evolving your own apps on
+that cluster.
 
-[gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
-[gcloud sdk]: https://cloud.google.com/sdk/
-[billing]: https://support.google.com/cloud/answer/6158867?hl=en
+### which one?
 
- * Install [gcloud sdk].  See also [gcloud downloads] site.
- * Install `kubectl` via `gcloud components install kubectl`.
- * Enable [billing] for a GCP project.
+Use a local minikube first, then try GKE when ready to
+try ingress to a remote cloud.
 
-Assign the following variable to a billable
-GCP project ID so we can use Google's
-container repo API (and GKE generally if
-using that instead of minikube).
+A local cluster is much faster for what follows, as it
+avoids orthogonal detours into cloud authentication and
+billing issues.
 
-<!-- @initializeProjectId -->
-```
-TUT_PROJECT_ID=lyrical-gantry-618
-```
+### kubectl
 
-One can install `kubectl` without gcloud using
+Regardless of cluster (minikube, GKE, AWS, etc.)  one
+needs `kubectl`, a command line client that facilitates
+controlling a k8s cluster.
 
-<!-- @optionallyInstallIndependentKubectl -->
-```
-apis=https://storage.googleapis.com
-version=$(curl -s $apis/kubernetes-release/release/stable.txt)
-curl -Lo $TUT_DIR/kubectl \
-  $apis/kubernetes-release/release/$version/bin/linux/amd64/kubectl
-chmod +x $TUT_DIR/kubectl
-alias kubectl=$TUT_DIR/kubectl
-```
+Instructions for installing `kubectl` are covered in
+the platform-specific instructions that follows.

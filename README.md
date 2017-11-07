@@ -1,18 +1,20 @@
 # Kubernetes Cluster Configuration
 
+> _A tutorial on installing customized cluster-level
+> "apps"._
+
 > __status: under development Oct 2017__
 
-The markdown content in and below the directory
-containing this `README` is meant to be a a tutorial
-for _kubernetes cluster configuration_.
+The directory containing this `README` holds a brief
+introduction to aggregate k8s cluster configuration and
+management.
 
-The tutorial assumes zero kubernetes knowledge.  It
-starts with just enough background (more info at
-https://kubernetes.io) to let a reader build a cluster
-"by hand" from scratch, to motivate the problem of
-configuration.  Upon completion, the reader will have
-tried two different approaches to cluster
-configuration.
+No k8s knowledge assumed (for more info, see
+https://kubernetes.io).  The tutorial introduces pods
+and deployments in the course of building a cluster
+from scratch, to motivate the problem of configuration.
+The tutorial finishes by working with two cluster
+configuration tools.
 
 ### Instructions
 
@@ -23,14 +25,18 @@ starting with:
 ```
 TUT_DIR=$(mktemp -d)
 ```
-All file system use - software installation, source code
-and data file creation - will happen in that disposable
-directory.
+With the exception of the optional gcloud installation
+covered later, all file system use will happen in
+this disposable directory.  Cleanup up is just
+
+> ```
+> rm -rf $TUT_DIR
+> ```
 
 The tutorial can be done directly from the content's
 [github repo UX](https://github.com/monopole/snt).  In
 any directory, start with `README.md`, then consult
-`README_ORDER.txt` to know in which order to visit
+`README_ORDER.txt` to see the order in which to visit
 remaining directory content.
 
 ### For a better experience
@@ -42,11 +48,10 @@ download the content and serve it locally with
 [mdrip](https://github.com/monopole/mdrip):
 
 ```
-cd $TUT_DIR
-git clone https://github.com/monopole/snt.git
+git clone https://github.com/monopole/snt.git $TUT_DIR/snt
 mkdir -p $TUT_DIR/bin
 GOBIN=$TUT_DIR/bin go install github.com/monopole/mdrip
-$TUT_DIR/bin/mdrip --mode demo --port 8081 snt
+$TUT_DIR/bin/mdrip --mode demo --port 8081 $TUT_DIR/snt
 ```
 
 Visit http://localhost:8081 to see the material
@@ -58,7 +63,5 @@ of code blocks.
 Install and run [tmux](https://github.com/tmux/tmux/wiki).
 
 Then, clicking on a code block on a locally served web
-page will not only copy the block, it will paste it to
-your active tmux session.
-
-Surprisingly handy for demos.
+page will immediately paste the block to your active
+tmux session.  Handy for demos.

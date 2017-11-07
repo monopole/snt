@@ -1,14 +1,13 @@
 # GKE cluster
 
 [gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
-[installed gcloud]: https://cloud.google.com/sdk/
-[enabled billing]: https://support.google.com/cloud/answer/6158867?hl=en
+[Install gcloud]: https://cloud.google.com/sdk/
+[Enabled billing]: https://support.google.com/cloud/answer/6158867?hl=en
 
 Prerequisites:
 
- * You've [installed gcloud].  See also [gcloud downloads] site.
- * You've also installed kubectl via  `gcloud components install kubectl`.
- * You've [enabled billing] for a GCP project.
+ * [Install gcloud].  See also [gcloud downloads] site.
+ * [Enabled billing] for a GCP project.
 
 Set this variable to match one of your actual,
 billable projects.
@@ -20,12 +19,20 @@ TUT_PROJECT_ID=lyrical-gantry-618
 # Arbitrary name for the cluster made below.
 TUT_CLUSTER_NAME=cluster-spinach
 ```
+### Install `kubectl`
+
+
 
 <!-- @initializeKubeConfig -->
 ```
 # Don't want to stomp on your normal config
 export KUBECONFIG=$HOME/.kube/tut-gke-config
 rm -f $KUBECONFIG
+```
+
+<!-- @initializeKubeCtl -->
+```
+gcloud components install kubectl
 ```
 
 Confirm that `gcloud` and `kubectl` are on your path

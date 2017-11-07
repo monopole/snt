@@ -5,18 +5,12 @@ configure, rollout, rollback, upgrade, etc.  Make it a
 webserver so it can be queried with HTTP clients you
 already have.
 
-The complexity in this server is contrived to facilate
-demonstration of k8s configuration, deployment and
-update mechanisms.
-
-To this end, the server serves a simple web page whose
-_configuration_ is influenced by both flags and shell
-env variables.
+The server serves a simple web page whose appearance is
+influenced by flags and shell env variables.
 
 Additionally, to demo rollouts and rollbacks, there
-will be multiple _versions_ of the binary that differ
-only in the value of a hard coded constant version
-number that appears on the served web page.
+will be multiple versions of the binary - the version
+will also appear on the served web page.
 
 
 <!-- @defineEnv -->
