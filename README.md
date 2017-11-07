@@ -16,22 +16,22 @@ configuration.
 
 ### Instructions
 
-Open a terminal and copy/paste code blocks to it as
-you read, starting with:
+Open a terminal and copy/paste code blocks to it,
+starting with:
 
 <!-- @makeTutorialWorkingDirectory-->
 ```
 TUT_DIR=$(mktemp -d)
 ```
-All file writing - software installation, source code
+All file system use - software installation, source code
 and data file creation - will happen in that disposable
 directory.
 
 The tutorial can be done directly from the content's
 [github repo UX](https://github.com/monopole/snt).  In
-any directory, start with `README.md`, then read the
-`README_ORDER.txt` file to know in which order to visit
-the remaining directory content.
+any directory, start with `README.md`, then consult
+`README_ORDER.txt` to know in which order to visit
+remaining directory content.
 
 ### For a better experience
 
@@ -46,19 +46,19 @@ cd $TUT_DIR
 git clone https://github.com/monopole/snt.git
 mkdir -p $TUT_DIR/bin
 GOBIN=$TUT_DIR/bin go install github.com/monopole/mdrip
-mdrip --mode demo --port 8081 snt
+$TUT_DIR/bin/mdrip --mode demo --port 8081 snt
 ```
 
 Visit http://localhost:8081 to see the material
-presented with a properly ordered navigation menu and
-one-click copying of code blocks.
+presented with a navigation menu and one-click copying
+of code blocks.
 
 ### For an even better experience
 
 Install and run [tmux](https://github.com/tmux/tmux/wiki).
 
-Then, clicking on a command block on a locally served
-webpage will both copy and paste the block to your
-active tmux session.
+Then, clicking on a code block on a locally served web
+page will not only copy the block, it will paste it to
+your active tmux session.
 
-This is surprisingly handy for demos.
+Surprisingly handy for demos.
