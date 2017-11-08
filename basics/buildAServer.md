@@ -1,6 +1,6 @@
 # Make a server
 
-Make a program to use as the example binary to
+Make a program to use as an example binary to
 configure, rollout, rollback, upgrade, etc.  Make it a
 webserver so it can be queried with HTTP clients you
 already have.
@@ -9,7 +9,7 @@ The server serves a simple web page whose appearance is
 influenced by flags and shell env variables.
 
 Additionally, to demo rollouts and rollbacks, there
-will be multiple versions of the binary - the version
+will be multiple versions of the binary. The version
 will also appear on the served web page.
 
 

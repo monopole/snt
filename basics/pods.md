@@ -15,38 +15,34 @@ resources it needs via the `resources.requests` and
 container's _quality of service_ class, aka QoS
 class.
 
-In turn, a pod is given a QoS level matching the
-_lowest_ level assigned to any of its containers.
+In turn, a pod is given a QoS level matching the lowest
+level assigned to any of its containers.
 
 There are three QoS classes:
 
-* _Best-Effort_: `requests` and `limits` not defined, lowest QoS.
-  With no requirements data, the kubelet has no
-  guidance from the container about its needs, so it
-  must treat the container as untrustworthy. The pod
-  inherits this lack of trust, and will be among the
-  first to be ejected by the node's kubelet if the node
-  is under pressure.  The watcher will see this, and
-  try to start the pod somewhere with available
-  resources, but will still lack guidance on how to
-  size the job.
+* _Best-Effort_: `requests` and `limits` not defined,
+  lowest QoS.  With no requirements data, the kubelet
+  has no guidance from the container about its needs.
+  The pod holding it will be among the first to be
+  ejected by the node's kubelet if the node is under
+  pressure.  The watcher will see this, and try to
+  start the pod somewhere with available resources, but
+  will still lack guidance on how to size the job.
 
 * _Burstable_: `requests` < `limits`, medium QoS.
   If its node is under pressure, a pod is ejected if any
-  of its containers exceeds their limit _and_ there are
+  of its containers exceeds their limit and there are
   no _best-effort_ pods around to be sacrificed instead.
 
 * _Guaranteed_: `requests` == `limits`, highest QoS.
-  Pod ejected if it exceeds its limits, but _won't be
-  ejected_ if it doesn't exceed its limits.  The
-  kubelet likes these pods because they are clear about
-  what they want.  Such a pod may
-  never start, because it can be
-  determined in advance that no nodes can hold it -
-  which is better than flapping.
-  Values for both `memory` and `cpu` must be specified
-  and must be respectively match in `request` and
-  `limit`.
+  Pod won't be ejected if it doesn't exceed its
+  declared limits.  The kubelet likes these pods
+  because they are clear about what they want.  Such a
+  pod may never start, because it can be determined in
+  advance that no nodes can hold it - which is better
+  than flapping.  Values for both `memory` and `cpu`
+  must be specified and must be respectively match in
+  `request` and `limit`.
 
 In the spec, the `cpu` units are _number of cores_.
 The expression `0.1` is equivalent to the expression

@@ -9,12 +9,13 @@ The directory containing this `README` holds a brief
 introduction to aggregate k8s cluster configuration and
 management.
 
-No k8s knowledge assumed (for more info, see
-https://kubernetes.io).  The tutorial introduces pods
-and deployments in the course of building a cluster
-from scratch, to motivate the problem of configuration.
-The tutorial finishes by working with two cluster
-configuration tools.
+The tutorial introduces pods and deployments in the
+course of building a cluster from scratch, to motivate
+the problem of configuration.  No k8s knowledge
+assumed, but discussion is kept to a minimum (for more
+info, see https://kubernetes.io).  The tutorial
+finishes by working with two cluster configuration
+tools.
 
 ### Instructions
 

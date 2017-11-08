@@ -3,15 +3,13 @@
 [namespace]: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces
 
 The command blocks that follow create pods, services,
-replicasets, ingress points, etc..  These resources
+replicasets, ingress points, etc.  These resources
 exist in a [namespace].
 
-Namespaces divide the set of all resources into
-subsets.  A command like `kubectl delete pod
-shoeShopServer` or the more dramatic `kubectl delete
-pods --all` implicitly operates only on the currently
-active namespace, leaving pods in other namespaces
-alone.
+A command like `kubectl delete pod shoeShopServer` or
+the more dramatic `kubectl delete pods --all`
+implicitly operates only on the currently active
+namespace, leaving pods in other namespaces alone.
 
 <!-- @getNamespaces -->
 ```
@@ -32,16 +30,14 @@ showPods kube-public
 unset -f showPods
 ```
 
-Labels offer another way to arrange resources into
-sets, and it may be useful to imagine a namespace as an
-implicitly declared label.
+Labels offer another way to arrange resources into sets.
 
-Conceptual differences:
+Conceptual differences between labels and namespace:
 
 * A default namespace exists (called
   `default`). There's no such thing as a default label.
 
-* Kubectl commands operate in an implicit namespace via
+* kubectl commands operate in an implicit namespace via
   kubectl configuration.  There's no analogous
   functionality for a label.
 
@@ -61,8 +57,8 @@ Your current namespace is:
 kubectl config view | grep namespace:
 ```
 
-Create a new namespace, but first delete it and every resource
-in it:
+Create a new namespace, but first delete it and every
+resource in it:
 
 <!-- @deleteNamespace -->
 ```

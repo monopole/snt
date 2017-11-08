@@ -59,7 +59,7 @@ mkdir -p $MINIKUBE_HOME
 <!-- @overrideKubeConfigAndWipeIt -->
 ```
 # Don't stomp on your existing kube config (if any)
-export KUBECONFIG=$TUT_DIR/tut-minikube-config
+export KUBECONFIG=$MINIKUBE_HOME/tut-minikube-config
 rm -f $KUBECONFIG
 ```
 
