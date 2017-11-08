@@ -10,7 +10,7 @@ Before doing so, delete the existing pod.
 
 <!-- @deletePod -->
 ```
-kubectl delete pod $TUT_POD_NAME
+kubectl delete pod pod-tomato
 ```
 
 Leave the load balancer service alone.  It cannot return
@@ -27,18 +27,18 @@ cat <<EOF | kubectl create -f -
 apiVersion: extensions/v1beta1
 kind: ReplicaSet
 metadata:
-  name: $TUT_REPSET_NAME
+  name: repset-asparagus
 spec:
-  replicas: 3
+  replicas: 2
   template:
     metadata:
-      name: $TUT_POD_NAME
+      name: pod-tomato
       labels:
-        app: $TUT_APP_LABEL
+        app: avocado
         env: monkey-staging
     spec:
       containers:
-      - name: $TUT_CON_NAME
+      - name: cnt-carrot
         image: $TUT_IMG_TAG:$TUT_IMG_V1
         resources:
           limits:
@@ -48,8 +48,8 @@ spec:
             cpu: $TUT_CON_CPU
             memory: $TUT_CON_MEMORY
         ports:
-        - name: $TUT_CON_PORT_NAME
-          containerPort: $TUT_CON_PORT_VALUE
+        - name: port-pumpkin
+          containerPort: 8080
 EOF
 ```
 
@@ -173,7 +173,7 @@ When done, delete the replica set:
 
 <!-- @deleteReplicaSet -->
 ```
-kubectl delete replicaset $TUT_REPSET_NAME
+kubectl delete replicaset repset-asparagus
 tut_WatchPods
 ```
 

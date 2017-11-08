@@ -33,8 +33,8 @@ behaviors:
   `spec.clusterIp:spec.ports[*].port`.
 
 * The example below uses `LoadBalancer`, which will
-  round-robin requests to backend pods.  Like most
-  other things, balancer creation is (like most other things) asynchronous.
+  round-robin requests to backend pods.  Balancer
+  creation is (like most other things) asynchronous.
   Information about it appears in the
   `status.loadBalancer` field.
 
@@ -45,12 +45,12 @@ cat <<EOF | kubectl create -f -
 kind: Service
 apiVersion: v1
 metadata:
-  name: $TUT_SERVICE_NAME
+  name: svc-eggplant
 
 spec:
   #  Which pods to map to.
   selector:
-    app: $TUT_APP_LABEL
+    app: avocado
 
   type: LoadBalancer
 
@@ -59,10 +59,10 @@ spec:
     - protocol: TCP
 
       # Where this service presents itself the external internet.
-      port: $TUT_EXT_PORT
+      port: 8088
 
       # Set this to match the port believed to be in use on the pods.
-      targetPort: $TUT_CON_PORT_VALUE
+      targetPort: 8080
 EOF
 }
 ```
@@ -84,50 +84,60 @@ The output of this command includes an endPoint.
 
 <!-- @describeService -->
 ```
-kubectl describe service $TUT_SERVICE_NAME
+kubectl describe service svc-eggplant
 ```
 
 Crucial aspects of the output are
 
 * Endpoints - the cluster addresses of the services the
-  loadbalancer will talk to.  If this isn't set, the
-  either the labels are wrong, or the targetPort is
-  wrong (in the pod spec), or something more dramatic
-  is wrong.
-* Ingress - the external IP of the service.
+  loadbalancer will talk to.  If this isn't set, then
+  no pods are running with the given labels, or the
+  pod targetPorts are wrong.
+* Ingress - the external IP of the service;
+  not present in minikube.
 
-Grab the load balancer's ingress IP address:
+Grab an address to use with the service:
 
-<!-- @defineFunctionToSetLbAddressVar -->
+<!-- @hackToDetermineWhichAddressToUse -->
 ```
-function tut_SetLbAddressVar {
-  echo "This takes around 30 sec after service creation to work."
-  local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'
-  TUT_LB_ADDRESS=""
-  while [ -z "$TUT_LB_ADDRESS" ]; do
-    TUT_LB_ADDRESS=$(kubectl get -o go-template="$tmpl" service $TUT_SERVICE_NAME)
-    if [ -z "$TUT_LB_ADDRESS" ]; then
-      echo "waiting"
-      sleep 2
-    fi
-  done
+```
+
+<!-- @defineFunctionToGetServiceAddress -->
+```
+function tut_getServiceAddress {
+  tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
+  firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
+  if [ "$firstNodeName" == "minikube" ]; then
+    # Running on minikube
+    local tmpl='{{range .spec.ports -}}{{.nodePort}}{{end}}'
+    local nodePort=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
+    echo $(minikube ip):$nodePort
+  else
+    # Running on GKE presumably
+    local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'
+    local lbAddress=""
+    while [ -z "$lbAddress" ]; do
+      lbAddress=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
+      if [ -z "$lbAddress" ]; then
+        sleep 2
+      fi
+    done
+    echo lbAddress:8088
+  fi
 }
 ```
 
 <!-- @setLoadBalancerAddressVar -->
 ```
-tut_SetLbAddressVar
-```
-
-<!-- @viewLoadBalancerAddressVar -->
-```
-echo "Service at $TUT_LB_ADDRESS"
+echo "This may take around 30 sec after service creation to work."
+TUT_SVC_ADDRESS=$(tut_getServiceAddress)
+echo "Service at $TUT_SVC_ADDRESS"
 ```
 
 <!-- @defineFunctionToQueryServer -->
 ```
 function tut_Query {
-  local cmd="curl -m 1 $TUT_LB_ADDRESS:$TUT_EXT_PORT/$1"
+  local cmd="curl -m 1 $TUT_SVC_ADDRESS/$1"
   echo $cmd
   $cmd
 }
@@ -141,11 +151,12 @@ tut_Query bananna
 
 [address list page]: https://console.cloud.google.com/networking/addresses/list
 
-The LB IP address also appears on the [address list
-page] of your developer console, and in the entire
-cluster's information dump:
+If running on GKE, The LB IP address also appears on
+the [address list page] of your developer console, and
+in the entire cluster's information dump:
+
 
 <!-- @dumpClusterInfo -->
 ```
-kubectl cluster-info dump | more
+kubectl cluster-info dump |grep Ingress
 ```

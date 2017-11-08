@@ -1,22 +1,27 @@
 # Make a server
 
-Make a program to use as the example binary to
+Make a program to use as an example binary to
 configure, rollout, rollback, upgrade, etc.  Make it a
 webserver so it can be queried with HTTP clients you
 already have.
 
-The complexity in this server is contrived to facilate
-demonstration of k8s configuration, deployment and
-update mechanisms.
-
-To this end, the server serves a simple web page whose
-_configuration_ is influenced by both flags and shell
-env variables.
+The server serves a simple web page whose appearance is
+influenced by flags and shell env variables.
 
 Additionally, to demo rollouts and rollbacks, there
-will be multiple _versions_ of the binary that differ
-only in the value of a hard coded constant version
-number that appears on the served web page.
+will be multiple versions of the binary. The version
+will also appear on the served web page.
+
+
+<!-- @defineEnv -->
+```
+TUT_IMG_NAME=radishwine
+TUT_IMG_V1=1
+TUT_IMG_V2=2
+TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
+
+mkdir -p $TUT_DIR/src
+```
 
 <!-- @makeWebServer -->
 ```

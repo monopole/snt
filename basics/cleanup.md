@@ -25,12 +25,12 @@ Also clean up other stuff that afaik isn't garbage collected:
 
 <!-- @deleteConfigMap -->
 ```
-kubectl delete configmap $TUT_CFG_NAME_1
+kubectl delete configmap cfg-parsley
 ```
 
 <!-- @deleteDeployment -->
 ```
-kubectl delete deployment $TUT_DEPLOY_NAME
+kubectl delete deployment dep-kale
 ```
 
 Delete the cluster so we stop paying for it:

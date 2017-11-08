@@ -12,41 +12,37 @@ Each container in a pod can specify the CPU and memory
 resources it needs via the `resources.requests` and
 `resources.limits` variables.  The values assigned to
 `requests` and `limits` for a container determine that
-container's _quality of service_ class, aka _QoS_
+container's _quality of service_ class, aka QoS
 class.
 
-In turn, a pod is given a QoS level matching the
-_lowest_ level assigned to any of its containers.
+In turn, a pod is given a QoS level matching the lowest
+level assigned to any of its containers.
 
 There are three QoS classes:
 
-* _Best-Effort_: `requests` and `limits` not defined, lowest QoS.
-  With no requirements data, the kubelet has no
-  guidance from the container about its needs, so it
-  must treat the container as untrustworthy. The pod
-  inherits this lack of trust, and will be among the
-  first to be ejected by the node's kubelet if the node
-  is under pressure.  The watcher will see this, and
-  try to start the pod somewhere with available
-  resources, but will still lack guidance on how to
-  size the job.
+* _Best-Effort_: `requests` and `limits` not defined,
+  lowest QoS.  With no requirements data, the kubelet
+  has no guidance from the container about its needs.
+  The pod holding it will be among the first to be
+  ejected by the node's kubelet if the node is under
+  pressure.  The watcher will see this, and try to
+  start the pod somewhere with available resources, but
+  will still lack guidance on how to size the job.
 
 * _Burstable_: `requests` < `limits`, medium QoS.
   If its node is under pressure, a pod is ejected if any
-  of its containers exceeds their limit _and_ there are
+  of its containers exceeds their limit and there are
   no _best-effort_ pods around to be sacrificed instead.
 
 * _Guaranteed_: `requests` == `limits`, highest QoS.
-  Pod ejected if it exceeds its limits, but _won't be
-  ejected_ if it doesn't exceed its limits.  The
-  kubelet likes these pods because they are clear about
-  what they want.  Such a pod may
-  never start, because it can be
-  determined in advance that no nodes can hold it -
-  which is better than flapping.
-  Values for both `memory` and `cpu` must be specified
-  and must be respectively match in `request` and
-  `limit`.
+  Pod won't be ejected if it doesn't exceed its
+  declared limits.  The kubelet likes these pods
+  because they are clear about what they want.  Such a
+  pod may never start, because it can be determined in
+  advance that no nodes can hold it - which is better
+  than flapping.  Values for both `memory` and `cpu`
+  must be specified and must be respectively match in
+  `request` and `limit`.
 
 In the spec, the `cpu` units are _number of cores_.
 The expression `0.1` is equivalent to the expression
@@ -93,26 +89,34 @@ for n in $nodes; do
 done
 ```
 
-As an example of filtering output from a list, grab the
-"external ips" from the nodes
+As an example of filtering output
+from a list, grab IP data from the nodes:
 
-<!-- @getNodeExternalIp -->
+<!-- @getNodeIps -->
 ```
-tmpl=`cat <<EOF
+function getIps {
+  local tmpl=`cat <<EOF
 {{range .items -}}
 {{\\\$n := .metadata.name -}}
   {{range .status.addresses -}}
-    {{if eq .type "ExternalIP"}}{{\\\$n}} {{.address}}{{end -}}
+    {{if eq .type "$1"}}{{\\\$n}} {{.address}}{{end -}}
   {{end}}
 {{end}}
 EOF
 `
-kubectl get -o go-template="$tmpl" nodes
+  kubectl get -o go-template="$tmpl" nodes
+}
+getIps InternalIP
+getIps ExternalIP
 ```
 
-OK, end aside.
+<!-- @defineContainerCapacityVarsForDemo -->
+```
+TUT_CON_CPU=100m     # 10% of a CPU
+TUT_CON_MEMORY=100Mi
+```
 
-Now define a function to create a pod, do so, then
+Define a function to create a pod, do so, then
 `get` the pod:
 
 <!-- @defineFunctionToCreatePod-->
@@ -122,18 +126,18 @@ cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: $TUT_POD_NAME
+  name: pod-tomato
   labels:
     #  Label critical for this example.
-    app: $TUT_APP_LABEL
+    app: avocado
     #  Not used, but including to see it in output.
     env: monkey-staging
 spec:
-  # A pod must have at least one container.
+  # Pod must have at least one container.
   containers:
-    - name: $TUT_CON_NAME
+    - name: cnt-carrot
       image: $TUT_IMG_TAG:$TUT_IMG_V1
-      imagePullPolicy: Always
+      imagePullPolicy: IfNotPresent
       resources:
         limits:
           cpu: $TUT_CON_CPU
@@ -144,9 +148,9 @@ spec:
       # Any one container can open any number of ports
       ports:
         # This container needs to expose only one port.
-        - name: $TUT_CON_PORT_NAME
+        - name: port-pumpkin
         # Specify the default port that the app uses.
-          containerPort: $TUT_CON_PORT_VALUE
+          containerPort: 8080
           protocol: TCP
 EOF
 }
@@ -167,7 +171,7 @@ state, the node it's running on, etc.
 
 <!-- @describeOnePod -->
 ```
-kubectl describe pod $TUT_POD_NAME
+kubectl describe pod pod-tomato
 ```
 
 <!-- @focussedDescribePod -->
@@ -192,7 +196,7 @@ tmpl=`cat <<EOF
 {{end}}
 EOF
 `
-kubectl get -o go-template="$tmpl" pod $TUT_POD_NAME
+kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
 Since this pod was created by hand - not by a _replica
@@ -204,11 +208,11 @@ recreate it after setting `TUT_CON_CPU=1000m`, i.e.:
 
 <!-- @checkScheduling -->
 ```
-kubectl delete pod $TUT_POD_NAME
+kubectl delete pod pod-tomato
 sleep 8
 TUT_CON_CPU=1000m
 tut_CreatePod
-kubectl get -o go-template="$tmpl" pod $TUT_POD_NAME
+kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
 A pod configured to use 1 (entire) CPU is
@@ -218,15 +222,14 @@ percentage of the cpu.
 
 <!-- @recreateThePodWithReasonableCpu -->
 ```
-kubectl delete pod $TUT_POD_NAME
+kubectl delete pod pod-tomato
 sleep 8
 TUT_CON_CPU=100m
 tut_CreatePod
-kubectl get -o go-template="$tmpl" pod $TUT_POD_NAME
+kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
-Aside: A pod that does some job and then goes away
-(i.e.  doesn't want to be reanimated) is called a
-[Job].
-
 [Job]: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion
+
+Aside: A pod that does some job and then goes away
+(i.e.  doesn't want to be reanimated) is called a [Job].

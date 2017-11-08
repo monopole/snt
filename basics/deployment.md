@@ -5,7 +5,7 @@
 [ServiceSpec]: https://kubernetes.io/docs/api-reference/v1.7/#service-v1-core
 
 
-Kubernetes is built as a series of layers.
+Kubernetes adds layers to avoid toil.
 
 * It is toil to repeatedly install all the libraries
   and data needed to make an app work, so one creates a
@@ -19,12 +19,12 @@ Kubernetes is built as a series of layers.
   changing hardware, so one invents a _replicaset_ to
   do the job.
 
-* The next level up - a _deployment_, concerns itself
+* The next level up - a deployment - concerns itself
   with creating replicasets, scaling them, upgrading or
   downgrading the pods therein, etc.
 
-Deployment yaml looks like replicaset yaml, except
-the the `kind` changes:
+Deployment yaml looks like replicaset yaml.
+Only the `kind` changes:
 
 <!-- @createDeployment -->
 ```yaml
@@ -32,18 +32,18 @@ cat <<EOF | kubectl create -f -
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: $TUT_DEPLOY_NAME
+  name: dep-kale
 spec:
-  replicas: 3
+  replicas: 2
   template:
     metadata:
-      name: $TUT_POD_NAME
+      name: pod-tomato
       labels:
-        app: $TUT_APP_LABEL
+        app: avocado
         env: monkey-staging
     spec:
       containers:
-      - name: $TUT_CON_NAME
+      - name: cnt-carrot
         image: $TUT_IMG_TAG:$TUT_IMG_V1
         resources:
           limits:
@@ -53,8 +53,8 @@ spec:
             cpu: $TUT_CON_CPU
             memory: $TUT_CON_MEMORY
         ports:
-        - name: $TUT_CON_PORT_NAME
-          containerPort: $TUT_CON_PORT_VALUE
+        - name: port-pumpkin
+          containerPort: 8080
 EOF
 ```
 
@@ -89,12 +89,12 @@ cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: $TUT_DEPLOY_NAME
+  name: dep-kale
 spec:
   template:
     spec:
       containers:
-      - name: $TUT_CON_NAME
+      - name: cnt-carrot
         image: $TUT_IMG_TAG:$TUT_IMG_V2
 EOF
 ```
@@ -108,5 +108,5 @@ tut_Query tangerine
 When finished playing, delete the deployent.
 <!-- @deleteDeployment -->
 ```
-kubectl delete deployment $TUT_DEPLOY_NAME
+kubectl delete deployment dep-kale
 ```
