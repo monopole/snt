@@ -2,7 +2,7 @@
 
 [namespace]: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces
 
-The command blocks that follow create pods, services,
+Command blocks that follow create pods, services,
 replicasets, ingress points, etc.  These resources
 exist in a [namespace].
 
@@ -30,7 +30,7 @@ showPods kube-public
 unset -f showPods
 ```
 
-Labels offer another way to arrange resources into sets.
+Labels offer another way to partition resources.
 
 Conceptual differences between labels and namespace:
 
@@ -82,4 +82,7 @@ kubectl --namespace=ns-beansprout \
 kubectl config view | grep namespace:
 ```
 
-The rest of the commands will operate in this namespace.
+The rest of the commands will operate in this
+namespace, rather than in `default`, so that the role
+of namespace is more evident in command output
+to follow.

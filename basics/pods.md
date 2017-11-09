@@ -8,6 +8,8 @@ Since a pod is the atomic unit of scheduling and
 replication in k8s, one has the opportunity to provide
 some scheduling information at pod creation time.
 
+### capacity is crucial to scheduling
+
 Each container in a pod can specify the CPU and memory
 resources it needs via the `resources.requests` and
 `resources.limits` variables.  The values assigned to
@@ -68,8 +70,10 @@ EOF
 kubectl get -o go-template="$tmpl" nodes
 ```
 
-Aside: To learn what fields are available for printing
-via Go templates, look at the underlying yaml:
+Aside: Controlling printing via Go templates is awkward
+at first but very flexible.  To learn what fields are
+available for printing via Go templates, look at the
+underlying yaml:
 
 <!-- @getNodeYaml -->
 ```
@@ -82,8 +86,8 @@ as an arg to `curl`):
 <!-- @nodeDataToCurl -->
 ```
 nodes=$(kubectl get \
-    -o go-template="{{range .items}}{{.metadata.name}} {{end}}" \
-    nodes)
+  -o go-template="{{range .items}}{{.metadata.name}} {{end}}" \
+  nodes)
 for n in $nodes; do
   echo $n
 done
@@ -110,10 +114,12 @@ getIps InternalIP
 getIps ExternalIP
 ```
 
+## Make a pod
+
 <!-- @defineContainerCapacityVarsForDemo -->
 ```
 TUT_CON_CPU=100m     # 10% of a CPU
-TUT_CON_MEMORY=100Mi
+TUT_CON_MEMORY=10000Ki
 ```
 
 Define a function to create a pod, do so, then
@@ -199,9 +205,7 @@ EOF
 kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
-Since this pod was created by hand - not by a _replica
-set_ (demo below) - it will not be recreated if the
-node running it dies.
+### scheduling test
 
 To test resource control, optionally delete the pod and
 recreate it after setting `TUT_CON_CPU=1000m`, i.e.:
@@ -220,7 +224,7 @@ unschedulable, since no nodes have 1 cpu available.
 Various jobs (e.g. kubelet, fluentd, etc) consume some
 percentage of the cpu.
 
-<!-- @recreateThePodWithReasonableCpu -->
+<!-- @recreatePod -->
 ```
 kubectl delete pod pod-tomato
 sleep 8
@@ -228,8 +232,3 @@ TUT_CON_CPU=100m
 tut_CreatePod
 kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
-
-[Job]: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion
-
-Aside: A pod that does some job and then goes away
-(i.e.  doesn't want to be reanimated) is called a [Job].

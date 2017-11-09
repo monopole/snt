@@ -11,11 +11,12 @@ management.
 
 The tutorial introduces pods and deployments in the
 course of building a cluster from scratch, to motivate
-the problem of configuration.  No k8s knowledge
-assumed, but discussion is kept to a minimum (for more
-info, see https://kubernetes.io).  The tutorial
-finishes by working with two cluster configuration
-tools.
+the problem of configuration.  The tutorial finishes by
+working with two cluster configuration tools.
+
+No k8s knowledge assumed, but background discussion is
+kept to a minimum.  See https://kubernetes.io for more
+documentation and tutorials.
 
 ### Instructions
 
@@ -27,18 +28,20 @@ starting with:
 TUT_DIR=$(mktemp -d)
 ```
 With the exception of the optional gcloud installation
-covered later, all file system use will happen in
-this disposable directory.  Cleanup up is just
+(discussed later), all file system use
+happens in this disposable directory.
+
+Cleanup up is just
 
 > ```
 > rm -rf $TUT_DIR
 > ```
 
 The tutorial can be done directly from the content's
-[github repo UX](https://github.com/monopole/snt).  In
-any directory, start with `README.md`, then consult
-`README_ORDER.txt` to see the order in which to visit
-remaining directory content.
+[github repo UX](https://github.com/monopole/snt).
+Start with the `README.md` in any directory, then
+consult `README_ORDER.txt` to see the order in which to
+visit remaining content.
 
 ### For a better experience
 

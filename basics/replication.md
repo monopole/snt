@@ -178,3 +178,7 @@ tut_WatchPods
 ```
 
 The service can be left alone for now.
+
+[Job]: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion
+
+Aside: A pod _intended_ to do some job and then die is called a [Job].

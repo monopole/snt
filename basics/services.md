@@ -26,22 +26,21 @@ behaviors:
 * Using `NodePort` here means the Kubernetes master
   will allocate a port from a flag-configured range in
   the low 30,000s, and each node will proxy that port
-  (the same port number on every node) into your
+  (the same port number on every node) to your
   service.  The IP must be discovered by inspection.
   Information about it appears in
   `<NodeIP>:spec.ports[*].nodePort` and
   `spec.clusterIp:spec.ports[*].port`.
 
 * The example below uses `LoadBalancer`, which will
-  round-robin requests to backend pods.  Balancer
-  creation is (like most other things) asynchronous.
-  Information about it appears in the
-  `status.loadBalancer` field.
+  round-robin requests to pods.  Balancer creation is
+  (like most other things) asynchronous.  Information
+  about it appears in the `status.loadBalancer` field.
 
 <!-- @defineFunctionToCreateService -->
 ```
 function tut_CreateService {
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 kind: Service
 apiVersion: v1
 metadata:

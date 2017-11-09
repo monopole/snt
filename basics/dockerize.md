@@ -220,10 +220,14 @@ fi
 
 The container images and source code in `$TUT_DIR` are no longer needed:
 
-<!-- @lsTutDir -->
+<!-- @lsSrc-->
 ```
-ls -C1 $TUT_DIR/src/${TUT_IMG_NAME}*
-rm $TUT_DIR/src/${TUT_IMG_NAME}*
+ls -C1 $TUT_DIR/src
+```
+
+<!-- @removeSrc -->
+```
+rm -rf $TUT_DIR/src
 ```
 
 
