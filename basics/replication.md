@@ -1,35 +1,43 @@
 # Replication
 
-[ReplicaSet]: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset
+[replica set]: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset
 
-Next try a [ReplicaSet].  Replica sets create pods, and
-are supposed to be use in the context of a
-_Deployment_, but we'll make a bare one here first.
+This section demonstrates how a [replica set] manages a
+set of pods.
 
-Before doing so, delete the existing pod.
-
+If you have a pod left over from previous lessons, get rid of it:
 <!-- @deletePod -->
 ```
 kubectl delete pod pod-tomato
 ```
 
-Leave the load balancer service alone.  It cannot return
-OK now because its only backing service (the pod) has been
-deleted, but once the replica set starts making pods,
-the load balancer will automatically hook up again by
-virtue of the labels.
+Leave the load balancer service alone.  It cannot
+successfully service requests because its only backing
+service (the pod) has been deleted.
+
+Confirm that it no longer works:
+
+<!-- @hitServiceWithNewArgument -->
+```
+tut_Query bananna
+```
+
+Once the replica set starts making pods, the load
+balancer will automatically hook up again by virtue of
+the labels, demonstrating one of k8s's self-repair
+behaviors.
 
 Create a replica set:
 
 <!-- @createReplicaSet -->
 ```yaml
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: extensions/v1beta1
 kind: ReplicaSet
 metadata:
   name: repset-asparagus
 spec:
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       name: pod-tomato
@@ -42,11 +50,11 @@ spec:
         image: $TUT_IMG_TAG:$TUT_IMG_V1
         resources:
           limits:
-            cpu: $TUT_CON_CPU
-            memory: $TUT_CON_MEMORY
+            cpu: 100m
+            memory: 10Mi
           requests:
-            cpu: $TUT_CON_CPU
-            memory: $TUT_CON_MEMORY
+            cpu: 100m
+            memory: 10Mi
         ports:
         - name: port-pumpkin
           containerPort: 8080
@@ -66,24 +74,29 @@ k8s:
 kubectl get pods
 ```
 
-For fun, go back up and create a pod manually, and
-watch (quickly) as it's immediately terminated
-by the system.
+The service should take traffic now:
+<!-- @hitServiceWithNewArgument -->
+```
+tut_Query jackfruit
+```
 
-Dump some useful pod info - like what nodes they live on:
+## Examine the pods
+
+Tailor a report to show the generated names for the
+pods, along with their host IPs:
 
 <!-- @getPodDetails -->
 ```
 tmpl=`cat <<EOF
 {{range .items -}}
-  name: {{.metadata.name -}}
-  {{with .status -}}
+{{.metadata.name -}}
+ {{with .status -}}
     {{range .containerStatuses}}
       image: {{.image}}
        name: {{.name -}}
     {{end}}
      hostIp: {{.hostIP}}
-        qos: {{.qosClass -}}
+        qos: {{.qosClass }}
   {{end}}
 {{end}}
 EOF
@@ -107,13 +120,28 @@ EOF
 kubectl get -o go-template="$tmpl" nodes
 ```
 
-Notice three instances of the image in the cluster
-(one per node):
+Confirm that each node (there's only one in the case of minikube)
+has a copy of the image:
 
 <!-- @grepNodesForProgram -->
 ```
 kubectl get nodes -o yaml | grep $TUT_IMG_NAME
 ```
+
+## Overpopulation
+
+For fun, create a pod manually - with the app label
+`avocado` - and watch (quickly) as it's immediately
+terminated by the system.
+
+<!-- @createOneTooMany -->
+```
+kubectl get pods
+tut_CreatePod
+kubectl get pods
+```
+
+## Underpopulation
 
 Define function to delete a random pod:
 
@@ -138,8 +166,8 @@ Define a pod watch that self-terminates in _n_ steps
 ```
 function tut_WatchPods {
   kubectl get pods
-  for i in {1..6}; do
-    sleep 0.3
+  for i in $(seq 2 $1); do
+    sleep 1
     kubectl get pods
   done
 }
@@ -151,7 +179,7 @@ Delete a pod, and wait for it to be rescheduled:
 ```
 kubectl get pods
 tut_DeleteRandomPod
-tut_WatchPods
+tut_WatchPods 20
 ```
 
 If necessary, recreate the service, get
@@ -165,20 +193,30 @@ tut_Query peach
 kubectl get pods
 kubectl delete --all pods
 tut_Query apple
-tut_WatchPods
+tut_WatchPods 20
 tut_Query peach
 ```
 
-When done, delete the replica set:
+When done playing, delete the replica set:
 
 <!-- @deleteReplicaSet -->
 ```
 kubectl delete replicaset repset-asparagus
-tut_WatchPods
+tut_WatchPods 20
 ```
 
 The service can be left alone for now.
 
 [Job]: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion
+[Daemon Set]: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 
-Aside: A pod _intended_ to do some job and then die is called a [Job].
+## Other pod managers
+
+A pod intended to do some job and then die, e.g.
+simply perform a git clone (using a git container), is
+called a [Job].  The job manager will retry if the job
+doesn't signal success.
+
+A pod intended to run on each node outside the scope of
+normal pod scheduling, e.g. to assure logs collection
+on _every_ node, is part of a [Daemon Set].

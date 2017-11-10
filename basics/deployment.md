@@ -7,34 +7,34 @@
 
 Kubernetes adds layers to avoid toil.
 
-* It is toil to repeatedly install all the libraries
+* It's toil to repeatedly install all the libraries
   and data needed to make an app work, so one creates a
   _container_ and installs only that.
 
-* It is toil to install a set of containers that
+* It's toil to install a set of containers that
   represent a serving stack every time one is needed,
   so one defines a _pod_ and installs that.
 
-* It is toil to watch and restart pods on unreliable or
+* It's toil to watch and restart pods on unreliable or
   changing hardware, so one invents a _replicaset_ to
   do the job.
 
-* The next level up - a deployment - concerns itself
-  with creating replicasets, scaling them, upgrading or
-  downgrading the pods therein, etc.
+* It's toil create replicasets, scale them, upgrade or
+  downgrading the pods therein, etc., so one invents a
+  _deployment_ with those concepts built in.
 
 Deployment yaml looks like replicaset yaml.
 Only the `kind` changes:
 
 <!-- @createDeployment -->
 ```yaml
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: dep-kale
 spec:
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       name: pod-tomato
@@ -47,17 +47,16 @@ spec:
         image: $TUT_IMG_TAG:$TUT_IMG_V1
         resources:
           limits:
-            cpu: $TUT_CON_CPU
-            memory: $TUT_CON_MEMORY
+            cpu: 100m
+            memory: 10Mi
           requests:
-            cpu: $TUT_CON_CPU
-            memory: $TUT_CON_MEMORY
+            cpu: 100m
+            memory: 10Mi
         ports:
         - name: port-pumpkin
           containerPort: 8080
 EOF
 ```
-
 
 <!-- @getDeployments -->
 ```
@@ -67,6 +66,15 @@ kubectl get deployments
 <!-- @desribeDeployments -->
 ```
 kubectl describe deployments
+```
+
+A deployment contains a replicaset. The cluster now has
+one, with a generated name built from the deployment
+name:
+
+<!-- @getReplicaSets -->
+```
+kubectl get replicasets
 ```
 
 A deployment differs from a replicaset in that it
@@ -99,13 +107,20 @@ spec:
 EOF
 ```
 
+Try this repeatedly to watch the pod count change
+as the new image rolls out:
 <!-- @checkImageVersion -->
 ```
 kubectl describe pods | grep Image:
+```
+
+The service still works during this process:
+<!-- @checkImageVersion -->
+```
 tut_Query tangerine
 ```
 
-When finished playing, delete the deployent.
+When finished, delete the deployent.
 <!-- @deleteDeployment -->
 ```
 kubectl delete deployment dep-kale

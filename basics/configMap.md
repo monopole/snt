@@ -2,15 +2,19 @@
 
 [ConfigMap]: https://kubernetes.io/docs/tasks/configure-pod-container/configmap
 
-Now redo the above deployment, but this time connect
-the deployment to a [ConfigMap] and use it
-reconfigure the image held by the pods with `kubectl`.
+> _Change properties of a deployment via a [ConfigMap],
+> to avoid having to re-specify send configuration
+> values into a deployment.  Easier than deleting and
+> recreating a deployment._
+>
+> _Time: 5min_
 
-First create the map:
 
-<!-- @createConfigMap -->
+Create a [ConfigMap]:
+
+<!-- @createConfigMap @test -->
 ```yaml
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -21,45 +25,16 @@ data:
 EOF
 ```
 
-<!-- @describeConfigMap -->
+<!-- @describeConfigMap @test -->
 ```
 kubectl describe configmap cfg-parsley
 ```
 
-To illustrate a point made below, change the image's
-(container's) port value:
+Create a deployment that uses this configmap:
 
-<!-- @tryNonDefaultPortToCheckFlagValuePassing -->
-```
-TUT_CON_PORT_VALUE=8777
-```
-
-and recreate the service (the loadbalancer):
-
-<!-- @deleteAndRecreateService -->
-```
-kubectl delete service svc-eggplant
-tut_CreateService
-```
-
-```
-kubectl describe service svc-eggplant
-TUT_SVC_ADDRESS=$(tut_getServiceAddress)
-echo "Service at $TUT_SVC_ADDRESS"
-```
-
-The loadbalancer, when started, is told which port to
-map to on the various nodes.  If the port value is
-changed in a deployment (which is about to happen), the
-service will not notice - it has to be deleted and
-restarted.
-
-Now create a deployment that uses the new container
-port value, and references the new configmap:
-
-<!-- @reCreateDeploymentToReferenceConfigMaop -->
+<!-- @createDeploymentToReferenceConfigMap @test -->
 ```yaml
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -76,22 +51,20 @@ spec:
       containers:
       - name: cnt-carrot
         image: $TUT_IMG_TAG:$TUT_IMG_V2
-        # --port value must match container port, so it's not safe
-        # to set it via configmap.  But it's wise safe to specify
-        # it explicity in this declaration.
+        # --port value must match containerPort
         command: ["/${TUT_IMG_NAME}",
-                  "--port=${TUT_CON_PORT_VALUE}",
+                  "--port=8080",
                   "--enableRiskyFeature=\$(TUTORIAL_ENABLE_RISK)"]
         resources:
           limits:
-            cpu: $TUT_CON_CPU
-            memory: $TUT_CON_MEMORY
+            cpu: 100m
+            memory: 10Mi
           requests:
-            cpu: $TUT_CON_CPU
-            memory: $TUT_CON_MEMORY
+            cpu: 100m
+            memory: 10Mi
         ports:
         - name: port-pumpkin
-          containerPort: $TUT_CON_PORT_VALUE
+          containerPort: 8080
         env:
         - name: TUTORIAL_GREETING
           valueFrom:
@@ -111,8 +84,7 @@ EOF
 kubectl describe deployments
 ```
 
-The following query should work:
-
+Make sure querying works:
 <!-- @curlService -->
 ```
 tut_Query lime
@@ -129,7 +101,7 @@ kind: ConfigMap
 metadata:
   name: cfg-parsley
 data:
-  tutorial.greeting: "GREETING ONE :-("
+  tutorial.greeting: "Bienvenue!"
   tutorial.enablerisk: "true"
 EOF
 ```
@@ -146,6 +118,8 @@ There are no visible changes in the service yet.
 tut_Query lemon
 ```
 
+### Mixed states
+
 Delete one pod at a time and watch as new configuration
 is adopted by new pods.
 
@@ -161,34 +135,42 @@ Repeat this query a few times to hit different pods:
 tut_Query orange
 ```
 
-One can get the cluster into a (likely very
-undesirabled) mixed state by _alternating changing the
-config with deletion of a single pod_.
+One can get the cluster into a (presumably
+undesirabled) permanently mixed state by changing the
+config and deleting a single pod.
 
-One way to get everything in sync again is delete all
-pods to force recreation at the latest config:
+Get everything in sync again by deleting all the pods
+to force recreation at the latest config:
 
 <!-- @deleteAllPods -->
 ```
 kubectl delete --all pods
 ```
 
-The _recommended way_ to manage config is to not apply
-changes to a configmap, but to instead create a _new configmap_
-and apply a change to the deployment so that it points to
-that new configmap.
+Confirm the new greeting is always served:
+<!-- @tryQuery -->
+```
+tut_Query orange
+```
+
+### Treat configs as immutable
+
+The recommended way to manage config is to not apply
+changes to a configmap, but to instead create a _new_
+map and apply a change to the deployment so that it
+points to that new configmap.
 
 Create a second config:
 
 <!-- @createConfigMap2 -->
 ```yaml
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cfg-cilantro
 data:
-  tutorial.greeting: "greeting two :-)"
+  tutorial.greeting: "Irasshaimase!"
   tutorial.enablerisk: "false"
 EOF
 ```
@@ -212,9 +194,15 @@ metadata:
   name: dep-kale
 spec:
   template:
+    metadata:
+      name: pod-tomato
+      labels:
+        app: avocado
+        env: monkey-staging
     spec:
       containers:
       - name: cnt-carrot
+        image: $TUT_IMG_TAG:$TUT_IMG_V1
         env:
         - name: TUTORIAL_GREETING
           valueFrom:
@@ -270,3 +258,90 @@ for i in {1..15}; do
   sleep 0.5
 done
 ```
+
+-----
+
+### ConfigMaps don't work with servers.
+
+It's tempting to define the container port in a
+configmap, as it's a key part of deploying services.
+
+However, the service resource doesn't yet honor
+the notion of a config map.  I.e., one could specify
+a port environment variable in a configmap,
+and use it in the `command:` field in the deployment's
+container spec, but to benefit from this the load
+balancer in front of the deployment should _also_
+get port information from the same config map.
+That currently doesn't work.
+
+<!-- @curlService -->
+```
+tut_Query lime
+```
+
+That's because the service (load balancer) being used
+was defined using `targetPort: 8080`:
+
+<!-- @checkServiceTargetPort -->
+```
+kubectl describe service svc-eggplant | grep TargetPort
+```
+
+while the deployment defined above uses port 8777.
+
+
+done to allow the following discussion:
+
+Suppose we change the service
+We could change that with an `apply`:
+
+<!-- @changeTheServicePort -->
+```
+cat <<EOF | kubectl apply -f -
+kind: Service
+apiVersion: v1
+metadata:
+  name: svc-eggplant
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8088
+      targetPort: 8777
+EOF
+```
+
+But the query still doesn't work
+<!-- @curlService -->
+```
+tut_Query lime
+```
+because (presumably) the apply doesn't trigger a rescan
+of the pods to hook up to the actual, virtual cluster ports
+in use.
+
+The point being made here is that ports
+
+and recreate the service (the loadbalancer):
+
+<!-- @deleteAndRecreateService -->
+```
+kubectl delete service svc-eggplant
+tut_CreateService
+```
+
+
+```
+kubectl describe service svc-eggplant
+TUT_SVC_ADDRESS=$(tut_getServiceAddress)
+echo "Service at $TUT_SVC_ADDRESS"
+```
+
+The loadbalancer, when started, is told which port to
+map to on the various nodes.  If the port value is
+changed in a deployment (which is about to happen), the
+service will not notice - it has to be deleted and
+restarted.
+
+
+---

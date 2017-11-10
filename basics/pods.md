@@ -128,7 +128,7 @@ Define a function to create a pod, do so, then
 <!-- @defineFunctionToCreatePod-->
 ```
 function tut_CreatePod {
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -223,6 +223,8 @@ A pod configured to use 1 (entire) CPU is
 unschedulable, since no nodes have 1 cpu available.
 Various jobs (e.g. kubelet, fluentd, etc) consume some
 percentage of the cpu.
+
+Confirm it can be recreated with a reasonable CPU request:
 
 <!-- @recreatePod -->
 ```

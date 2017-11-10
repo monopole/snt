@@ -79,7 +79,7 @@ kubectl get service
 ```
 
 Find out what's going on with the service:
-The output of this command includes an endPoint.
+
 
 <!-- @describeService -->
 ```
