@@ -99,7 +99,12 @@ kind: Deployment
 metadata:
   name: dep-kale
 spec:
+  replicas: 3
   template:
+    metadata:
+      labels:
+        app: avocado
+        env: monkey-staging
     spec:
       containers:
       - name: cnt-carrot
@@ -107,8 +112,9 @@ spec:
 EOF
 ```
 
-Try this repeatedly to watch the pod count change
-as the new image rolls out:
+Try the following repeatedly to watch the pod count
+change as the new image rolls out:
+
 <!-- @checkImageVersion -->
 ```
 kubectl describe pods | grep Image:

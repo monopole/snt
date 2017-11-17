@@ -1,41 +1,24 @@
 # Clean up
 
-Either add an address record, e.g.
+One can individually delete things, e.g.
 
 ```
-A * $TUT_STATIC_IP_NAME
-```
-
-to some naming service (e.g. namebright.com) then check it with
-
-```
-nslookup scriptingandtooling.com ns1.namebrightdns.com
-```
-
-or delete the static IP so we stop paying for it:
-
-<!-- @deleteStaticIp -->
-```
-#  Obviously don't do this if you've recorded it in DNS records.
-gcloud compute --project=$TUT_PROJECT_ID  \
-    addresses delete $TUT_STATIC_IP_NAME
-```
-
-Also clean up other stuff that afaik isn't garbage collected:
-
-<!-- @deleteConfigMap -->
-```
-kubectl delete configmap cfg-parsley
-```
-
-<!-- @deleteDeployment -->
-```
+kubectl delete namespace ns-beansprout
 kubectl delete deployment dep-kale
 ```
 
-Delete the cluster so we stop paying for it:
+or leverage the namespace:
+
+<!-- @deleteTheNamespaceAndEverythingInIt -->
+```
+kubectl delete namespace ns-beansprout
+```
+
+If using GKE, delete the cluster to stop billing.
 
 <!-- @deleteCluster -->
 ```
-gcloud --quiet container clusters delete $TUT_CLUSTER_NAME
+if ! isMinikube; then
+  gcloud --quiet container clusters delete $TUT_CLUSTER_NAME
+fi
 ```

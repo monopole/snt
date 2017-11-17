@@ -5,22 +5,27 @@
 
 > __status: under development Oct 2017__
 
-The directory containing this `README` holds a brief
-introduction to aggregate k8s cluster configuration and
-management.
+The content in the directory containing this `README`
+introduces the reader to aggregate k8s cluster
+configuration and management.
+
+No k8s knowledge or existing infrastructure is assumed.
+Instructions to start a cluster are included to allow
+self-contained test coverage for the tutorial.
+Nevertheless, background discussion is kept to a
+minimum.
 
 The tutorial introduces pods and deployments in the
 course of building a cluster from scratch, to motivate
 the problem of configuration.  The tutorial finishes by
 working with two cluster configuration tools.
 
-No k8s knowledge assumed, but background discussion is
-kept to a minimum.  See https://kubernetes.io for more
-documentation and tutorials.
+See https://kubernetes.io for more documentation and
+tutorials.
 
-### Instructions
+## Using the tutorial
 
-Open a terminal and copy/paste code blocks to it,
+Open a bash shell and copy/paste code blocks to it,
 starting with:
 
 <!-- @makeTutorialWorkingDirectory-->
@@ -38,10 +43,11 @@ Cleanup up is just
 > ```
 
 The tutorial can be done directly from the content's
-[github repo UX](https://github.com/monopole/snt).
-Start with the `README.md` in any directory, then
-consult `README_ORDER.txt` to see the order in which to
-visit remaining content.
+[github repo UX](https://github.com/monopole/snt)
+(i.e. what you're likely reading right now).  Start
+with the `README.md` in any directory, then consult
+`README_ORDER.txt` to see the order in which to visit
+remaining content.
 
 ### For a better experience
 
@@ -58,13 +64,19 @@ GOBIN=$TUT_DIR/bin go install github.com/monopole/mdrip
 $TUT_DIR/bin/mdrip --mode demo --port 8081 $TUT_DIR/snt
 ```
 
-Visit http://localhost:8081 to see the material
+Then visit http://localhost:8081 to see the material
 presented with a navigation menu and one-click copying
-of code blocks.
+of code blocks and check marks to show completion.
 
 ### For an even better experience
 
-Install and run [tmux](https://github.com/tmux/tmux/wiki).
+Install and run [tmux](https://github.com/tmux/tmux/wiki),
+e.g.
+
+```
+sudo apt-get install tmux
+tmux
+```
 
 Then, clicking on a code block on a locally served web
 page will immediately paste the block to your active

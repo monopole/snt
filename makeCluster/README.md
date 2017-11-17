@@ -25,12 +25,11 @@ authentication and billing issues.
 
 Try GKE when ready to try ingress to a remote cloud.
 
-
 ### kubectl
 
 Regardless of cluster (minikube, GKE, AWS, etc.)  one
 needs `kubectl`, a command line client that facilitates
 controlling a k8s cluster.
 
-Instructions for installing `kubectl` differ slightly
-depending on the cluster choice.
+You'll install `kubectl` below, via means that
+differ slightly depending on the cluster choice.

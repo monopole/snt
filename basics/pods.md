@@ -15,9 +15,7 @@ resources it needs via the `resources.requests` and
 `resources.limits` variables.  The values assigned to
 `requests` and `limits` for a container determine that
 container's _quality of service_ class, aka QoS
-class.
-
-In turn, a pod is given a QoS level matching the lowest
+class. A pod is given a QoS level matching the lowest
 level assigned to any of its containers.
 
 There are three QoS classes:
@@ -70,49 +68,6 @@ EOF
 kubectl get -o go-template="$tmpl" nodes
 ```
 
-Aside: Controlling printing via Go templates is awkward
-at first but very flexible.  To learn what fields are
-available for printing via Go templates, look at the
-underlying yaml:
-
-<!-- @getNodeYaml -->
-```
-kubectl get -o yaml nodes
-```
-
-To make data available in a shell loop (e.g. to use it
-as an arg to `curl`):
-
-<!-- @nodeDataToCurl -->
-```
-nodes=$(kubectl get \
-  -o go-template="{{range .items}}{{.metadata.name}} {{end}}" \
-  nodes)
-for n in $nodes; do
-  echo $n
-done
-```
-
-As an example of filtering output
-from a list, grab IP data from the nodes:
-
-<!-- @getNodeIps -->
-```
-function getIps {
-  local tmpl=`cat <<EOF
-{{range .items -}}
-{{\\\$n := .metadata.name -}}
-  {{range .status.addresses -}}
-    {{if eq .type "$1"}}{{\\\$n}} {{.address}}{{end -}}
-  {{end}}
-{{end}}
-EOF
-`
-  kubectl get -o go-template="$tmpl" nodes
-}
-getIps InternalIP
-getIps ExternalIP
-```
 
 ## Make a pod
 
@@ -208,7 +163,7 @@ kubectl get -o go-template="$tmpl" pod pod-tomato
 ### scheduling test
 
 To test resource control, optionally delete the pod and
-recreate it after setting `TUT_CON_CPU=1000m`, i.e.:
+recreate it after increasing `TUT_CON_CPU` to `1000m`, i.e.:
 
 <!-- @checkScheduling -->
 ```
@@ -232,5 +187,9 @@ kubectl delete pod pod-tomato
 sleep 8
 TUT_CON_CPU=100m
 tut_CreatePod
+```
+
+<!-- @checkPod -->
+```
 kubectl get -o go-template="$tmpl" pod pod-tomato
 ```

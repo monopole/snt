@@ -5,19 +5,17 @@
 This section demonstrates how a [replica set] manages a
 set of pods.
 
-If you have a pod left over from previous lessons, get rid of it:
+If you have a pod running from earlier, get rid of it:
 <!-- @deletePod -->
 ```
 kubectl delete pod pod-tomato
 ```
 
-Leave the load balancer service alone.  It cannot
-successfully service requests because its only backing
-service (the pod) has been deleted.
+The service can be left running, but it cannot serve
+because its only backing service (the pod) has been
+deleted.
 
-Confirm that it no longer works:
-
-<!-- @hitServiceWithNewArgument -->
+<!-- @queryServiceWithNewArgument -->
 ```
 tut_Query bananna
 ```
@@ -130,14 +128,18 @@ kubectl get nodes -o yaml | grep $TUT_IMG_NAME
 
 ## Overpopulation
 
-For fun, create a pod manually - with the app label
-`avocado` - and watch (quickly) as it's immediately
+Create a pod manually with the app label
+`avocado`, and watch (quickly) as it's immediately
 terminated by the system.
 
 <!-- @createOneTooMany -->
 ```
 kubectl get pods
 tut_CreatePod
+kubectl get pods
+```
+
+```
 kubectl get pods
 ```
 
@@ -182,10 +184,9 @@ tut_DeleteRandomPod
 tut_WatchPods 20
 ```
 
-If necessary, recreate the service, get
-the (new) loadBalancer address, hit the LB, and try
-interleaving requests with deletion of all pods.  See
-if the pods stay dead long enough to fail a request.
+Delete _all_ pods, and try interleaving requests with
+deletion of all pods.  See if the pods stay dead long
+enough to fail a request.
 
 <!-- @deleteAllPods -->
 ```
@@ -193,7 +194,7 @@ tut_Query peach
 kubectl get pods
 kubectl delete --all pods
 tut_Query apple
-tut_WatchPods 20
+tut_WatchPods 5
 tut_Query peach
 ```
 
@@ -202,7 +203,7 @@ When done playing, delete the replica set:
 <!-- @deleteReplicaSet -->
 ```
 kubectl delete replicaset repset-asparagus
-tut_WatchPods 20
+tut_WatchPods 10
 ```
 
 The service can be left alone for now.

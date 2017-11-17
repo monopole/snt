@@ -9,7 +9,8 @@ exist in a [namespace].
 A command like `kubectl delete pod shoeShopServer` or
 the more dramatic `kubectl delete pods --all`
 implicitly operates only on the currently active
-namespace, leaving pods in other namespaces alone.
+namespace, leaving pods in other namespaces alone.  A
+simple way to manage multi-tenancy.
 
 <!-- @getNamespaces -->
 ```
@@ -31,7 +32,6 @@ unset -f showPods
 ```
 
 Labels offer another way to partition resources.
-
 Conceptual differences between labels and namespace:
 
 * A default namespace exists (called

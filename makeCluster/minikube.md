@@ -16,22 +16,6 @@ virtualbox hypervisor instead.
 [virtualbox]: https://www.virtualbox.org/
 
 
-### Define a project ID
-
-The "GKE path" through these instructions require a
-project ID in which to create cloud containers and
-clusters for billing.
-
-When using minikube, a project ID isn't needed, but the
-env variable is assigned regardless so the same
-tutorial code blocks (for naming container images and
-such) can be used regardless of cluster.
-
-<!-- @initializeProjectId -->
-```
-TUT_PROJECT_ID=mk-project
-```
-
 ### Clean up from previous runs (if any)
 
 <!-- @purgePreviousMinikubeVmUsage -->
@@ -121,7 +105,7 @@ This can take a few minutes.
 <!-- @startTheClusterOnVirtualBox -->
 ```
 # sudo -E minikube start --vm-driver=none
-minikube start --memory 8192 --cpus 6 --vm-driver=virtualbox
+time minikube start --memory 8192 --cpus 6 --vm-driver=virtualbox
 ```
 
 <!-- @optionallyWaitForFullMinikubeStartup -->
@@ -147,6 +131,9 @@ Confirm expectations
 ```
 minikube status
 ```
+
+This environment variable now points to what should
+be a short file.
 
 <!-- @examineKubeConfig -->
 ```

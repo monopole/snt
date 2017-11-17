@@ -2,15 +2,13 @@
 
 [ConfigMap]: https://kubernetes.io/docs/tasks/configure-pod-container/configmap
 
-> _Change properties of a deployment via a [ConfigMap],
-> to avoid having to re-specify send configuration
-> values into a deployment.  Easier than deleting and
-> recreating a deployment._
+> _Instead of deleting and recreating a deployment
+> to change it, set its properties via a [ConfigMap]._
 >
 > _Time: 5min_
 
 
-Create a [ConfigMap]:
+Create a ConfigMap:
 
 <!-- @createConfigMap @test -->
 ```yaml
@@ -259,89 +257,13 @@ for i in {1..15}; do
 done
 ```
 
------
 
-### ConfigMaps don't work with servers.
+### ConfigMaps don't work with everything.
 
-It's tempting to define the container port in a
-configmap, as it's a key part of deploying services.
+They have a general purpose name, but only deployments
+use them.
 
-However, the service resource doesn't yet honor
-the notion of a config map.  I.e., one could specify
-a port environment variable in a configmap,
-and use it in the `command:` field in the deployment's
-container spec, but to benefit from this the load
-balancer in front of the deployment should _also_
-get port information from the same config map.
-That currently doesn't work.
-
-<!-- @curlService -->
-```
-tut_Query lime
-```
-
-That's because the service (load balancer) being used
-was defined using `targetPort: 8080`:
-
-<!-- @checkServiceTargetPort -->
-```
-kubectl describe service svc-eggplant | grep TargetPort
-```
-
-while the deployment defined above uses port 8777.
-
-
-done to allow the following discussion:
-
-Suppose we change the service
-We could change that with an `apply`:
-
-<!-- @changeTheServicePort -->
-```
-cat <<EOF | kubectl apply -f -
-kind: Service
-apiVersion: v1
-metadata:
-  name: svc-eggplant
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 8088
-      targetPort: 8777
-EOF
-```
-
-But the query still doesn't work
-<!-- @curlService -->
-```
-tut_Query lime
-```
-because (presumably) the apply doesn't trigger a rescan
-of the pods to hook up to the actual, virtual cluster ports
-in use.
-
-The point being made here is that ports
-
-and recreate the service (the loadbalancer):
-
-<!-- @deleteAndRecreateService -->
-```
-kubectl delete service svc-eggplant
-tut_CreateService
-```
-
-
-```
-kubectl describe service svc-eggplant
-TUT_SVC_ADDRESS=$(tut_getServiceAddress)
-echo "Service at $TUT_SVC_ADDRESS"
-```
-
-The loadbalancer, when started, is told which port to
-map to on the various nodes.  If the port value is
-changed in a deployment (which is about to happen), the
-service will not notice - it has to be deleted and
-restarted.
-
-
----
+I.e. one cannot use them to, say, instruct a service
+which pod ports to talk to.  If the port used in the
+container `command:` line above changed, one would need
+a new service configured to look at that port instead.
