@@ -1,6 +1,8 @@
 # Start a Minikube cluster
 
-Time required: ~5 mins
+> _Use your laptop to create a single node cluster._
+>
+> _Time: 5min_
 
 Prerequisites:
 
@@ -100,7 +102,7 @@ alias kubectl=$TUT_DIR/bin/kubectl
 
 ### Start the cluster
 
-This can take a few minutes.
+This can take a couple of minutes because of downloads.
 
 <!-- @startTheClusterOnVirtualBox -->
 ```

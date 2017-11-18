@@ -1,5 +1,11 @@
 # Make a server
 
+> _Write a configurable HTTP server
+>  to run on the cluster._
+>
+> _Time: 30sec_
+
+
 Make a program to use as an example binary to
 configure, rollout, rollback, upgrade, etc.  Make it a
 webserver so it can be queried with HTTP clients you

@@ -8,4 +8,3 @@ deployment
 configMap
 ingress
 troubleshooting
-cleanup

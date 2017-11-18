@@ -6,27 +6,26 @@
 > __status: under development Oct 2017__
 
 The content in the directory containing this `README`
-introduces the reader to aggregate k8s cluster
-configuration and management.
-
-No k8s knowledge or existing infrastructure is assumed.
-Instructions to start a cluster are included to allow
-self-contained test coverage for the tutorial.
-Nevertheless, background discussion is kept to a
-minimum.
+introduces the reader to kubernetes (a.k.a. _k8s_) and
+some options for configuration management.
 
 The tutorial introduces pods and deployments in the
-course of building a cluster from scratch, to motivate
-the problem of configuration.  The tutorial finishes by
-working with two cluster configuration tools.
+course of configuring a cluster from scratch, to show
+that even a simple cluster has configuration
+challenges.  Instructions to start a cluster are
+directly included to allow self-contained test coverage
+for the tutorial.  The tutorial finishes by working
+with two cluster configuration tools.
 
-See https://kubernetes.io for more documentation and
-tutorials.
+No k8s knowledge or existing infrastructure is assumed,
+but discussion is kept to a minimum to focuss on actual
+practice with real commands.  See https://kubernetes.io
+for more background documentation and tutorials.
 
 ## Using the tutorial
 
-Open a bash shell and copy/paste code blocks to it,
-starting with:
+Open a bash shell (the default on linux and Mac OSX)
+and copy/paste code blocks to it, starting with:
 
 <!-- @makeTutorialWorkingDirectory-->
 ```

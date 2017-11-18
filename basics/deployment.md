@@ -1,4 +1,8 @@
-### Try a Deployment
+# Deployments
+
+> _Rollout a new server._
+>
+> _Time: 6min_
 
 
 [Deployment]: https://kubernetes.io/docs/concepts/workloads/controllers/deployment

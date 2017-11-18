@@ -1,4 +1,8 @@
-### Expose the Pod With a Service
+# Expose the Pod With a Service
+
+> _Make pod services available outside the cluster._
+>
+> _Time: 5min_
 
 Pods are not exposed to the outside world directly.  To
 access a service on a pod, one  needs a k8s [Service] -
@@ -96,10 +100,6 @@ Crucial aspects of the output are
 
 Grab an address to use with the service:
 
-<!-- @hackToDetermineWhichAddressToUse -->
-```
-```
-
 <!-- @defineFunctionToGetServiceAddress -->
 ```
 function tut_getServiceAddress {
@@ -141,6 +141,7 @@ function tut_Query {
 <!-- @queryService -->
 ```
 tut_Query bananna
+tut_Query tangerine
 ```
 
 [address list page]: https://console.cloud.google.com/networking/addresses/list

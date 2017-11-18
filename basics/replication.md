@@ -1,11 +1,16 @@
 # Replication
 
+> _Decimate the pods!  Reanimate the pods!_
+>
+> _Time: 9min_
+
 [replica set]: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset
 
 This section demonstrates how a [replica set] manages a
 set of pods.
 
-If you have a pod running from earlier, get rid of it:
+If you have a pod running from earlier, get rid of it
+(to avoid confusing output below):
 <!-- @deletePod -->
 ```
 kubectl delete pod pod-tomato
@@ -15,7 +20,7 @@ The service can be left running, but it cannot serve
 because its only backing service (the pod) has been
 deleted.
 
-<!-- @queryServiceWithNewArgument -->
+<!-- @queryNoLongerWorks -->
 ```
 tut_Query bananna
 ```
@@ -73,15 +78,15 @@ kubectl get pods
 ```
 
 The service should take traffic now:
-<!-- @hitServiceWithNewArgument -->
+<!-- @queryService -->
 ```
 tut_Query jackfruit
 ```
 
 ## Examine the pods
 
-Tailor a report to show the generated names for the
-pods, along with their host IPs:
+Tailor a report showing the generated pod names and
+their host IPs:
 
 <!-- @getPodDetails -->
 ```

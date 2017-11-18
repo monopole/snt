@@ -1,5 +1,10 @@
 # Ingress and DNS
 
+> _Make your service available worldwide._
+>
+> _Time: 5min_
+
+
 __Skip this if using minikube - this section about
 exposing a service from GKE to the outside world__
 

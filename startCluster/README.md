@@ -4,10 +4,12 @@
 [GKE]: https://cloud.google.com/container-engine
 
 A k8s tutorial requires a working, albeit bare,
-cluster.  This section has instructions for starting
+cluster.
 
- * a locally hosted cluster on [minikube].
- * a remote cluster hosted on [GKE].
+This section has instructions for starting either
+
+ * a locally hosted cluster on [minikube],
+ * or a remote cluster hosted on [GKE].
 
 Here, _starting_ a cluster means doing the minimal
 setup necessary to bring up a k8s API server and nodes
@@ -19,11 +21,15 @@ your own apps on that cluster.
 
 ### Which one?
 
-Using a local cluster will get you through the material
-faster, as it avoids orthogonal detours into cloud
-authentication and billing issues.
+Using a local cluster (minikube) will get you through
+the material faster, as it avoids orthogonal detours
+into cloud authentication and billing issues.
 
-Try GKE when ready to try ingress to a remote cloud.
+Try GKE to practice ingress configuration and launch
+cluster-backed services accessible world-wide.
+
+Short of ingress, the commands that configure the
+cluster are the same.  k8s is a portable cloud.
 
 ### kubectl
 

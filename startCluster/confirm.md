@@ -1,5 +1,10 @@
 ## Confirm kubectl can talk to your cluster
 
+> _Are the lights on?_
+>
+> _Time: 10sec_
+
+
 Regardless of which cluster you've set up,
 you should now be able to talk to it via kubectl.
 

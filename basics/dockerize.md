@@ -1,5 +1,10 @@
 # Make docker images
 
+> _Bundle your server into a container (twice)._
+>
+> _Time: 2-5min_
+
+
 Kubernetes wants pods to pull their container images
 from a (presumably remote and trustworthy) server
 called a container registry, so that's a first step
@@ -18,6 +23,8 @@ In what follows:
 
  * If you're using GKE, you'll use the
    Google container registry at http://gcr.io.
+
+## Set up environment
 
 <!-- @defineFunctionToConsultClusterPlatform -->
 ```
@@ -55,7 +62,7 @@ echo "DOCKER_HOST=$DOCKER_HOST"
 
 ## Create images
 
-Put the web server into a container image.
+Put your web server into a container image.
 
 <!-- @removeAllLocalDockerImages -->
 ```

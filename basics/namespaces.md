@@ -1,5 +1,10 @@
 # Define a namespace
 
+> _Isolate the tutorial work in your cluster._
+>
+> _Time: 2min_
+
+
 [namespace]: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces
 
 Command blocks that follow create pods, services,
@@ -9,8 +14,14 @@ exist in a [namespace].
 A command like `kubectl delete pod shoeShopServer` or
 the more dramatic `kubectl delete pods --all`
 implicitly operates only on the currently active
-namespace, leaving pods in other namespaces alone.  A
-simple way to manage multi-tenancy.
+namespace, leaving pods in other namespaces alone.
+
+This can do something as simple as isolate your
+tutorial work on a running cluster from other jobs, or
+help with something as complex as multi-tenancy.
+
+
+## Review current status
 
 <!-- @getNamespaces -->
 ```
@@ -56,6 +67,8 @@ Your current namespace is:
 ```
 kubectl config view | grep namespace:
 ```
+
+## Make a tutorial namespace
 
 Create a new namespace, but first delete it and every
 resource in it:

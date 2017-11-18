@@ -1,5 +1,9 @@
 # Helm
 
+> _Configure your cluster using templates._
+>
+> _Time: 6min_
+
 Before running what follows it's assumed you done
 instructions above to start a cluster, i.e. this command
 ```
@@ -33,9 +37,9 @@ helm init
 ```
 
 
-## Basics
+## Are the lights on?
 
-<!-- @areTheLightsOn -->
+<!-- @confirmTillerRunning -->
 ```
 kubectl get pods --namespace kube-system | grep tiller
 ```

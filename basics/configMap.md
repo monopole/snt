@@ -5,10 +5,10 @@
 > _Instead of deleting and recreating a deployment
 > to change it, set its properties via a [ConfigMap]._
 >
-> _Time: 5min_
+> _Time: 6min_
 
 
-Create a ConfigMap:
+Create a ConfigMap.  It's a set of key:value pairs.
 
 <!-- @createConfigMap @test -->
 ```yaml
@@ -126,7 +126,7 @@ is adopted by new pods.
 tut_DeleteRandomPod
 ```
 
-Repeat this query a few times to hit different pods:
+Repeat this query ten or so times to hit different pods:
 
 <!-- @tryQuery -->
 ```
@@ -257,6 +257,14 @@ for i in {1..15}; do
 done
 ```
 
+### Cleanup?
+
+<!-- @deleteStuff -->
+```
+kubectl delete deployment dep-kale
+kubectl delete configmap cfg-parsley
+kubectl delete configmap cfg-cilantro
+```
 
 ### ConfigMaps don't work with everything.
 
