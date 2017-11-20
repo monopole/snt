@@ -5,40 +5,48 @@
 
 > __status: under development Oct 2017__
 
-The directory containing this `README` holds a brief
-introduction to aggregate k8s cluster configuration and
-management.
+The content in the directory containing this `README`
+introduces the reader to kubernetes (a.k.a. _k8s_) and
+some options for configuration management.
 
 The tutorial introduces pods and deployments in the
-course of building a cluster from scratch, to motivate
-the problem of configuration.  No k8s knowledge
-assumed, but discussion is kept to a minimum (for more
-info, see https://kubernetes.io).  The tutorial
-finishes by working with two cluster configuration
-tools.
+course of configuring a cluster from scratch, to show
+that even a simple cluster has configuration
+challenges.  Instructions to start a cluster are
+directly included to allow self-contained test coverage
+for the tutorial.  The tutorial finishes by working
+with two cluster configuration tools.
 
-### Instructions
+No k8s knowledge or existing infrastructure is assumed,
+but discussion is kept to a minimum to focuss on actual
+practice with real commands.  See https://kubernetes.io
+for more background documentation and tutorials.
 
-Open a terminal and copy/paste code blocks to it,
-starting with:
+## Using the tutorial
+
+Open a bash shell (the default on linux and Mac OSX)
+and copy/paste code blocks to it, starting with:
 
 <!-- @makeTutorialWorkingDirectory-->
 ```
 TUT_DIR=$(mktemp -d)
 ```
 With the exception of the optional gcloud installation
-covered later, all file system use will happen in
-this disposable directory.  Cleanup up is just
+(discussed later), all file system use
+happens in this disposable directory.
+
+Cleanup up is just
 
 > ```
 > rm -rf $TUT_DIR
 > ```
 
 The tutorial can be done directly from the content's
-[github repo UX](https://github.com/monopole/snt).  In
-any directory, start with `README.md`, then consult
+[github repo UX](https://github.com/monopole/snt)
+(i.e. what you're likely reading right now).  Start
+with the `README.md` in any directory, then consult
 `README_ORDER.txt` to see the order in which to visit
-remaining directory content.
+remaining content.
 
 ### For a better experience
 
@@ -55,13 +63,19 @@ GOBIN=$TUT_DIR/bin go install github.com/monopole/mdrip
 $TUT_DIR/bin/mdrip --mode demo --port 8081 $TUT_DIR/snt
 ```
 
-Visit http://localhost:8081 to see the material
+Then visit http://localhost:8081 to see the material
 presented with a navigation menu and one-click copying
-of code blocks.
+of code blocks and check marks to show completion.
 
 ### For an even better experience
 
-Install and run [tmux](https://github.com/tmux/tmux/wiki).
+Install and run [tmux](https://github.com/tmux/tmux/wiki),
+e.g.
+
+```
+sudo apt-get install tmux
+tmux
+```
 
 Then, clicking on a code block on a locally served web
 page will immediately paste the block to your active

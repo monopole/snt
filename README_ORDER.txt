@@ -1,4 +1,5 @@
-makeCluster
+startCluster
 basics
 helm
 kinflate
+cleanup

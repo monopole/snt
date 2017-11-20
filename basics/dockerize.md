@@ -1,34 +1,43 @@
 # Make docker images
 
+> _Bundle your server into a container (twice)._
+>
+> _Time: 2-5min_
+
+
 Kubernetes wants pods to pull their container images
 from a (presumably remote and trustworthy) server
 called a container registry, so that's a first step
 
 
-If you're using minikube for your cluster, you'll use a
-registry built into minikube.  This is done via:
+In what follows:
 
- 1. Configuring your `docker` command to talk to the
-    docker deamon in the running minikube, such that
-    when you enter `docker push` you'll push directly
-    into minikube's docker storage, and pods will pull
-    from its cache.
+ * If you're using minikube for your cluster, you'll use a
+   registry built into minikube.  This is done via:
+   1. Configuring your `docker` command to talk to the
+      docker deamon in the running minikube, such that
+      when you enter `docker push` you'll push directly
+      into minikube's docker storage, and pods will pull
+      from its cache.
+   2. Creating pods with `imagePullPolicy: IfNotPresent`
 
- 2. Creating pods with `imagePullPolicy: IfNotPresent`
+ * If you're using GKE, you'll use the
+   Google container registry at http://gcr.io.
 
-<!-- @useThisIfUsingMinikube -->
+## Set up environment
+
+<!-- @defineFunctionToConsultClusterPlatform -->
 ```
-TUT_CON_HOST=""
-```
-
-
-[Google container registry]: http://gcr.io
-If you're using GKE, you'll use the
-[Google container registry].
-
-<!-- @useThisIfUsingGKE -->
-```
-TUT_CON_HOST="gcr.io"
+function isMinikube() {
+  local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
+  local firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
+  [[ "$firstNodeName" == "minikube" ]]
+}
+if isMinikube; then
+  echo "Using minikube"
+else
+  echo "Using GKE"
+fi
 ```
 
 Define an image tag to use as an argument to various
@@ -37,26 +46,23 @@ in kubernetes pod definitions.
 
 <!-- @defineImageTag -->
 ```
-if [ -n "$TUT_CON_HOST" ]; then
-  # use remote registry
-  TUT_IMG_TAG=$TUT_CON_HOST/$TUT_PROJECT_ID/$TUT_IMG_NAME
-else
+if isMinikube; then
   # use local registry
-  TUT_IMG_TAG=$TUT_PROJECT_ID/$TUT_IMG_NAME
+  TUT_IMG_TAG=$TUT_IMG_NAME
   eval $(minikube docker-env)
+else
+  # use GCR
+  TUT_IMG_TAG=gcr.io/$TUT_PROJECT_ID/$TUT_IMG_NAME
 fi
 echo "TUT_IMG_TAG=$TUT_IMG_TAG"
 echo "DOCKER_HOST=$DOCKER_HOST"
 ```
 
-
-> _TODO_: make a better canonical test to distinguish minikube from GKE use.
-
 > _TODO_: maybe use non-VM but local registry via `minikube start --insecure-registry`
 
 ## Create images
 
-Put the web server into a container image.
+Put your web server into a container image.
 
 <!-- @removeAllLocalDockerImages -->
 ```
@@ -97,7 +103,7 @@ tut_BuildDockerImage $TUT_IMG_V1
 docker images --no-trunc | grep $TUT_IMG_NAME
 ```
 
-Run the image locally to test it:
+Sanity check the container image by running it:
 
 <!-- @runDockerImage -->
 ```
@@ -109,10 +115,10 @@ docker ps | grep $TUT_IMG_TAG
 #   docker exec -it {containerId} bash
 # then cd /tmp to examine logs
 
-if [ -n "$TUT_CON_HOST" ]; then
-  host=localhost
-else
+if isMinikube; then
   host=$(minikube ip)
+else
+  host=localhost
 fi
 
 curl -m 1 $host:8080/kingGhidorah
@@ -148,12 +154,9 @@ instead of minikube's local docker.
 
 <!-- @pushToGcr -->
 ```
-if [ -n "$TUT_CON_HOST" ]; then
+if ! isMinikube; then
   docker push $TUT_IMG_TAG:$TUT_IMG_V1
   docker push $TUT_IMG_TAG:$TUT_IMG_V2
-else
- # We've already built the images into minikube's
- # docker's cache.
 fi
 ```
 
@@ -161,7 +164,7 @@ Having done push, make sure pull works.
 
 <!-- @exerciseGcr -->
 ```
-if [ -n "$TUT_CON_HOST" ]; then
+if ! isMinikube; then
   # Confirm the cached image
   docker images | grep $TUT_IMG_TAG
   # Remove the cached image
@@ -179,7 +182,7 @@ Optionally start by deleting old images (if any):
 
 <!-- @deleteImages -->
 ```
-if [ -n "$TUT_CON_HOST" ]; then
+if ! isMinikube; then
   gcloud --quiet container images delete $TUT_IMG_TAG:$TUT_IMG_V1
   gcloud --quiet container images delete $TUT_IMG_TAG:$TUT_IMG_V2
 fi
@@ -194,20 +197,19 @@ Then upload:
 
 <!-- @uploadImages -->
 ```
-if [ -n "$TUT_CON_HOST" ]; then
+if ! isMinikube; then
   gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V1
   gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V2
 fi
 ```
 
-
 List the cloud-homed images:
 
 <!-- @listImages -->
 ```
-if [ -n "$TUT_CON_HOST" ]; then
+if ! isMinikube; then
   (
-  gcloud container images list --repository $TUT_CON_HOST/$TUT_PROJECT_ID
+  gcloud container images list --repository gcr.io/$TUT_PROJECT_ID
   echo "--------------------"
   gcloud container images list-tags $TUT_IMG_TAG
   echo "--------------------"
@@ -220,10 +222,15 @@ fi
 
 The container images and source code in `$TUT_DIR` are no longer needed:
 
-<!-- @lsTutDir -->
+<!-- @lsSrc-->
 ```
-ls -C1 $TUT_DIR/src/${TUT_IMG_NAME}*
-rm $TUT_DIR/src/${TUT_IMG_NAME}*
+ls -C1 $TUT_DIR/src
+```
+
+<!-- @removeSrc -->
+```
+rm -rf $TUT_DIR/src
+ls $TUT_DIR
 ```
 
 

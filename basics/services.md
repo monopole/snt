@@ -1,4 +1,8 @@
-### Expose the Pod With a Service
+# Expose the Pod With a Service
+
+> _Make pod services available outside the cluster._
+>
+> _Time: 5min_
 
 Pods are not exposed to the outside world directly.  To
 access a service on a pod, one  needs a k8s [Service] -
@@ -7,41 +11,38 @@ static port.
 
 [Service]: https://kubernetes.io/docs/concepts/services-networking/service
 
-First confirm that there are no services:
+Confirm that there are no services:
 
 <!-- @getService -->
 ```
 kubectl get service
 ```
 
-Then create one in the form of a loadbalancer.
+Create one in the form of a loadbalancer.
 
 The `spec`'s `type` field invokes different
 behaviors:
 
-* The default is `ClusterIP`, which means a service
+* `ClusterIP`: The default, means a service
   visible only to other pods in the cluster - no
   external access.
 
-* Using `NodePort` here means the Kubernetes master
-  will allocate a port from a flag-configured range in
-  the low 30,000s, and each node will proxy that port
-  (the same port number on every node) into your
-  service.  The IP must be discovered by inspection.
-  Information about it appears in
-  `<NodeIP>:spec.ports[*].nodePort` and
+* `NodePort`: The k8s master will allocate a port that
+  is unused on all nodes, and have the nodes forward
+  from that port to the service.  The IP must be
+  discovered by inspection.  Information about it
+  appears in `<NodeIP>:spec.ports[*].nodePort` and
   `spec.clusterIp:spec.ports[*].port`.
 
 * The example below uses `LoadBalancer`, which will
-  round-robin requests to backend pods.  Balancer
-  creation is (like most other things) asynchronous.
-  Information about it appears in the
-  `status.loadBalancer` field.
+  round-robin requests to pods.  Balancer creation is
+  (like most other things) asynchronous.  Information
+  about it appears in the `status.loadBalancer` field.
 
 <!-- @defineFunctionToCreateService -->
 ```
 function tut_CreateService {
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 kind: Service
 apiVersion: v1
 metadata:
@@ -59,9 +60,10 @@ spec:
     - protocol: TCP
 
       # Where this service presents itself the external internet.
-      port: 8088
+      port: 8666
 
-      # Set this to match the port believed to be in use on the pods.
+      # The port at which the user's software in the container
+      # listens for requests.
       targetPort: 8080
 EOF
 }
@@ -80,7 +82,7 @@ kubectl get service
 ```
 
 Find out what's going on with the service:
-The output of this command includes an endPoint.
+
 
 <!-- @describeService -->
 ```
@@ -98,17 +100,10 @@ Crucial aspects of the output are
 
 Grab an address to use with the service:
 
-<!-- @hackToDetermineWhichAddressToUse -->
-```
-```
-
 <!-- @defineFunctionToGetServiceAddress -->
 ```
 function tut_getServiceAddress {
-  tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
-  firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
-  if [ "$firstNodeName" == "minikube" ]; then
-    # Running on minikube
+  if isMinikube; then
     local tmpl='{{range .spec.ports -}}{{.nodePort}}{{end}}'
     local nodePort=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
     echo $(minikube ip):$nodePort
@@ -122,7 +117,7 @@ function tut_getServiceAddress {
         sleep 2
       fi
     done
-    echo lbAddress:8088
+    echo lbAddress:8666
   fi
 }
 ```
@@ -143,10 +138,10 @@ function tut_Query {
 }
 ```
 
-Hit your server:
-<!-- @curlService -->
+<!-- @queryService -->
 ```
 tut_Query bananna
+tut_Query tangerine
 ```
 
 [address list page]: https://console.cloud.google.com/networking/addresses/list
@@ -155,8 +150,9 @@ If running on GKE, The LB IP address also appears on
 the [address list page] of your developer console, and
 in the entire cluster's information dump:
 
-
 <!-- @dumpClusterInfo -->
 ```
-kubectl cluster-info dump |grep Ingress
+if ! isMinikube; then
+  kubectl cluster-info dump |grep Ingress
+fi
 ```

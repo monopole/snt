@@ -1,5 +1,12 @@
 # GKE cluster
 
+> _Do the prep work to run this tutorial on Google's cloud,
+> allowing one to adapt the work
+> The setup can then be adapted to greater purpose._
+>
+> _Time: 5min (assuming prerequisites)_
+
+
 [gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
 [Install gcloud]: https://cloud.google.com/sdk/
 [Enabled billing]: https://support.google.com/cloud/answer/6158867?hl=en
@@ -9,16 +16,20 @@ Prerequisites:
  * [Install gcloud].  See also [gcloud downloads] site.
  * [Enabled billing] for a GCP project.
 
-Set this variable to match one of your actual,
-billable projects.
+Set this variable to match one of your actual, billable projects.
 
-<!-- @initializeKubeConfig -->
+<!-- @useAnExistingProjectId -->
 ```
 TUT_PROJECT_ID=lyrical-gantry-618
+```
 
-# Arbitrary name for the cluster made below.
+Pick any name for the cluster made below.
+The name is used in project billing.
+<!-- @nameTheCluster -->
+```
 TUT_CLUSTER_NAME=cluster-spinach
 ```
+
 ### Install `kubectl`
 
 

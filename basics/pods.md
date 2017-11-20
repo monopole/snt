@@ -1,4 +1,8 @@
-### Define a Pod
+# Define a Pod
+
+> _The atomic unit of kubernetes._
+>
+> _Time: 5min_
 
 The example below creates one pod, holding just one
 container.  The container in turn holds just one server
@@ -8,14 +12,14 @@ Since a pod is the atomic unit of scheduling and
 replication in k8s, one has the opportunity to provide
 some scheduling information at pod creation time.
 
+### Capacity is crucial
+
 Each container in a pod can specify the CPU and memory
 resources it needs via the `resources.requests` and
 `resources.limits` variables.  The values assigned to
 `requests` and `limits` for a container determine that
 container's _quality of service_ class, aka QoS
-class.
-
-In turn, a pod is given a QoS level matching the lowest
+class. A pod is given a QoS level matching the lowest
 level assigned to any of its containers.
 
 There are three QoS classes:
@@ -68,52 +72,13 @@ EOF
 kubectl get -o go-template="$tmpl" nodes
 ```
 
-Aside: To learn what fields are available for printing
-via Go templates, look at the underlying yaml:
 
-<!-- @getNodeYaml -->
-```
-kubectl get -o yaml nodes
-```
-
-To make data available in a shell loop (e.g. to use it
-as an arg to `curl`):
-
-<!-- @nodeDataToCurl -->
-```
-nodes=$(kubectl get \
-    -o go-template="{{range .items}}{{.metadata.name}} {{end}}" \
-    nodes)
-for n in $nodes; do
-  echo $n
-done
-```
-
-As an example of filtering output
-from a list, grab IP data from the nodes:
-
-<!-- @getNodeIps -->
-```
-function getIps {
-  local tmpl=`cat <<EOF
-{{range .items -}}
-{{\\\$n := .metadata.name -}}
-  {{range .status.addresses -}}
-    {{if eq .type "$1"}}{{\\\$n}} {{.address}}{{end -}}
-  {{end}}
-{{end}}
-EOF
-`
-  kubectl get -o go-template="$tmpl" nodes
-}
-getIps InternalIP
-getIps ExternalIP
-```
+## Make a pod
 
 <!-- @defineContainerCapacityVarsForDemo -->
 ```
 TUT_CON_CPU=100m     # 10% of a CPU
-TUT_CON_MEMORY=100Mi
+TUT_CON_MEMORY=10000Ki
 ```
 
 Define a function to create a pod, do so, then
@@ -122,7 +87,7 @@ Define a function to create a pod, do so, then
 <!-- @defineFunctionToCreatePod-->
 ```
 function tut_CreatePod {
-cat <<EOF | kubectl create -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -199,12 +164,10 @@ EOF
 kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
-Since this pod was created by hand - not by a _replica
-set_ (demo below) - it will not be recreated if the
-node running it dies.
+### scheduling test
 
 To test resource control, optionally delete the pod and
-recreate it after setting `TUT_CON_CPU=1000m`, i.e.:
+recreate it after increasing `TUT_CON_CPU` to `1000m`, i.e.:
 
 <!-- @checkScheduling -->
 ```
@@ -212,7 +175,6 @@ kubectl delete pod pod-tomato
 sleep 8
 TUT_CON_CPU=1000m
 tut_CreatePod
-kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
 A pod configured to use 1 (entire) CPU is
@@ -220,16 +182,23 @@ unschedulable, since no nodes have 1 cpu available.
 Various jobs (e.g. kubelet, fluentd, etc) consume some
 percentage of the cpu.
 
-<!-- @recreateThePodWithReasonableCpu -->
+Verify that the pod now suffers from `ContainersNotReady`.
+
+```
+kubectl get -o go-template="$tmpl" pod pod-tomato
+```
+
+Confirm it can be recreated with a reasonable CPU request:
+
+<!-- @recreatePod -->
 ```
 kubectl delete pod pod-tomato
 sleep 8
 TUT_CON_CPU=100m
 tut_CreatePod
-kubectl get -o go-template="$tmpl" pod pod-tomato
 ```
 
-[Job]: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion
-
-Aside: A pod that does some job and then goes away
-(i.e.  doesn't want to be reanimated) is called a [Job].
+<!-- @checkPod -->
+```
+kubectl get -o go-template="$tmpl" pod pod-tomato
+```

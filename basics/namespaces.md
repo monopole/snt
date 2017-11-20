@@ -1,8 +1,13 @@
 # Define a namespace
 
+> _Isolate the tutorial work in your cluster._
+>
+> _Time: 2min_
+
+
 [namespace]: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces
 
-The command blocks that follow create pods, services,
+Command blocks that follow create pods, services,
 replicasets, ingress points, etc.  These resources
 exist in a [namespace].
 
@@ -10,6 +15,13 @@ A command like `kubectl delete pod shoeShopServer` or
 the more dramatic `kubectl delete pods --all`
 implicitly operates only on the currently active
 namespace, leaving pods in other namespaces alone.
+
+This can do something as simple as isolate your
+tutorial work on a running cluster from other jobs, or
+help with something as complex as multi-tenancy.
+
+
+## Review current status
 
 <!-- @getNamespaces -->
 ```
@@ -30,8 +42,7 @@ showPods kube-public
 unset -f showPods
 ```
 
-Labels offer another way to arrange resources into sets.
-
+Labels offer another way to partition resources.
 Conceptual differences between labels and namespace:
 
 * A default namespace exists (called
@@ -56,6 +67,8 @@ Your current namespace is:
 ```
 kubectl config view | grep namespace:
 ```
+
+## Make a tutorial namespace
 
 Create a new namespace, but first delete it and every
 resource in it:
@@ -82,4 +95,7 @@ kubectl --namespace=ns-beansprout \
 kubectl config view | grep namespace:
 ```
 
-The rest of the commands will operate in this namespace.
+The rest of the commands will operate in this
+namespace, rather than in `default`, so that the role
+of namespace is more evident in command output
+to follow.

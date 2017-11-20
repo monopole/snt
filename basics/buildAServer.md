@@ -1,5 +1,11 @@
 # Make a server
 
+> _Write a configurable HTTP server
+>  to run on the cluster._
+>
+> _Time: 30sec_
+
+
 Make a program to use as an example binary to
 configure, rollout, rollback, upgrade, etc.  Make it a
 webserver so it can be queried with HTTP clients you
@@ -8,9 +14,9 @@ already have.
 The server serves a simple web page whose appearance is
 influenced by flags and shell env variables.
 
-Additionally, to demo rollouts and rollbacks, there
-will be multiple versions of the binary. The version
-will also appear on the served web page.
+To demo rollouts and rollbacks, there will be multiple
+versions of the binary, with the version appearing
+on the served web page.
 
 
 <!-- @defineEnv -->
@@ -36,6 +42,7 @@ import (
     "net/http"
     "os"
     "strconv"
+    "time"
 )
 
 type config struct {
@@ -45,8 +52,8 @@ type config struct {
 }
 
 type server struct {
-    C    *config
-    Path string
+    C       *config
+    Path    string
     Version int
 }
 
@@ -63,7 +70,7 @@ Version {{.Version}} : {{if .C.Risky}}<em>{{end}}
 `)
 
 var (
-    c                  *config
+    c *config
     enableRiskyFeature = flag.Bool("enableRiskyFeature", false,
         "Enables some risky feature.")
     port = flag.Int("port", 8080, "Port at which HTTP is served.")
@@ -86,8 +93,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
         glog.Fatal(err)
     }
     if path == "quit" {
-        fmt.Println("All done.")
+      go func() {
+        time.Sleep(1 * time.Second)
+        fmt.Println("Server exiting.")
         os.Exit(0)
+      }()
     }
 }
 
@@ -146,3 +156,5 @@ TUTORIAL_GREETING=salutations ${TUT_IMG_PATH} \
     --enableRiskyFeature --port 8100 &
 tut_RequestAndQuit 8100 godzilla
 ```
+
+The binary is ready; it just needs a place to run.

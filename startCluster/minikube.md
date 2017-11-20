@@ -1,51 +1,42 @@
-# Minikube cluster
+# Start a Minikube cluster
+
+> _Use your laptop to create a single node cluster._
+>
+> _Time: 5min_
 
 Prerequisites:
 
- * linux (tested on ubuntu).  Should work on OSX with
-   some modification.
- * Install [virtualbox]
+ * linux. Should work on OSX with some modification.
+ * Install [virtualbox] for use as minikube's vmdriver.
+
+minikube's `--vm-driver=none` provides access to all
+your local true cores, but it requires `sudo`.  That
+complicates testing these scripts, so using the
+virtualbox hypervisor instead.
 
 [here]: https://github.com/kubernetes/minikube
 [virtualbox]: https://www.virtualbox.org/
 
-These instructions (see more [here]) are tested to work
-on ubuntu.
 
-minikube's `--vm-driver=none` provides access to all
-your local true cores, but it requires `sudo`, so not
-using it here to avoid password prompts in testing.
+### Clean up from previous runs (if any)
 
-### Define a project ID
-
-The GKE instructions require a project ID in which to
-create cloud containers and clusters for billing.  When
-using minikube, a project ID isn't needed, but the env
-variable is assigned regardless so the same tutorial
-code blocks (for naming container images and such) can
-be used regardless of cluster.
-
-<!-- @initializeProjectId -->
+<!-- @purgePreviousMinikubeVmUsage -->
 ```
-TUT_PROJECT_ID=mk-project
-```
-
-### Clean up from last minikube run (if any)
-
-<!-- @possiblyCleanUpPreviousVmUsage -->
-```
-for line in "$(vboxmanage list vms)"; do
-  echo $line
-  if [[ $line =~ .*minikube.*\{[0-9a-f\-]+\}.* ]]; then
-    id=$(echo $line | sed 's/.*{\(.*\)}.*/\1/')
-    echo "powering down $id"
-    vboxmanage controlvm $id poweroff
-    sleep 4
-    vboxmanage unregistervm $id --delete
-  fi
-done
+function purgePreviousMinikubeVmUsage {
+  for line in "$(vboxmanage list vms)"; do
+    echo $line
+    if [[ $line =~ .*minikube.*\{[0-9a-f\-]+\}.* ]]; then
+      id=$(echo $line | sed 's/.*{\(.*\)}.*/\1/')
+      echo "powering down $id"
+      vboxmanage controlvm $id poweroff
+      sleep 4
+      vboxmanage unregistervm $id --delete
+    fi
+  done
+}
+purgePreviousMinikubeVmUsage
+# confirm no minikube vms
 vboxmanage list vms
-# vboxmanage startvm minikube --type emergencystop
 ```
 
 <!-- @removeOldMinikubeState -->
@@ -94,7 +85,8 @@ export CHANGE_MINIKUBE_NONE_USER=true
 
 ### Install kubectl
 
-Manually install the latest version of `kubectl`.
+Install `kubectl` before starting `minikube` to be
+ready to talk to it.
 
 <!-- @installKubectl -->
 ```
@@ -110,24 +102,25 @@ alias kubectl=$TUT_DIR/bin/kubectl
 
 ### Start the cluster
 
-This can take a few minutes.
+This can take a couple of minutes because of downloads.
 
 <!-- @startTheClusterOnVirtualBox -->
 ```
 # sudo -E minikube start --vm-driver=none
-minikube start --memory 8192 --cpus 6 --vm-driver=virtualbox
+time minikube start --memory 8192 --cpus 6 --vm-driver=virtualbox
 ```
 
 <!-- @optionallyWaitForFullMinikubeStartup -->
 ```
 function awaitMinikube {
-  for i in {1..150}; do # timeout for 5 minutes
+  for i in {1..100}; do
     kubectl get nodes &> /dev/null
     local foo="$?"
     if [ $foo -eq 0 ]; then
+      echo "k8s API appears to be up."
       return
     fi
-    echo "sleep 2"
+    echo "sleeping"
     sleep 2
   done
 }
@@ -141,12 +134,10 @@ Confirm expectations
 minikube status
 ```
 
+This environment variable now points to what should
+be a short file.
+
 <!-- @examineKubeConfig -->
 ```
 cat $KUBECONFIG
-```
-
-<!-- @optionallyObserveFirewallChanges -->
-```
-sudo iptables -L INPUT
 ```

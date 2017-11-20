@@ -1,9 +1,16 @@
 # Ingress and DNS
 
+> _Make your service available worldwide._
+>
+> _Time: 5min_
+
+
+__Skip this if using minikube - this section about
+exposing a service from GKE to the outside world__
+
 The TCP loadbalancer user here, despite serving HTTP in
 examples above, is [not designed] to terminate [TLS]
-(transport layer security) connections.  Also, it isn't
-monitored for health (?).
+(transport layer security) connections.
 
 [not designed]: https://cloud.google.com/container-engine/docs/tutorials/http-balancer
 
@@ -50,7 +57,7 @@ metadata:
 spec:
   backend:
     serviceName: svc-eggplant
-    servicePort: 8088
+    servicePort: 8666
 EOF
 ```
 
@@ -82,4 +89,29 @@ curl -m 1 $TUT_STATIC_IP_VALUE
 <!-- @hitIngressWithExplicitProtocolAndPort -->
 ```
 curl -m 1 http://$TUT_STATIC_IP_VALUE:80
+```
+
+## Cleanup
+
+Either join the internet or delete ingress.
+
+I.e. add an address record
+
+```
+A * $TUT_STATIC_IP_NAME
+```
+
+to some naming service (e.g. namebright.com) then check it with
+
+```
+nslookup your-new-website.com ns1.namebrightdns.com
+```
+
+or delete the static IP so we stop paying for it:
+
+<!-- @deleteStaticIp -->
+```
+#  Obviously don't do this if you've recorded it in DNS records.
+gcloud compute --project=$TUT_PROJECT_ID  \
+    addresses delete $TUT_STATIC_IP_NAME
 ```
