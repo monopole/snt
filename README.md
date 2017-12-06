@@ -8,20 +8,25 @@
 This tutorial describes configuring a cluster managed
 by kubernetes (aka _k8s_).
 
-No k8s knowledge or existing infrastructure is assumed,
-but discussion is kept to a minimum to focuss on
-practice with real commands.  See https://kubernetes.io
-for more information.
+It's meant for a new k8s user.  It walks through the
+basics of manual cluster configuration via kubectl, to
+place discussion of higher level configuration tools in
+context.
 
-The bulk of the tutorial describes "manual"
-configuration using kubectl and the raw k8s api.  It
-concludes by using two very different configuration
-tools to better automate the preceding process.
+That said, the tutorial is focussed on command
+execution, eschewing deeper discussion that can be
+found at https://kubernetes.io and many other sites.
 
-## Using the tutorial
+### Requirements
 
-Open a bash shell and copy/paste code blocks
-to it, starting with:
+bash, [Go](https://golang.org/doc/install) and
+[git](https://git-scm.com/downloads).
+
+## Usage
+
+Open a `bash` shell (there are some very short bash
+scripts in what follows) and copy/paste code blocks to
+it, starting with:
 
 <!-- @makeWorkingDir -->
 ```
@@ -39,17 +44,14 @@ Cleanup up is just
 > ```
 
 If you are viewing this content in its raw form on
-[github repo UX](https://github.com/monopole/snt), you
-can start with the `README.md` in any directory, then
+[github](https://github.com/monopole/snt),
+start with the `README.md` in any directory, then
 consult `README_ORDER.txt` to see the order in which to
-visit remaining content.
+visit remaining content in the given directory.
 
 ### For a better experience
 
-Take less than ten seconds (assuming you have
-[git](https://git-scm.com/downloads) and
-[Go](https://golang.org/doc/install) installed) to
-serve the content locally with
+Take less than ten seconds to serve the content locally with
 [mdrip](https://github.com/monopole/mdrip):
 
 ```
@@ -60,11 +62,11 @@ $TUT_DIR/bin/mdrip --mode demo --port 8001 gh:monopole/snt
 
 Then visit http://localhost:8001 to see the material
 presented with a navigation menu, progress checks,
-and and one-click copying of code blocks.
+and one-click copying of code blocks.
 
 ### For an even better experience
 
-Install and run [tmux](https://github.com/tmux/tmux/wiki),
+Additionally install and run [tmux](https://github.com/tmux/tmux/wiki),
 e.g.
 
 ```
@@ -74,4 +76,5 @@ tmux
 
 Then, clicking on a code block on a locally served web
 page will immediately paste the block to your active
-tmux session.  Handy for demos.
+tmux session.  Handy for demos (no need to retarget the
+mouse).
