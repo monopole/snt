@@ -5,32 +5,29 @@
 
 > __status: under development Oct 2017__
 
-The content in the directory containing this `README`
-introduces the reader to kubernetes (a.k.a. _k8s_) and
-some options for configuration management.
-
-The tutorial introduces pods and deployments in the
-course of configuring a cluster from scratch, to show
-that even a simple cluster has configuration
-challenges.  Instructions to start a cluster are
-directly included to allow self-contained test coverage
-for the tutorial.  The tutorial finishes by working
-with two cluster configuration tools.
+This tutorial describes configuring a cluster managed
+by kubernetes (aka _k8s_).
 
 No k8s knowledge or existing infrastructure is assumed,
-but discussion is kept to a minimum to focuss on actual
+but discussion is kept to a minimum to focuss on
 practice with real commands.  See https://kubernetes.io
-for more background documentation and tutorials.
+for more information.
+
+The bulk of the tutorial describes "manual"
+configuration using kubectl and the raw k8s api.  It
+concludes by using two very different configuration
+tools to better automate the preceding process.
 
 ## Using the tutorial
 
-Open a bash shell (the default on linux and Mac OSX)
-and copy/paste code blocks to it, starting with:
+Open a bash shell and copy/paste code blocks
+to it, starting with:
 
-<!-- @makeTutorialWorkingDirectory-->
+<!-- @makeWorkingDir -->
 ```
 TUT_DIR=$(mktemp -d)
 ```
+
 With the exception of the optional gcloud installation
 (discussed later), all file system use
 happens in this disposable directory.
@@ -41,31 +38,29 @@ Cleanup up is just
 > rm -rf $TUT_DIR
 > ```
 
-The tutorial can be done directly from the content's
-[github repo UX](https://github.com/monopole/snt)
-(i.e. what you're likely reading right now).  Start
-with the `README.md` in any directory, then consult
-`README_ORDER.txt` to see the order in which to visit
-remaining content.
+If you are viewing this content in its raw form on
+[github repo UX](https://github.com/monopole/snt), you
+can start with the `README.md` in any directory, then
+consult `README_ORDER.txt` to see the order in which to
+visit remaining content.
 
 ### For a better experience
 
 Take less than ten seconds (assuming you have
 [git](https://git-scm.com/downloads) and
 [Go](https://golang.org/doc/install) installed) to
-download the content and serve it locally with
+serve the content locally with
 [mdrip](https://github.com/monopole/mdrip):
 
 ```
-git clone https://github.com/monopole/snt.git $TUT_DIR/snt
 mkdir -p $TUT_DIR/bin
 GOBIN=$TUT_DIR/bin go install github.com/monopole/mdrip
-$TUT_DIR/bin/mdrip --mode demo --port 8081 $TUT_DIR/snt
+$TUT_DIR/bin/mdrip --mode demo --port 8001 gh:monopole/snt
 ```
 
-Then visit http://localhost:8081 to see the material
-presented with a navigation menu and one-click copying
-of code blocks and check marks to show completion.
+Then visit http://localhost:8001 to see the material
+presented with a navigation menu, progress checks,
+and and one-click copying of code blocks.
 
 ### For an even better experience
 
