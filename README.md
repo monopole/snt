@@ -43,6 +43,8 @@ Cleanup up is just
 > rm -rf $TUT_DIR
 > ```
 
+## If you are reading this from github...
+
 If you are viewing this content in its raw form on
 [github](https://github.com/monopole/snt),
 start with the `README.md` in any directory, then
