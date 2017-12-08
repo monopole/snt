@@ -8,24 +8,25 @@
 This tutorial describes configuring a cluster managed
 by kubernetes (aka _k8s_).
 
-It's meant for a new k8s user.  It walks through the
-basics of manual cluster configuration via kubectl, to
-place discussion of higher level configuration tools in
-context.
+It's meant for a new k8s user.  It starts with a
+walkthrough of manual cluster configuration via
+kubectl.  This establishes context for the closing
+topics, which compare different approaches to managing
+configuration.
 
-That said, the tutorial is focussed on command
-execution, eschewing deeper discussion that can be
-found at https://kubernetes.io and many other sites.
+The tutorial is focussed on command execution,
+eschewing deeper discussion that can be found at
+https://kubernetes.io and many other sites.
 
 ### Requirements
 
-bash, [Go](https://golang.org/doc/install) and
-[git](https://git-scm.com/downloads).
+[Go](https://golang.org/doc/install),
+[git](https://git-scm.com/downloads) and bash.
+Some command blocks use bash-specific syntax.
 
 ## Usage
 
-Open a `bash` shell (there are some very short bash
-scripts in what follows) and copy/paste code blocks to
+Open a `bash` shell and copy/paste code blocks to
 it, starting with:
 
 <!-- @makeWorkingDir -->
@@ -43,7 +44,7 @@ Cleanup up is just
 > rm -rf $TUT_DIR
 > ```
 
-## If you are reading this from github...
+## If you are reading this on github...
 
 If you are viewing this content in its raw form on
 [github](https://github.com/monopole/snt),
