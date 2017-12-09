@@ -5,17 +5,16 @@
 
 > __status: under development Oct 2017__
 
-This tutorial describes configuring a cluster managed
-by kubernetes (aka _k8s_).
+This tutorial requires no kubernetes knowledge.
+To establish context for the closing topics, this
+tutorial starts with a walkthrough of _manual_
+configuration via kubectl.
 
-It's meant for a new k8s user.  It starts with a
-walkthrough of manual cluster configuration via
-kubectl.  This establishes context for the closing
-topics, which compare different approaches to managing
-configuration.
+The tutorial concludes by comparing different
+approaches to _app-level_ configuration.
 
-The tutorial is focussed on command execution,
-eschewing deeper discussion that can be found at
+The tutorial focusses on command execution.  It
+eschews deeper discussion that can be found at
 https://kubernetes.io and many other sites.
 
 ### Requirements
