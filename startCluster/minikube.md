@@ -9,6 +9,7 @@ Prerequisites:
  * Linux.  It will also work on OSX with some modification
    (TODO: OS detection/branching)
  * Install [virtualbox] for use as minikube's vmdriver.
+ * Install [docker].  Google for latest advice for your OS.
 
 minikube's flag `--vm-driver=none` provides access to
 all your local true cores, but it requires `sudo`.
@@ -17,7 +18,7 @@ following uses the virtualbox hypervisor instead.
 
 [here]: https://github.com/kubernetes/minikube
 [virtualbox]: https://www.virtualbox.org/
-
+[docker]: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
 
 ### Clean up from previous runs (if any)
 
@@ -111,7 +112,8 @@ chmod +x $TUT_BIN/kubectl
 
 ### Start the cluster
 
-This can take a couple of minutes because of downloads.
+This can take a couple of minutes because
+it downloads an OS image.
 
 <!-- @startClusterOnMk -->
 ```
@@ -143,15 +145,15 @@ Confirm expectations
 
 <!-- @confirmMinikubeRunning -->
 ```
-minikube status
+$MINIKUBE_HOME/minikube status
 ```
 
-This environment variable now points to what should
-be a short file.
+The above steps have stored some state
+in your `KUBECONFIG` file:
 
 <!-- @catKubeConfig -->
 ```
-clear;
+printf "=====\n %s \n======\n" "$KUBECONFIG"
 cat $KUBECONFIG
 ```
 

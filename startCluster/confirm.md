@@ -1,4 +1,4 @@
-## Confirm kubectl can talk to your cluster
+# Can kubectl talk to your cluster?
 
 > _Are the lights on?_
 >

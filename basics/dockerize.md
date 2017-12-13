@@ -5,10 +5,12 @@
 > _Time: 2-5min_
 
 
-Kubernetes wants pods to pull their container images
-from a (presumably remote and trustworthy) server
-called a container registry, so that's a first step
-
+Kubernetes runs containers, pulled from a (presumably
+remote and trustworthy) server called a container
+registry.  So the server just created needs to be
+placed in a container image (basically a tar ball with
+metadata), and that in turn must be placed in a
+registry.
 
 In what follows:
 
@@ -62,19 +64,23 @@ echo "DOCKER_HOST=$DOCKER_HOST"
 
 ## Create images
 
-Put your web server into a container image.
+Harmlessly assure there are no images left over from
+a previous pass through these commands.
 
-<!-- @clearDockerImages -->
+<!-- @removeDockerImages -->
 ```
 # docker rm $(docker stop $(docker ps -aq))
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V1
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
 ```
 
+See what processes are running in the container.
+
+If running a local minikube, there will be many processes.
+If running on GKE, there might not be anything here.
+
 <!-- @peekRunningContainers -->
 ```
-# If running a local minikube, there will be many processes.
-# If running on GKE, there might not be anything here.
 docker ps -a
 ```
 

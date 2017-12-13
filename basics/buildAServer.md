@@ -156,4 +156,4 @@ TUTORIAL_GREETING=salutations ${TUT_IMG_PATH} \
 tut_RequestAndQuit 8100 godzilla
 ```
 
-The binary is ready; it just needs a place to run.
+The server works.  It just needs a place to run.

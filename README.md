@@ -23,6 +23,9 @@ to app-level configuration.
 [git](https://git-scm.com/downloads) and bash.
 Some command blocks use bash-specific syntax.
 
+Further requirements arise from the choice of where you
+run your cluster (discussed next).
+
 ### Usage
 
 Begin by creating a disposable working directory:
@@ -45,6 +48,4 @@ Cleanup is just
 > rm -rf $TUT_DIR
 > ```
 
-which your operating system will do on its own (eventually).
-
-
+which your OS will eventually do on its own.
