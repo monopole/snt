@@ -26,7 +26,7 @@ In what follows:
 
 ## Set up environment
 
-<!-- @defineFunctionToConsultClusterPlatform -->
+<!-- @funcConsultPlatform -->
 ```
 function isMinikube() {
   local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
@@ -64,21 +64,21 @@ echo "DOCKER_HOST=$DOCKER_HOST"
 
 Put your web server into a container image.
 
-<!-- @removeAllLocalDockerImages -->
+<!-- @clearDockerImages -->
 ```
 # docker rm $(docker stop $(docker ps -aq))
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V1
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
 ```
 
-<!-- @peekAtCurrentlyRunningContainers -->
+<!-- @peekRunningContainers -->
 ```
 # If running a local minikube, there will be many processes.
 # If running on GKE, there might not be anything here.
 docker ps -a
 ```
 
-<!-- @defineFunctionToCreateDockerImage -->
+<!-- @funcToCreateImage -->
 ```
 function tut_BuildDockerImage {
   local tag=$TUT_IMG_TAG:$1  # Add version to tag
@@ -93,12 +93,12 @@ EOF
 }
 ```
 
-<!-- @createDockerImageVersion1 -->
+<!-- @createImageV1 -->
 ```
 tut_BuildDockerImage $TUT_IMG_V1
 ```
 
-<!-- @listRelevantImages -->
+<!-- @listImages -->
 ```
 docker images --no-trunc | grep $TUT_IMG_NAME
 ```
@@ -125,7 +125,7 @@ curl -m 1 $host:8080/kingGhidorah
 curl -m 1 $host:8080/quit
 ```
 
-<!-- @confirmTheServerIsGone -->
+<!-- @confirmServerGone -->
 ```
 docker ps | grep $TUT_IMG_TAG
 ```
@@ -139,7 +139,7 @@ tut_BuildProgram     $TUT_IMG_V2
 tut_BuildDockerImage $TUT_IMG_V2
 ```
 
-<!-- @confirmLocalDockerCache -->
+<!-- @confirmDockerCache -->
 ```
 ls -1sh $TUT_DIR/src
 docker images | grep ${TUT_IMG_NAME}
@@ -232,7 +232,6 @@ ls -C1 $TUT_DIR/src
 rm -rf $TUT_DIR/src
 ls $TUT_DIR
 ```
-
 
    <!--
    notes about using a local, but not inside minikube, docker daemon:

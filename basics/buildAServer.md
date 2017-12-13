@@ -7,23 +7,22 @@
 
 
 Make a program to use as an example binary to
-configure, rollout, rollback, upgrade, etc.  Make it a
-webserver so it can be queried with HTTP clients you
-already have.
+configure, rollout, rollback, upgrade, etc.
 
-The server serves a simple web page whose appearance is
-influenced by flags and shell env variables.
+The program will serve a simple web page
+whose appearance is influenced by flags and
+shell env variables.
 
-To demo rollouts and rollbacks, there will be multiple
-versions of the binary, with the version appearing
-on the served web page.
+To demo rollouts and rollbacks, there will be
+multiple versions of the program, with the
+version appearing on the served web page.
 
 
 <!-- @defineEnv -->
 ```
 TUT_IMG_NAME=radishwine
-TUT_IMG_V1=1
-TUT_IMG_V2=2
+TUT_IMG_V1=1  # to tag version 1
+TUT_IMG_V2=2  # to tag version 2
 TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
 
 mkdir -p $TUT_DIR/src
@@ -115,7 +114,7 @@ EOF
 
 Build version 1 of the program to see that it works.
 
-<!-- @defineFunctionToBuild -->
+<!-- @funcToBuild -->
 ```
 # Builds binary with a hard-coded version stamp.
 function tut_BuildProgram {
@@ -128,7 +127,7 @@ function tut_BuildProgram {
 }
 ```
 
-<!-- @buildBinaryAtVersion1 -->
+<!-- @buildAtV1 -->
 ```
 rm -f $TUT_IMG_PATH
 tut_BuildProgram $TUT_IMG_V1
@@ -136,7 +135,7 @@ file $TUT_IMG_PATH
 ls -sh $TUT_IMG_PATH
 ```
 
-<!-- @defineFunctionToRunAndKillLocalServer -->
+<!-- @funcRunAndKill -->
 ```
 function tut_RequestAndQuit {
   local port=$1
@@ -150,7 +149,7 @@ function tut_RequestAndQuit {
 }
 ```
 
-<!-- @runAndKillLocalServer -->
+<!-- @runAndKill -->
 ```
 TUTORIAL_GREETING=salutations ${TUT_IMG_PATH} \
     --enableRiskyFeature --port 8100 &

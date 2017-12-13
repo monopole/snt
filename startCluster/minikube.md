@@ -1,18 +1,19 @@
 # Start a Minikube cluster
 
-> _Use your laptop to create a single node cluster._
+> _Create a multi-pod cluster on your laptop._
 >
 > _Time: 5min_
 
 Prerequisites:
 
- * linux. Should work on OSX with some modification.
+ * Linux.  It will also work on OSX with some modification
+   (TODO: OS detection/branching)
  * Install [virtualbox] for use as minikube's vmdriver.
 
-minikube's `--vm-driver=none` provides access to all
-your local true cores, but it requires `sudo`.  That
-complicates testing these scripts, so using the
-virtualbox hypervisor instead.
+minikube's flag `--vm-driver=none` provides access to
+all your local true cores, but it requires `sudo`.
+Root access complicates testing this tutorial, so the
+following uses the virtualbox hypervisor instead.
 
 [here]: https://github.com/kubernetes/minikube
 [virtualbox]: https://www.virtualbox.org/
@@ -20,7 +21,7 @@ virtualbox hypervisor instead.
 
 ### Clean up from previous runs (if any)
 
-<!-- @purgePreviousMinikubeVmUsage -->
+<!-- @purgePrevMk -->
 ```
 function purgePreviousMinikubeVmUsage {
   for line in "$(vboxmanage list vms)"; do
@@ -35,11 +36,16 @@ function purgePreviousMinikubeVmUsage {
   done
 }
 purgePreviousMinikubeVmUsage
-# confirm no minikube vms
+```
+
+Confirm no minikube vms (yet):
+
+<!-- @listVms -->
+```
 vboxmanage list vms
 ```
 
-<!-- @removeOldMinikubeState -->
+<!-- @removeOldMkState -->
 ```
 # Where .minikube directory will live
 export MINIKUBE_HOME=$TUT_DIR/mk
@@ -47,32 +53,31 @@ rm -rf $MINIKUBE_HOME/.minikube
 mkdir -p $MINIKUBE_HOME
 ```
 
-<!-- @overrideKubeConfigAndWipeIt -->
+Preserve existing kube config (if any)
+
+<!-- @useTmpKubeConfig -->
 ```
-# Don't stomp on your existing kube config (if any)
 export KUBECONFIG=$MINIKUBE_HOME/tut-minikube-config
 rm -f $KUBECONFIG
 ```
 
 ### Install minikube
 
-<!-- @installLatest -->
+<!-- @installMk -->
 ```
 apis=https://storage.googleapis.com
 curl -Lo $MINIKUBE_HOME/minikube \
     $apis/minikube/releases/latest/minikube-linux-amd64
 chmod +x $MINIKUBE_HOME/minikube
-alias minikube=$MINIKUBE_HOME/minikube
 find $MINIKUBE_HOME
 ```
 
-<!-- @confirmVersionAndPath -->
+<!-- @confirmVersion -->
 ```
-which minikube  # expect nothing, since aliasing
-minikube version
+$MINIKUBE_HOME/minikube version
 ```
 
-<!-- @defineOtherMiniKubeEnvVars -->
+<!-- @defineOtherMkEnvVars -->
 ```
 # Suppress prompts to report error messages.
 export MINIKUBE_WANTREPORTERRORPROMPT=false
@@ -85,6 +90,13 @@ export CHANGE_MINIKUBE_NONE_USER=true
 
 ### Install kubectl
 
+<!-- @mkTutBin -->
+```
+mkdir -p $TUT_DIR/bin
+TUT_BIN=$TUT_DIR/bin
+PATH=$TUT_BIN:$PATH
+```
+
 Install `kubectl` before starting `minikube` to be
 ready to talk to it.
 
@@ -92,25 +104,25 @@ ready to talk to it.
 ```
 apis=https://storage.googleapis.com
 version=$(curl -s $apis/kubernetes-release/release/stable.txt)
-mkdir -p $TUT_DIR/bin
 curl -Lo $TUT_DIR/bin/kubectl \
   $apis/kubernetes-release/release/$version/bin/linux/amd64/kubectl
-chmod +x $TUT_DIR/bin/kubectl
-alias kubectl=$TUT_DIR/bin/kubectl
+chmod +x $TUT_BIN/kubectl
 ```
-
 
 ### Start the cluster
 
 This can take a couple of minutes because of downloads.
 
-<!-- @startTheClusterOnVirtualBox -->
+<!-- @startClusterOnMk -->
 ```
 # sudo -E minikube start --vm-driver=none
-time minikube start --memory 8192 --cpus 6 --vm-driver=virtualbox
+time $MINIKUBE_HOME/minikube \
+    start --memory 8192 --cpus 6 --vm-driver=virtualbox
 ```
 
-<!-- @optionallyWaitForFullMinikubeStartup -->
+Run to assure that minikube is up.
+
+<!-- @optConfirmMkUp -->
 ```
 function awaitMinikube {
   for i in {1..100}; do
@@ -137,7 +149,19 @@ minikube status
 This environment variable now points to what should
 be a short file.
 
-<!-- @examineKubeConfig -->
+<!-- @catKubeConfig -->
 ```
+clear;
 cat $KUBECONFIG
 ```
+
+Confirm versions of client and server:
+
+<!-- @kubectlVersion -->
+```
+$TUT_BIN/kubectl version
+```
+
+If this spits out a version for the client and server,
+you've got a cluster.  Proceed to
+[confirmation](/startCluster/confirm).

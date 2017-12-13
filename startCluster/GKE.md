@@ -1,4 +1,4 @@
-# GKE cluster
+# ...or start a GKE cluster
 
 > _Do the prep work to run this tutorial on Google's cloud,
 > allowing one to adapt the work
@@ -13,7 +13,7 @@
 
 Prerequisites:
 
- * [Install gcloud].  See also [gcloud downloads] site.
+ * [Install gcloud].
  * [Enabled billing] for a GCP project.
 
 Set this variable to match one of your actual, billable projects.
