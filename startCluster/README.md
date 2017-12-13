@@ -5,20 +5,20 @@
 [minikube]: https://github.com/kubernetes/minikube/releases
 [GKE]: https://cloud.google.com/container-engine
 
-Do the minimal setup necessary to install a k8s API
-server and nodes on some hardware, with no services
-running other than those that comprise k8s itself.
-
 Instructions follow to start either
 
  * a locally hosted cluster on [minikube],
  * or a remote cluster hosted on [GKE].
 
+You'll do the minimal setup necessary to
+be able to contact a k8s API server.
+
 ### Which one?
 
-Short of ingress (how one makes the cluster accessible
-to the world), the commands that configure the cluster
-are the same - because k8s is a portable cloud.
+k8s is a portable cloud.  Short of
+ingress (how one makes the cluster accessible to the
+world), the commands that configure the cluster are
+the same regardless of the platform underneath.
 
 Using __minikube__ takes one through the material
 faster, as it avoids detours into cloud authentication

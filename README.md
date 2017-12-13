@@ -2,7 +2,7 @@
 
 _A tutorial on installing customized cluster-level "apps"._
 
-> __status: under development Oct 2017__
+> __status: under development Nov 2017__
 
 This tutorial requires no kubernetes knowledge.
 It focusses on command execution,

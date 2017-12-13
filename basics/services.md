@@ -106,7 +106,7 @@ function tut_getServiceAddress {
   if isMinikube; then
     local tmpl='{{range .spec.ports -}}{{.nodePort}}{{end}}'
     local nodePort=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
-    echo $(minikube ip):$nodePort
+    echo $($MINIKUBE_HOME/minikube ip):$nodePort
   else
     # Running on GKE presumably
     local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'

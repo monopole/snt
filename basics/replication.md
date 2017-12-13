@@ -1,4 +1,4 @@
-# Replication
+# Self-Repairing Apps with Replication
 
 > _Decimate the pods!  Reanimate the pods!_
 >
@@ -9,11 +9,11 @@
 This section demonstrates how a [replica set] manages a
 set of pods.
 
-If you have a pod running from earlier, get rid of it
-(to avoid confusing output below):
+If you have pods running from earlier, get rid of it
+to avoid confusing output below:
 <!-- @deletePod -->
 ```
-kubectl delete pod pod-tomato
+kubectl delete pods --all
 ```
 
 The service can be left running, but it cannot serve
@@ -219,9 +219,8 @@ The service can be left alone for now.
 ## Other pod managers
 
 A pod intended to do some job and then die, e.g.
-simply perform a git clone (using a git container), is
-called a [Job].  The job manager will retry if the job
-doesn't signal success.
+simply perform a git clone, is called a [Job].  The job
+manager will retry if the job doesn't signal success.
 
 A pod intended to run on each node outside the scope of
 normal pod scheduling, e.g. to assure logs collection

@@ -1,4 +1,4 @@
-# ConfigMaps
+# Beginning Configuration
 
 [ConfigMap]: https://kubernetes.io/docs/tasks/configure-pod-container/configmap
 
@@ -30,7 +30,7 @@ kubectl describe configmap cfg-parsley
 
 Create a deployment that uses this configmap:
 
-<!-- @createDeploymentToReferenceConfigMap @test -->
+<!-- @makeDeploymentWithCM @test -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
@@ -180,7 +180,7 @@ kubectl describe configmap cfg-cilantro
 
 Define a function to apply a config change:
 
-<!-- @defineFunctionToPointDeploymentToNewConfig -->
+<!-- @funcToRepointDeployment -->
 ```
 function tut_ApplyConfigChange {
 local newConfig=$1

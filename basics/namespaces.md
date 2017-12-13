@@ -16,9 +16,8 @@ the more dramatic `kubectl delete pods --all`
 implicitly operates only on the currently active
 namespace, leaving pods in other namespaces alone.
 
-This can do something as simple as isolate your
-tutorial work on a running cluster from other jobs, or
-help with something as complex as multi-tenancy.
+Namespaces isolate one app from another, one tenant
+from another, etc.
 
 
 ## Review current status
@@ -52,8 +51,7 @@ Conceptual differences between labels and namespace:
   kubectl configuration.  There's no analogous
   functionality for a label.
 
-* A resource has exactly one namespace, but can have
-  any number of labels.
+* A resource has one namespace, but any number of labels.
 
 * The namespace (but no labels) appears in DNS entries
   for resources that have DNS entries (pods, services).
@@ -68,7 +66,7 @@ Your current namespace is:
 kubectl config view | grep namespace:
 ```
 
-## Make a tutorial namespace
+## Make a Namespace for your App
 
 Create a new namespace, but first delete it and every
 resource in it:

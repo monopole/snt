@@ -1,12 +1,12 @@
-# Define a Pod
+# The App Runs as a Pod
 
 > _The atomic unit of kubernetes._
 >
 > _Time: 5min_
 
 The example below creates one pod, holding just one
-container.  The container in turn holds just one server
-binary.
+container.  The container in turn holds just one server,
+your app component.
 
 Since a pod is the atomic unit of scheduling and
 replication in k8s, one has the opportunity to provide
@@ -18,9 +18,9 @@ Each container in a pod can specify the CPU and memory
 resources it needs via the `resources.requests` and
 `resources.limits` variables.  The values assigned to
 `requests` and `limits` for a container determine that
-container's _quality of service_ class, aka QoS
-class. A pod is given a QoS level matching the lowest
-level assigned to any of its containers.
+container's _quality of service_ class. A pod is given
+a QoS level matching the lowest level assigned to any
+of its containers.
 
 There are three QoS classes:
 
@@ -29,7 +29,7 @@ There are three QoS classes:
   has no guidance from the container about its needs.
   The pod holding it will be among the first to be
   ejected by the node's kubelet if the node is under
-  pressure.  The watcher will see this, and try to
+  pressure.  A monitor will see this, and try to
   start the pod somewhere with available resources, but
   will still lack guidance on how to size the job.
 
@@ -55,7 +55,7 @@ The memory units are bytes, with the suffixes `K`, `M`,
 `G` etc.
 
 
-<!-- @printNodeCapacities -->
+<!-- @nodeCapacities -->
 ```
 tmpl=`cat <<EOF
 {{range .items}}
@@ -75,7 +75,10 @@ kubectl get -o go-template="$tmpl" nodes
 
 ## Make a pod
 
-<!-- @defineContainerCapacityVarsForDemo -->
+For a capacity demo below, express the
+capacities using bash variables:
+
+<!-- @defineDemoCapVars -->
 ```
 TUT_CON_CPU=100m     # 10% of a CPU
 TUT_CON_MEMORY=10000Ki
@@ -84,14 +87,14 @@ TUT_CON_MEMORY=10000Ki
 Define a function to create a pod, do so, then
 `get` the pod:
 
-<!-- @defineFunctionToCreatePod-->
+<!-- @funcToCreatePod-->
 ```
 function tut_CreatePod {
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-tomato
+  name: $1
   labels:
     #  Label critical for this example.
     app: avocado
@@ -123,7 +126,7 @@ EOF
 
 <!-- @createThePod -->
 ```
-tut_CreatePod
+tut_CreatePod pod-tomato
 ```
 
 <!-- @getAllPods -->
@@ -139,7 +142,7 @@ state, the node it's running on, etc.
 kubectl describe pod pod-tomato
 ```
 
-<!-- @focussedDescribePod -->
+<!-- @detailedPod -->
 ```
 tmpl=`cat <<EOF
 {{.metadata.name -}}
@@ -173,8 +176,19 @@ recreate it after increasing `TUT_CON_CPU` to `1000m`, i.e.:
 ```
 kubectl delete pod pod-tomato
 sleep 8
+```
+
+confirm there are no pods:
+
+<!-- @noPods -->
+```
+kubectl get pods
+```
+
+<!-- @makeUnschedulablePod -->
+```
 TUT_CON_CPU=1000m
-tut_CreatePod
+tut_CreatePod pod-tomato2
 ```
 
 A pod configured to use 1 (entire) CPU is
@@ -185,17 +199,26 @@ percentage of the cpu.
 Verify that the pod now suffers from `ContainersNotReady`.
 
 ```
-kubectl get -o go-template="$tmpl" pod pod-tomato
+kubectl get -o go-template="$tmpl" pod pod-tomato2
 ```
 
 Confirm it can be recreated with a reasonable CPU request:
 
+<!-- @deletePod -->
+```
+kubectl delete pod pod-tomato2
+sleep 8
+```
+
+<!-- @noPods -->
+```
+kubectl get pods
+```
+
 <!-- @recreatePod -->
 ```
-kubectl delete pod pod-tomato
-sleep 8
 TUT_CON_CPU=100m
-tut_CreatePod
+tut_CreatePod pop-tomato
 ```
 
 <!-- @checkPod -->
