@@ -1,4 +1,4 @@
-# ...or start a GKE cluster
+# ...or Start a GKE Cluster
 
 > _Do the prep work to run this tutorial on Google's cloud,
 > allowing one to adapt the work

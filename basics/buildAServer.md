@@ -1,15 +1,17 @@
-# Make a server
+# Make an App Component
 
 > _Write a configurable HTTP server
 >  to run on the cluster._
 >
 > _Time: 30sec_
 
+A cluster-wide app may involve any number of
+components - web servers, log capturers, databases,
+etc.  This tutorial will use just one component, with
+the minimal complexity needed demonstrate
+configuration, rollout, rollback, upgrade, etc.
 
-Make a program to use as an example binary to
-configure, rollout, rollback, upgrade, etc.
-
-The program will serve a simple web page
+The program will serve a tiny web page
 whose appearance is influenced by flags and
 shell env variables.
 

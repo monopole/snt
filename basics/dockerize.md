@@ -1,27 +1,26 @@
-# Make docker images
+# Containerize the App Component
 
 > _Bundle your server into a container (twice)._
 >
 > _Time: 2-5min_
 
 
-Kubernetes runs containers, pulled from a (presumably
-remote and trustworthy) server called a container
-registry.  So the server just created needs to be
-placed in a container image (basically a tar ball with
-metadata), and that in turn must be placed in a
-registry.
+The server you just wrote and tested must be placed in
+a container image (a tar ball with metadata), and that
+in turn must be placed in a container registry.  This
+is because k8s runs containers, pulling them as needed
+from a (presumably trustworthy) registry.
+
 
 In what follows:
 
  * If you're using minikube for your cluster, you'll use a
-   registry built into minikube.  This is done via:
-   1. Configuring your `docker` command to talk to the
+   registry built into minikube.
+   1. You'll configue your `docker` command to talk to the
       docker deamon in the running minikube, such that
       when you enter `docker push` you'll push directly
-      into minikube's docker storage, and pods will pull
-      from its cache.
-   2. Creating pods with `imagePullPolicy: IfNotPresent`
+      into minikube's docker storage.
+   2. You'll create pods with `imagePullPolicy: IfNotPresent`
 
  * If you're using GKE, you'll use the
    Google container registry at http://gcr.io.
@@ -51,7 +50,7 @@ in kubernetes pod definitions.
 if isMinikube; then
   # use local registry
   TUT_IMG_TAG=$TUT_IMG_NAME
-  eval $(minikube docker-env)
+  eval $($MINIKUBE_HOME/minikube docker-env)
 else
   # use GCR
   TUT_IMG_TAG=gcr.io/$TUT_PROJECT_ID/$TUT_IMG_NAME
@@ -122,7 +121,7 @@ docker ps | grep $TUT_IMG_TAG
 # then cd /tmp to examine logs
 
 if isMinikube; then
-  host=$(minikube ip)
+  host=$($MINIKUBE_HOME/minikube ip)
 else
   host=localhost
 fi
@@ -153,10 +152,9 @@ docker images | grep ${TUT_IMG_NAME}
 
 [GCR]: http://gcr.io
 
-## Push images to [GCR]
+## Push images to [GCR] if using GKE.
 
-This section only applies if using [GCR]
-instead of minikube's local docker.
+This section only applies if using GKE instead of minikube.
 
 <!-- @pushToGcr -->
 ```

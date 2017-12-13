@@ -1,4 +1,4 @@
-# Start a cluster
+# Which Cluster?
 
 > _Time: 1min_
 

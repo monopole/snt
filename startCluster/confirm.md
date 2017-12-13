@@ -1,4 +1,4 @@
-# Can kubectl talk to your cluster?
+# Can kubectl Talk to your Cluster?
 
 > _Are the lights on?_
 >

@@ -1,4 +1,4 @@
-# Start a Minikube cluster
+# Start a Minikube Cluster
 
 > _Create a multi-pod cluster on your laptop._
 >

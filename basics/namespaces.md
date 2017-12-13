@@ -1,4 +1,4 @@
-# Define a namespace
+# Isolate Apps with Namespaces
 
 > _Isolate the tutorial work in your cluster._
 >
@@ -7,9 +7,9 @@
 
 [namespace]: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces
 
-Command blocks that follow create pods, services,
-replicasets, ingress points, etc.  These resources
-exist in a [namespace].
+Command blocks that follow create the pods, services,
+replicasets, ingress points, etc, that comprise a
+cluster app.  These resources exist in a [namespace].
 
 A command like `kubectl delete pod shoeShopServer` or
 the more dramatic `kubectl delete pods --all`
