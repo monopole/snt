@@ -39,7 +39,7 @@ behaviors:
   (like most other things) asynchronous.  Information
   about it appears in the `status.loadBalancer` field.
 
-<!-- @defineFunctionToCreateService -->
+<!-- @funcCreateService -->
 ```
 function tut_CreateService {
 cat <<EOF | kubectl apply -f -
@@ -100,7 +100,7 @@ Crucial aspects of the output are
 
 Grab an address to use with the service:
 
-<!-- @defineFunctionToGetServiceAddress -->
+<!-- @funcGetAddress -->
 ```
 function tut_getServiceAddress {
   if isMinikube; then
@@ -122,14 +122,14 @@ function tut_getServiceAddress {
 }
 ```
 
-<!-- @setLoadBalancerAddressVar -->
+<!-- @getAddress -->
 ```
 echo "This may take around 30 sec after service creation to work."
 TUT_SVC_ADDRESS=$(tut_getServiceAddress)
 echo "Service at $TUT_SVC_ADDRESS"
 ```
 
-<!-- @defineFunctionToQueryServer -->
+<!-- @funcQueryServer -->
 ```
 function tut_Query {
   local cmd="curl -m 1 $TUT_SVC_ADDRESS/$1"

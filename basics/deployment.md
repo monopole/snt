@@ -12,11 +12,11 @@
 Kubernetes adds layers to avoid toil.
 
 * It's toil to repeatedly install all the libraries
-  and data needed to make an app work, so one creates a
+  and data needed to make a program work, so one creates a
   _container_ and installs only that.
 
 * It's toil to install a set of containers that
-  represent a serving stack every time one is needed,
+  represent an serving stack every time one is needed,
   so one defines a _pod_ and installs that.
 
 * It's toil to watch and restart pods on unreliable or
@@ -67,7 +67,7 @@ EOF
 kubectl get deployments
 ```
 
-<!-- @desribeDeployments -->
+<!-- @descDeployments -->
 ```
 kubectl describe deployments
 ```
@@ -87,9 +87,9 @@ new one while turning down the old one.
 
 Observe this by upgrading the image from v1 to v2.
 
-<!-- @confirmCurrentImageVersion -->
+<!-- @checkVersion -->
 ```
-kubectl describe pods | grep Image:
+kubectl describe pods | egrep '(Status:|Image:)'
 tut_Query kiwi
 ```
 
@@ -119,13 +119,13 @@ EOF
 Try the following repeatedly to watch the pod count
 change as the new image rolls out:
 
-<!-- @checkImageVersion -->
+<!-- @checkAgain -->
 ```
-kubectl describe pods | grep Image:
+kubectl describe pods | egrep '(Status:|Image:)'
 ```
 
 The service still works during this process:
-<!-- @checkImageVersion -->
+<!-- @queryService -->
 ```
 tut_Query tangerine
 ```

@@ -18,7 +18,7 @@ Prerequisites:
 
 Set this variable to match one of your actual, billable projects.
 
-<!-- @useAnExistingProjectId -->
+<!-- @existingProjectId -->
 ```
 TUT_PROJECT_ID=lyrical-gantry-618
 ```
@@ -34,14 +34,14 @@ TUT_CLUSTER_NAME=cluster-spinach
 
 
 
-<!-- @initializeKubeConfig -->
+<!-- @initKubeConfig -->
 ```
 # Don't want to stomp on your normal config
 export KUBECONFIG=$HOME/.kube/tut-gke-config
 rm -f $KUBECONFIG
 ```
 
-<!-- @initializeKubeCtl -->
+<!-- @initKubeCtl -->
 ```
 gcloud components install kubectl
 ```
@@ -59,7 +59,7 @@ which gcloud
 Failing that, try something like this to
 get them on your `PATH`:
 
-<!-- @useConsumerCloudEnv -->
+<!-- @setGCloudEnv -->
 ```
 tmp=$HOME/google-cloud-sdk
 if [ -d "$tmp" ]; then
@@ -71,7 +71,7 @@ unset tmp
 
 Choose your cloud identity and project.
 
-<!-- @chooseCloudIdentity -->
+<!-- @cloudIdentity -->
 ```
 gcloud config set account jregan@google.com
 gcloud config set account jeff.regan@gmail.com
@@ -81,7 +81,7 @@ TUT_PROJECT_ID=lyrical-gantry-618
 
 Complete setup, login and confirm your settings:
 
-<!-- @completeConfigSetup -->
+<!-- @completeSetup -->
 ```
 gcloud config set project $TUT_PROJECT_ID
 gcloud config set compute/region us-west1
@@ -93,7 +93,7 @@ gcloud config set compute/zone us-west1-a
 gcloud auth application-default login
 ```
 
-<!-- @confirmCloudConfig -->
+<!-- @confirmConfig -->
 ```
 gcloud config list
 ```

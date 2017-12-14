@@ -78,7 +78,7 @@ find $MINIKUBE_HOME
 $MINIKUBE_HOME/minikube version
 ```
 
-<!-- @defineOtherMkEnvVars -->
+<!-- @defineMkEnvVars -->
 ```
 # Suppress prompts to report error messages.
 export MINIKUBE_WANTREPORTERRORPROMPT=false
@@ -124,7 +124,7 @@ time $MINIKUBE_HOME/minikube \
 
 Run to assure that minikube is up.
 
-<!-- @optConfirmMkUp -->
+<!-- @waitForIt -->
 ```
 function awaitMinikube {
   for i in {1..100}; do
@@ -143,7 +143,7 @@ awaitMinikube
 
 Confirm expectations
 
-<!-- @confirmMinikubeRunning -->
+<!-- @confirmUp -->
 ```
 $MINIKUBE_HOME/minikube status
 ```

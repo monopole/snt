@@ -27,7 +27,7 @@ In what follows:
 
 ## Set up environment
 
-<!-- @funcConsultPlatform -->
+<!-- @funcPlatform -->
 ```
 function isMinikube() {
   local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
@@ -66,7 +66,7 @@ echo "DOCKER_HOST=$DOCKER_HOST"
 Harmlessly assure there are no images left over from
 a previous pass through these commands.
 
-<!-- @removeDockerImages -->
+<!-- @rmDockerImages -->
 ```
 # docker rm $(docker stop $(docker ps -aq))
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V1
@@ -78,12 +78,12 @@ See what processes are running in the container.
 If running a local minikube, there will be many processes.
 If running on GKE, there might not be anything here.
 
-<!-- @peekRunningContainers -->
+<!-- @peekAtRunning -->
 ```
 docker ps -a
 ```
 
-<!-- @funcToCreateImage -->
+<!-- @funcCreateImage -->
 ```
 function tut_BuildDockerImage {
   local tag=$TUT_IMG_TAG:$1  # Add version to tag
@@ -130,7 +130,7 @@ curl -m 1 $host:8080/kingGhidorah
 curl -m 1 $host:8080/quit
 ```
 
-<!-- @confirmServerGone -->
+<!-- @confirmNoService -->
 ```
 docker ps | grep $TUT_IMG_TAG
 ```

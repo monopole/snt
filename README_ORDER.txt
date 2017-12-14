@@ -1,5 +1,4 @@
 startCluster
 basics
-helm
-kinflate
+appConfig
 cleanup

@@ -9,7 +9,7 @@ kubectl delete service svc-eggplant
 
 or wipe the entire namespace:
 
-<!-- @deleteTheNamespaceAndEverythingInIt -->
+<!-- @deleteNamespace -->
 ```
 kubectl delete namespace ns-beansprout
 ```
@@ -29,6 +29,7 @@ fi
 Recover diskspace (or just wait - the system
 will reclaim it eventually):
 
+<!-- @rmTutDir -->
 ```
 if [ -n "$TUT_DIR" ]; then
   rm -rf $TUT_DIR

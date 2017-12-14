@@ -10,7 +10,7 @@
 
 Create a ConfigMap.  It's a set of key:value pairs.
 
-<!-- @createConfigMap @test -->
+<!-- @applyConfigMap @test -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -23,14 +23,14 @@ data:
 EOF
 ```
 
-<!-- @describeConfigMap @test -->
+<!-- @descConfigMap @test -->
 ```
 kubectl describe configmap cfg-parsley
 ```
 
 Create a deployment that uses this configmap:
 
-<!-- @makeDeploymentWithCM @test -->
+<!-- @deploymentWithCM @test -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
@@ -77,7 +77,7 @@ spec:
 EOF
 ```
 
-<!-- @describeDeployments -->
+<!-- @descDeployments -->
 ```
 kubectl describe deployments
 ```
@@ -91,7 +91,7 @@ tut_Query lime
 Apply a change in the configuration that launches the
 risky feature and changes the greeting:
 
-<!-- @applyConfigMapChange -->
+<!-- @applyCMapChange -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -104,7 +104,7 @@ data:
 EOF
 ```
 
-<!-- @describeConfig -->
+<!-- @descConfigMap -->
 ```
 kubectl describe configmap cfg-parsley
 ```
@@ -173,14 +173,14 @@ data:
 EOF
 ```
 
-<!-- @describeConfigMap -->
+<!-- @descConfigMap -->
 ```
 kubectl describe configmap cfg-cilantro
 ```
 
 Define a function to apply a config change:
 
-<!-- @funcToRepointDeployment -->
+<!-- @funcRepointDeployment -->
 ```
 function tut_ApplyConfigChange {
 local newConfig=$1
@@ -224,7 +224,7 @@ tut_Query lime
 
 Apply the change:
 
-<!-- @changeDeployToConfig2 -->
+<!-- @changeToConfig2 -->
 ```
 tut_ApplyConfigChange cfg-cilantro
 ```
@@ -239,25 +239,25 @@ tut_Query lime
 
 Change it back and forth, and rapidly query to watch the turnover.
 
-<!-- @changeDeployToConfig1 -->
+<!-- @changeToC1WithQuery -->
 ```
 tut_ApplyConfigChange cfg-parsley
-for i in {1..15}; do
+for i in {1..10}; do
   tut_Query movingTo1
   sleep 0.5
 done
 ```
 
-<!-- @changeDeployToConfig2 -->
+<!-- @changeToC2WithQuery -->
 ```
 tut_ApplyConfigChange cfg-cilantro
-for i in {1..15}; do
+for i in {1..10}; do
   tut_Query movingTo2
   sleep 0.5
 done
 ```
 
-### Cleanup?
+### Cleanup
 
 <!-- @deleteStuff -->
 ```

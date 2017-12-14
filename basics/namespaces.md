@@ -27,7 +27,7 @@ from another, etc.
 kubectl get namespaces
 ```
 
-<!-- @getPodsInDifferentNamespaces -->
+<!-- @getPodsByNamespace -->
 ```
 function showPods {
   echo "---- pods in namespace $1"
@@ -82,7 +82,7 @@ Create and switch to a new namespace:
 kubectl create namespace ns-beansprout
 ```
 
-<!-- @changeDefaultNamespace -->
+<!-- @changeDefault -->
 ```
 kubectl --namespace=ns-beansprout \
     config set-context $(kubectl config current-context)

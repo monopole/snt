@@ -187,7 +187,7 @@ confirm there are no pods:
 kubectl get pods
 ```
 
-<!-- @makeUnschedulablePod -->
+<!-- @unschedulablePod -->
 ```
 TUT_CON_CPU=7000m # 7 cpus
 tut_CreatePod pod-tomato2

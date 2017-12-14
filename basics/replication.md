@@ -20,7 +20,7 @@ The service can be left running, but it cannot serve
 because its only backing service (the pod) has been
 deleted.
 
-<!-- @queryNoLongerWorks -->
+<!-- @queryBusted -->
 ```
 tut_Query bananna
 ```
@@ -32,7 +32,7 @@ behaviors.
 
 Create a replica set:
 
-<!-- @createReplicaSet -->
+<!-- @applyReplicaSet -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: extensions/v1beta1
@@ -64,7 +64,7 @@ spec:
 EOF
 ```
 
-<!-- @describeReplicaSet -->
+<!-- @descReplicaSet -->
 ```yaml
 kubectl describe replicaset
 ```
@@ -109,7 +109,7 @@ kubectl get -o go-template="$tmpl" pods
 
 Compare those IPs to the IPs of the nodes:
 
-<!-- @detailTheNodes -->
+<!-- @detailNodes -->
 ```
 tmpl=`cat <<EOF
 {{range .items -}}
@@ -126,7 +126,7 @@ kubectl get -o go-template="$tmpl" nodes
 Confirm that each node (there's only one in the case of minikube)
 has a copy of the image:
 
-<!-- @grepNodesForProgram -->
+<!-- @grepNodesForImage -->
 ```
 kubectl get nodes -o yaml | grep $TUT_IMG_NAME
 ```
@@ -137,10 +137,10 @@ Create a pod manually with the app label
 `avocado`, and watch (quickly) as it's immediately
 terminated by the system.
 
-<!-- @createOneTooMany -->
+<!-- @oneTooMany -->
 ```
 kubectl get pods
-tut_CreatePod
+tut_CreatePod another-pod
 kubectl get pods
 ```
 
@@ -152,7 +152,7 @@ kubectl get pods
 
 Define function to delete a random pod:
 
-<!-- @defineFunctionToDeleteRandomPod -->
+<!-- @funcDeleteRandomPod -->
 ```
 function tut_DeleteRandomPod {
   local tmpl=`cat <<EOF
@@ -169,7 +169,7 @@ EOF
 Define a pod watch that self-terminates in _n_ steps
 (unlike `kubectl -w`):
 
-<!-- @defineFunctionToWatchPods -->
+<!-- @funcToWatchPods -->
 ```
 function tut_WatchPods {
   kubectl get pods
@@ -186,7 +186,7 @@ Delete a pod, and wait for it to be rescheduled:
 ```
 kubectl get pods
 tut_DeleteRandomPod
-tut_WatchPods 20
+tut_WatchPods 10
 ```
 
 Delete _all_ pods, and try interleaving requests with
@@ -208,7 +208,7 @@ When done playing, delete the replica set:
 <!-- @deleteReplicaSet -->
 ```
 kubectl delete replicaset repset-asparagus
-tut_WatchPods 10
+tut_WatchPods 3
 ```
 
 The service can be left alone for now.

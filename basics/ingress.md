@@ -81,12 +81,12 @@ echo $TUT_STATIC_IP_VALUE
 
 Now hit the ingress point:
 
-<!-- @hitIngress -->
+<!-- @hitIngress1 -->
 ```
 curl -m 1 $TUT_STATIC_IP_VALUE
 ```
 
-<!-- @hitIngressWithExplicitProtocolAndPort -->
+<!-- @hitIngress2 -->
 ```
 curl -m 1 http://$TUT_STATIC_IP_VALUE:80
 ```
