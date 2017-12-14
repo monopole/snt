@@ -68,15 +68,15 @@ kubectl config view | grep namespace:
 
 ## Make a Namespace for your App
 
-Create a new namespace, but first delete it and every
-resource in it:
+First, delete anything created in a previous
+pass through this tutorial:
 
 <!-- @deleteNamespace -->
 ```
 kubectl delete namespace ns-beansprout
 ```
 
-Create and switch to a new namespace
+Create and switch to a new namespace:
 <!-- @createNamespace -->
 ```
 kubectl create namespace ns-beansprout
@@ -94,6 +94,4 @@ kubectl config view | grep namespace:
 ```
 
 The rest of the commands will operate in this
-namespace, rather than in `default`, so that the role
-of namespace is more evident in command output
-to follow.
+namespace, rather than in the `default` namespace.

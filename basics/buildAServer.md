@@ -1,4 +1,4 @@
-# Make an App Component
+# Make a Single-Component App
 
 > _Write a configurable HTTP server
 >  to run on the cluster._
@@ -37,7 +37,6 @@ package main
 
 import (
     "flag"
-    "fmt"
     "github.com/golang/glog"
     "html/template"
     "net/http"
@@ -46,17 +45,8 @@ import (
     "time"
 )
 
-type config struct {
-    Risky    bool
-    Port     int
-    Greeting string
-}
-
-type server struct {
-    C       *config
-    Path    string
-    Version int
-}
+type config struct {Risky bool; Port int; Greeting string}
+type server struct {C *config; P string; V int}
 
 const (
     version = 0
@@ -64,18 +54,16 @@ const (
     tmplBody = `
 {{define "` + tmplName + `" -}}
 <html><body>
-Version {{.Version}} : {{if .C.Risky}}<em>{{end}}
-{{- .C.Greeting}}{{if .C.Risky}}</em>{{end}} {{.Path}}
+Version {{.V}} : {{if .C.Risky}}<em>{{end}}
+{{- .C.Greeting}}{{if .C.Risky}}</em>{{end}} {{.P}}
 </body></html>
 {{end}}
 `)
 
 var (
-    c *config
     enableRiskyFeature = flag.Bool("enableRiskyFeature", false,
         "Enables some risky feature.")
     port = flag.Int("port", 8080, "Port at which HTTP is served.")
-    tmpl = template.Must(template.New("main").Parse(tmplBody))
 )
 
 func getConfig() *config {
@@ -87,26 +75,22 @@ func getConfig() *config {
     return &config{*enableRiskyFeature, *port, greeting}
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-    path := r.URL.Path[1:]
-    if err := tmpl.ExecuteTemplate(
-        w, tmplName, &server{c, path, version}); err != nil {
-        glog.Fatal(err)
-    }
-    if path == "quit" {
-      go func() {
-        time.Sleep(1 * time.Second)
-        fmt.Println("Server exiting.")
-        os.Exit(0)
-      }()
-    }
-}
-
 func main() {
-    c = getConfig()
-    http.HandleFunc("/", handler)
+    c := getConfig()
+    tmpl := template.Must(template.New("main").Parse(tmplBody))
+    http.HandleFunc("/quit",
+      func (w http.ResponseWriter, r *http.Request) {
+        go func() {time.Sleep(1 * time.Second); os.Exit(0)}()
+      })
+    http.HandleFunc("/",
+      func (w http.ResponseWriter, r *http.Request) {
+        if err := tmpl.ExecuteTemplate(
+          w, tmplName, &server{c, r.URL.Path[1:], version});
+          err != nil {
+          glog.Fatal(err)
+        }
+      })
     hostPort := ":" + strconv.Itoa(c.Port)
-    fmt.Println("Serving at " + hostPort)
     if err := http.ListenAndServe(hostPort, nil); err != nil {
         glog.Fatal(err)
     }

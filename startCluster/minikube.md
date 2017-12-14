@@ -91,6 +91,9 @@ export CHANGE_MINIKUBE_NONE_USER=true
 
 ### Install kubectl
 
+Install `kubectl` before starting `minikube` to be
+ready to talk to it.
+
 <!-- @mkTutBin -->
 ```
 mkdir -p $TUT_DIR/bin
@@ -98,10 +101,7 @@ TUT_BIN=$TUT_DIR/bin
 PATH=$TUT_BIN:$PATH
 ```
 
-Install `kubectl` before starting `minikube` to be
-ready to talk to it.
-
-<!-- @installKubectl -->
+<!-- @downloadKubectl -->
 ```
 apis=https://storage.googleapis.com
 version=$(curl -s $apis/kubernetes-release/release/stable.txt)
@@ -166,4 +166,4 @@ $TUT_BIN/kubectl version
 
 If this spits out a version for the client and server,
 you've got a cluster.  Proceed to
-[confirmation](/startCluster/confirm).
+[confirm](/startCluster/confirm) step.
