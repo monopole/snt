@@ -1,6 +1,6 @@
 # Containerize the App Component
 
-> _Bundle your server into a container (twice)._
+> _Bundle your server into a container._
 >
 > _Time: 2-5min_
 
@@ -29,12 +29,12 @@ In what follows:
 
 <!-- @funcPlatform -->
 ```
-function isMinikube() {
+function tut_isMinikube() {
   local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
   local firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
   [[ "$firstNodeName" == "minikube" ]]
 }
-if isMinikube; then
+if tut_isMinikube; then
   echo "Using minikube"
 else
   echo "Using GKE"
@@ -47,7 +47,7 @@ in kubernetes pod definitions.
 
 <!-- @defineImageTag -->
 ```
-if isMinikube; then
+if tut_isMinikube; then
   # use local registry
   TUT_IMG_TAG=$TUT_IMG_NAME
   eval $($MINIKUBE_HOME/minikube docker-env)
@@ -120,7 +120,7 @@ docker ps | grep $TUT_IMG_TAG
 #   docker exec -it {containerId} bash
 # then cd /tmp to examine logs
 
-if isMinikube; then
+if tut_isMinikube; then
   host=$($MINIKUBE_HOME/minikube ip)
 else
   host=localhost
@@ -156,37 +156,11 @@ docker images | grep ${TUT_IMG_NAME}
 
 This section only applies if using GKE instead of minikube.
 
-<!-- @pushToGcr -->
-```
-if ! isMinikube; then
-  docker push $TUT_IMG_TAG:$TUT_IMG_V1
-  docker push $TUT_IMG_TAG:$TUT_IMG_V2
-fi
-```
-
-Having done push, make sure pull works.
-
-<!-- @exerciseGcr -->
-```
-if ! isMinikube; then
-  # Confirm the cached image
-  docker images | grep $TUT_IMG_TAG
-  # Remove the cached image
-  docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
-  # Confirm it's gone
-  docker images | grep $TUT_IMG_TAG
-  # Pull it from the registry
-  docker pull $TUT_IMG_TAG:$TUT_IMG_V2
-  # Confirm it's back.
-  docker images | grep $TUT_IMG_TAG
-fi
-```
-
 Optionally start by deleting old images (if any):
 
 <!-- @deleteImages -->
 ```
-if ! isMinikube; then
+if ! tut_isMinikube; then
   gcloud --quiet container images delete $TUT_IMG_TAG:$TUT_IMG_V1
   gcloud --quiet container images delete $TUT_IMG_TAG:$TUT_IMG_V2
 fi
@@ -196,12 +170,11 @@ See also these [container deletion instructions].
 
 [container deletion instructions]: https://cloud.google.com/container-registry/docs/quickstart
 
-
 Then upload:
 
 <!-- @uploadImages -->
 ```
-if ! isMinikube; then
+if ! tut_isMinikube; then
   gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V1
   gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V2
 fi
@@ -211,7 +184,7 @@ List the cloud-homed images:
 
 <!-- @listImages -->
 ```
-if ! isMinikube; then
+if ! tut_isMinikube; then
   (
   gcloud container images list --repository gcr.io/$TUT_PROJECT_ID
   echo "--------------------"

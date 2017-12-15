@@ -29,16 +29,16 @@ kubectl get namespaces
 
 <!-- @getPodsByNamespace -->
 ```
-function showPods {
+function tut_showPods {
   echo "---- pods in namespace $1"
   kubectl --namespace=$1 get pods
   echo "---- "
   echo " "
 }
-showPods default
-showPods kube-system
-showPods kube-public
-unset -f showPods
+tut_showPods default
+tut_showPods kube-system
+tut_showPods kube-public
+unset -f tut_showPods
 ```
 
 Labels offer another way to partition resources.

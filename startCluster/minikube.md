@@ -24,7 +24,7 @@ following uses the virtualbox hypervisor instead.
 
 <!-- @purgePrevMk -->
 ```
-function purgePreviousMinikubeVmUsage {
+function tut_purgePrevVmUsage {
   for line in "$(vboxmanage list vms)"; do
     echo $line
     if [[ $line =~ .*minikube.*\{[0-9a-f\-]+\}.* ]]; then
@@ -36,7 +36,7 @@ function purgePreviousMinikubeVmUsage {
     fi
   done
 }
-purgePreviousMinikubeVmUsage
+tut_purgePrevVmUsage
 ```
 
 Confirm no minikube vms (yet):
@@ -126,7 +126,7 @@ Run to assure that minikube is up.
 
 <!-- @waitForIt -->
 ```
-function awaitMinikube {
+function tut_awaitMk {
   for i in {1..100}; do
     kubectl get nodes &> /dev/null
     local foo="$?"
@@ -138,7 +138,7 @@ function awaitMinikube {
     sleep 2
   done
 }
-awaitMinikube
+tut_awaitMk
 ```
 
 Confirm expectations

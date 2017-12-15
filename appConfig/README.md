@@ -1,19 +1,50 @@
 # App Level Configuration
 
-The definition of a cluster app could be _the set of
-all things needed to provide some cluster-backed
-service_.
-
 People access Amazon, Facebook, Google etc. through
-apps (mobile or web) that are backed by enormous clusters.
+mobile or web apps that talk to enormous computer
+clusters running some service that also has app-like
+properties.
 
-The many services backing user visible apps are
-themselves cluster-level apps with independent
-lifecycles, e.g. Google's Spanner is a cluster-level
-storage app that backs many other cluster-level apps,
-e.g. maps and ad serving.
+This cluster-level service app, talking to billions of
+phones or web browsers, updates periodically, and if
+something goes wrong is rapidly replaced with its older
+version.  There's a dedicated team that maintains and
+improves this 'app'.
 
-A cluster app may have instances on many dimensions:
+Further, this cluster-level app talks to a plethora of
+other cluster-level apps, all evolving on their own
+lifecycle.
+
+For example, Google Maps is backed by services
+dedicated to serving map tiles, satellite photos,
+restaurant reviews, providing translations, collecting
+live traffic status, storing user preferences, etc.
+
+These other cluster-level apps are maintained by
+completely different teams that do not, and indeed
+cannot, attempt to orchestrate any kind of timing
+around when they release new versions.
+
+## kubernetes Apps
+
+In kubernetes, cluster-level apps are characterized by
+the set of all k8s resources needed to serve them - the
+ConfigMaps, the Deployments, etc.
+
+As has been seen, this is just a collection of one or
+more yaml files.  The yaml files are recipes, and the
+container images themselves are the ingredients - where
+they come from is a related, yet distinct, concern.
+
+## Making the App Concept Useful
+
+We want to attach
+
+
+Configuration -
+
+
+In ka8s, configuration is
 
 * exposure: production, staging, QA, dev snapshot,
 * regions: Asia, Americas, Europe, ...
