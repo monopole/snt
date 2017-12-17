@@ -1,27 +1,20 @@
-# ...or Start a GKE Cluster
+# Start a GKE Cluster
 
-> _Do the prep work to run this tutorial on Google's cloud,
-> allowing one to adapt the work
-> The setup can then be adapted to greater purpose._
+> _Do the prep work to run this tutorial on Google's cloud._
 >
 > _Time: 5min (assuming prerequisites)_
 
+_Skip to [confirmation](/startCluster/confirm) if you
+just set up a minikube cluster._
 
 [gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
-[Install gcloud]: https://cloud.google.com/sdk/
-[Enabled billing]: https://support.google.com/cloud/answer/6158867?hl=en
+[gcloud]: https://cloud.google.com/sdk/
+[Enable billing]: https://support.google.com/cloud/answer/6158867?hl=en
 
 Prerequisites:
 
- * [Install gcloud].
- * [Enabled billing] for a GCP project.
-
-Set this variable to match one of your actual, billable projects.
-
-<!-- @existingProjectId -->
-```
-TUT_PROJECT_ID=lyrical-gantry-618
-```
+ * Install [gcloud].
+ * [Enable billing] for a GCP project.
 
 Pick any name for the cluster made below.
 The name is used in project billing.
@@ -30,9 +23,7 @@ The name is used in project billing.
 TUT_CLUSTER_NAME=cluster-spinach
 ```
 
-### Install `kubectl`
-
-
+### Install open-source `kubectl`
 
 <!-- @initKubeConfig -->
 ```
@@ -69,14 +60,12 @@ fi
 unset tmp
 ```
 
-Choose your cloud identity and project.
-
+Choose your cloud identity and project ID.
+It should be a billable project ID.
 <!-- @cloudIdentity -->
 ```
-gcloud config set account jregan@google.com
-gcloud config set account jeff.regan@gmail.com
-TUT_PROJECT_ID=svc-cat-tangle
-TUT_PROJECT_ID=lyrical-gantry-618
+gcloud config set account <your google account email address>
+TUT_PROJECT_ID=<your google project ID, e.g. colorful-boat-918>
 ```
 
 Complete setup, login and confirm your settings:

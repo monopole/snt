@@ -1,42 +1,37 @@
-# Which Cluster?
+# Where to Host Your k8s Cluster
 
 > _Time: 1min_
 
-[minikube]: https://github.com/kubernetes/minikube/releases
-[GKE]: https://cloud.google.com/container-engine
+_Starting_ a cluster means marshalling the underlying machines (real
+or virtual) needed to run k8s.
 
-Instructions follow to start either
+_Configuring_ a k8s cluster means talking to the k8s API server
+to start and maintain your apps.
 
- * a locally hosted cluster on [minikube],
- * or a remote cluster hosted on [GKE].
+Short of ingress (how one makes the cluster accessible to the world),
+the commands that configure the cluster are the same regardless of
+where it is hosted, because kubernetes is a portable cloud.
 
-You'll do the minimal setup necessary to
-be able to contact a k8s API server.
+## Host on your laptop
 
-### Which one?
+[Minikube](https://github.com/kubernetes/minikube/releases) allows one
+to run a k8s cluser on your laptop.
 
-k8s is a portable cloud.  Short of
-ingress (how one makes the cluster accessible to the
-world), the commands that configure the cluster are
-the same regardless of the platform underneath.
+This avoids detours into cloud authentication and billing issues, but
+does require installation of the software necessary to run VMs on your
+laptop.
 
-Using __minikube__ takes one through the material
-faster, as it avoids detours into cloud authentication
-and billing issues.  But it first requires installing
-software necessary to run VMs on your laptop.
+-> Choose __[minikube](/startCluster/minikube)__.
 
-Using __GKE__ lets one practice ingress configuration
-and launch cluster-backed services accessible
-world-wide, even if for only a few minutes.  But it
-requires a credit card and (possibly) billing that will
-amount to less than a dollar if you complete the
-instructions to turn down the cluster you create.
+## Host on Google Kubernetes Engine
 
-### kubectl
+Using [GKE](https://cloud.google.com/container-engine) lets you
+practice ingress configuration and make your tutorial app accessible
+world-wide, even if only for a few minutes.  You can easily build from
+there.
 
-Regardless of cluster (minikube, GKE, AWS, azure, etc.)
-one needs `kubectl`, a command line client that
-facilitates controlling a k8s cluster.
+It requires a Google account and credit card, and the (well-tested)
+installation of some Google programs.  New users are given more than
+enough free credit to complete this tutorial.
 
-You'll install `kubectl` below, via means that
-differ slightly depending on the cluster choice.
+-> Choose __[GKE](/startCluster/GKE)__.

@@ -89,7 +89,7 @@ export CHANGE_MINIKUBE_NONE_USER=true
 ```
 
 
-### Install kubectl
+### Install open-source kubectl
 
 Install `kubectl` before starting `minikube` to be
 ready to talk to it.

@@ -1,21 +1,20 @@
 # Kubernetes Cluster Configuration
 
-_A tutorial on installing customized cluster-level "apps"._
+_A tutorial on installing customized cluster-level apps._
 
 > __status: under development Nov 2017__
 
-This tutorial requires no kubernetes knowledge.
-It focusses on command execution,
-eschewing deeper discussion that can be found at
-https://kubernetes.io and many other sites.
+This tutorial requires no knowledge of kubernetes (a.k.a. _k8s_).
 
-To establish context for the main topic, this
-tutorial starts with a walkthrough of manual
-configuration (individual commands to create a pod,
-create a service, etc.).
+It focusses on command execution, eschewing deeper
+discussion that can be found at https://kubernetes.io
+and many other sites.
 
-Context established, it compares different approaches
-to app-level configuration.
+To establish context for the main topic, this tutorial
+starts with a walk-through of manual configuration
+(individual commands to create a pod, create a service,
+etc.).  Context established, it compares different
+approaches to app-level configuration.
 
 ### Requirements
 
