@@ -20,7 +20,7 @@ multiple versions of the program, with the
 version appearing on the served web page.
 
 
-<!-- @defineEnv -->
+<!-- @defineEnv @test -->
 ```
 TUT_IMG_NAME=radishwine
 TUT_IMG_V1=1  # to tag version 1
@@ -30,7 +30,7 @@ TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
 mkdir -p $TUT_DIR/src
 ```
 
-<!-- @makeWebServer -->
+<!-- @makeWebServer @test -->
 ```
 cat <<'EOF' >${TUT_IMG_PATH}.go
 package main
@@ -100,7 +100,7 @@ EOF
 
 Build version 1 of the program to see that it works.
 
-<!-- @funcToBuild -->
+<!-- @funcToBuild @test -->
 ```
 # Builds binary with a hard-coded version stamp.
 function tut_BuildProgram {
@@ -113,7 +113,7 @@ function tut_BuildProgram {
 }
 ```
 
-<!-- @buildAtV1 -->
+<!-- @buildAtV1 @test -->
 ```
 rm -f $TUT_IMG_PATH
 tut_BuildProgram $TUT_IMG_V1
@@ -121,7 +121,7 @@ file $TUT_IMG_PATH
 ls -sh $TUT_IMG_PATH
 ```
 
-<!-- @funcRunAndKill -->
+<!-- @funcRunAndKill @test -->
 ```
 function tut_RequestAndQuit {
   local port=$1
@@ -135,7 +135,7 @@ function tut_RequestAndQuit {
 }
 ```
 
-<!-- @runAndKill -->
+<!-- @runAndKill @test -->
 ```
 TUTORIAL_GREETING=salutations ${TUT_IMG_PATH} \
     --enableRiskyFeature --port 8100 &

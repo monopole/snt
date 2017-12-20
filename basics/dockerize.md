@@ -27,7 +27,7 @@ In what follows:
 
 ## Set up environment
 
-<!-- @funcPlatform -->
+<!-- @funcPlatform @test -->
 ```
 function tut_isMinikube() {
   local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
@@ -45,7 +45,7 @@ Define an image tag to use as an argument to various
 docker commands and as the value of the `image` field
 in kubernetes pod definitions.
 
-<!-- @defineImageTag -->
+<!-- @defineImageTag @test -->
 ```
 if tut_isMinikube; then
   # use local registry
@@ -66,7 +66,7 @@ echo "DOCKER_HOST=$DOCKER_HOST"
 Harmlessly assure there are no images left over from
 a previous pass through these commands.
 
-<!-- @rmDockerImages -->
+<!-- @rmDockerImages @test -->
 ```
 # docker rm $(docker stop $(docker ps -aq))
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V1
@@ -78,12 +78,12 @@ See what processes are running in the container.
 If running a local minikube, there will be many processes.
 If running on GKE, there might not be anything here.
 
-<!-- @peekAtRunning -->
+<!-- @peekAtRunning @test -->
 ```
 docker ps -a
 ```
 
-<!-- @funcCreateImage -->
+<!-- @funcCreateImage @test -->
 ```
 function tut_BuildDockerImage {
   local tag=$TUT_IMG_TAG:$1  # Add version to tag
@@ -98,19 +98,19 @@ EOF
 }
 ```
 
-<!-- @createImageV1 -->
+<!-- @createImageV1 @test -->
 ```
 tut_BuildDockerImage $TUT_IMG_V1
 ```
 
-<!-- @listImages -->
+<!-- @listImages @test -->
 ```
 docker images --no-trunc | grep $TUT_IMG_NAME
 ```
 
 Sanity check the container image by running it:
 
-<!-- @runDockerImage -->
+<!-- @runDockerImage @test -->
 ```
 docker run -d -p 8080:8080 $TUT_IMG_TAG:$TUT_IMG_V1
 docker ps | grep $TUT_IMG_TAG
@@ -130,7 +130,7 @@ curl -m 1 $host:8080/kingGhidorah
 curl -m 1 $host:8080/quit
 ```
 
-<!-- @confirmNoService -->
+<!-- @confirmNoService @test -->
 ```
 docker ps | grep $TUT_IMG_TAG
 ```
@@ -138,13 +138,13 @@ docker ps | grep $TUT_IMG_TAG
 Build another image at version 2 to allow
 rollout/rollback practice later:
 
-<!-- @buildVersion2 -->
+<!-- @buildVersion2 @test -->
 ```
 tut_BuildProgram     $TUT_IMG_V2
 tut_BuildDockerImage $TUT_IMG_V2
 ```
 
-<!-- @confirmDockerCache -->
+<!-- @confirmDockerCache @test -->
 ```
 ls -1sh $TUT_DIR/src
 docker images | grep ${TUT_IMG_NAME}
@@ -199,12 +199,12 @@ fi
 
 The container images and source code in `$TUT_DIR` are no longer needed:
 
-<!-- @lsSrc-->
+<!-- @lsSrc @test -->
 ```
 ls -C1 $TUT_DIR/src
 ```
 
-<!-- @removeSrc -->
+<!-- @removeSrc @test -->
 ```
 rm -rf $TUT_DIR/src
 ls $TUT_DIR

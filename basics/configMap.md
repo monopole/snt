@@ -77,13 +77,13 @@ spec:
 EOF
 ```
 
-<!-- @descDeployments -->
+<!-- @descDeployments @test -->
 ```
 kubectl describe deployments
 ```
 
 Make sure querying works:
-<!-- @curlService -->
+<!-- @curlService @test -->
 ```
 tut_Query lime
 ```
@@ -91,7 +91,7 @@ tut_Query lime
 Apply a change in the configuration that launches the
 risky feature and changes the greeting:
 
-<!-- @applyCMapChange -->
+<!-- @applyCMapChange @test -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -104,14 +104,14 @@ data:
 EOF
 ```
 
-<!-- @descConfigMap -->
+<!-- @descConfigMap @test -->
 ```
 kubectl describe configmap cfg-parsley
 ```
 
 There are no visible changes in the service yet.
 
-<!-- @curlService -->
+<!-- @curlService @test -->
 ```
 tut_Query lemon
 ```
@@ -121,14 +121,14 @@ tut_Query lemon
 Delete one pod at a time and watch as new configuration
 is adopted by new pods.
 
-<!-- @deleteOnePod -->
+<!-- @deleteOnePod @test -->
 ```
 tut_DeleteRandomPod
 ```
 
 Repeat this query ten or so times to hit different pods:
 
-<!-- @tryQuery -->
+<!-- @tryQuery @test  -->
 ```
 tut_Query orange
 ```
@@ -140,13 +140,13 @@ config and deleting a single pod.
 Get everything in sync again by deleting all the pods
 to force recreation at the latest config:
 
-<!-- @deleteAllPods -->
+<!-- @deleteAllPods @test -->
 ```
 kubectl delete --all pods
 ```
 
 Confirm the new greeting is always served:
-<!-- @tryQuery -->
+<!-- @tryQuery @test -->
 ```
 tut_Query orange
 ```
@@ -160,7 +160,7 @@ points to that new configmap.
 
 Create a second config:
 
-<!-- @createConfigMap2 -->
+<!-- @createConfigMap2 @test -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -173,14 +173,14 @@ data:
 EOF
 ```
 
-<!-- @descConfigMap -->
+<!-- @descConfigMap @test -->
 ```
 kubectl describe configmap cfg-cilantro
 ```
 
 Define a function to apply a config change:
 
-<!-- @funcRepointDeployment -->
+<!-- @funcRepointDeployment @test -->
 ```
 function tut_ApplyConfigChange {
 local newConfig=$1
@@ -217,14 +217,14 @@ EOF
 ```
 
 Confirm existing behavior before applying the change:
-<!-- @curlService -->
+<!-- @curlService @test -->
 ```
 tut_Query lime
 ```
 
 Apply the change:
 
-<!-- @changeToConfig2 -->
+<!-- @changeToConfig2 @test -->
 ```
 tut_ApplyConfigChange cfg-cilantro
 ```
@@ -232,14 +232,14 @@ tut_ApplyConfigChange cfg-cilantro
 Query again, noting the change in the output brought on by the
 change in the values of the environment variables.
 
-<!-- @curlService -->
+<!-- @curlService @test -->
 ```
 tut_Query lime
 ```
 
 Change it back and forth, and rapidly query to watch the turnover.
 
-<!-- @changeToC1WithQuery -->
+<!-- @changeToC1WithQuery @test -->
 ```
 tut_ApplyConfigChange cfg-parsley
 for i in {1..10}; do
@@ -248,7 +248,7 @@ for i in {1..10}; do
 done
 ```
 
-<!-- @changeToC2WithQuery -->
+<!-- @changeToC2WithQuery @test -->
 ```
 tut_ApplyConfigChange cfg-cilantro
 for i in {1..10}; do
@@ -259,7 +259,7 @@ done
 
 ### Cleanup
 
-<!-- @deleteStuff -->
+<!-- @deleteStuff @test -->
 ```
 kubectl delete deployment dep-kale
 kubectl delete configmap cfg-parsley

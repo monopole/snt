@@ -4,7 +4,8 @@ _A tutorial on installing customized cluster-level apps._
 
 > __status: under development Nov 2017__
 
-This tutorial requires no knowledge of kubernetes (a.k.a. _k8s_).
+This tutorial requires no knowledge of kubernetes,
+also known as _k8s_.
 
 It focusses on command execution, eschewing deeper
 discussion that can be found at https://kubernetes.io
@@ -29,6 +30,7 @@ run your cluster (discussed next).
 
 Begin by creating a disposable working directory:
 
+<!-- @mkTmpDir @test -->
 ```
 TUT_DIR=$(mktemp -d)
 ```

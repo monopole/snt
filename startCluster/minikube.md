@@ -22,7 +22,7 @@ following uses the virtualbox hypervisor instead.
 
 ### Clean up from previous runs (if any)
 
-<!-- @purgePrevMk -->
+<!-- @purgePrevMk @test -->
 ```
 function tut_purgePrevVmUsage {
   for line in "$(vboxmanage list vms)"; do
@@ -41,12 +41,12 @@ tut_purgePrevVmUsage
 
 Confirm no minikube vms (yet):
 
-<!-- @listVms -->
+<!-- @listVms @test -->
 ```
 vboxmanage list vms
 ```
 
-<!-- @removeOldMkState -->
+<!-- @removeOldMkState @test -->
 ```
 # Where .minikube directory will live
 export MINIKUBE_HOME=$TUT_DIR/mk
@@ -56,7 +56,7 @@ mkdir -p $MINIKUBE_HOME
 
 Preserve existing kube config (if any)
 
-<!-- @useTmpKubeConfig -->
+<!-- @useTmpKubeConfig @test -->
 ```
 export KUBECONFIG=$MINIKUBE_HOME/tut-minikube-config
 rm -f $KUBECONFIG
@@ -64,7 +64,7 @@ rm -f $KUBECONFIG
 
 ### Install minikube
 
-<!-- @installMk -->
+<!-- @installMk @test -->
 ```
 apis=https://storage.googleapis.com
 curl -Lo $MINIKUBE_HOME/minikube \
@@ -73,12 +73,12 @@ chmod +x $MINIKUBE_HOME/minikube
 find $MINIKUBE_HOME
 ```
 
-<!-- @confirmVersion -->
+<!-- @confirmVersion @test -->
 ```
 $MINIKUBE_HOME/minikube version
 ```
 
-<!-- @defineMkEnvVars -->
+<!-- @defineMkEnvVars @test -->
 ```
 # Suppress prompts to report error messages.
 export MINIKUBE_WANTREPORTERRORPROMPT=false
@@ -94,14 +94,14 @@ export CHANGE_MINIKUBE_NONE_USER=true
 Install `kubectl` before starting `minikube` to be
 ready to talk to it.
 
-<!-- @mkTutBin -->
+<!-- @mkTutBin @test -->
 ```
 mkdir -p $TUT_DIR/bin
 TUT_BIN=$TUT_DIR/bin
 PATH=$TUT_BIN:$PATH
 ```
 
-<!-- @downloadKubectl -->
+<!-- @downloadKubectl @test -->
 ```
 apis=https://storage.googleapis.com
 version=$(curl -s $apis/kubernetes-release/release/stable.txt)
@@ -115,7 +115,7 @@ chmod +x $TUT_BIN/kubectl
 This can take a couple of minutes because
 it downloads an OS image.
 
-<!-- @startClusterOnMk -->
+<!-- @startClusterOnMk @test -->
 ```
 # sudo -E minikube start --vm-driver=none
 time $MINIKUBE_HOME/minikube \
@@ -124,7 +124,7 @@ time $MINIKUBE_HOME/minikube \
 
 Run to assure that minikube is up.
 
-<!-- @waitForIt -->
+<!-- @waitForIt @test -->
 ```
 function tut_awaitMk {
   for i in {1..100}; do
@@ -143,7 +143,7 @@ tut_awaitMk
 
 Confirm expectations
 
-<!-- @confirmUp -->
+<!-- @confirmUp @test -->
 ```
 $MINIKUBE_HOME/minikube status
 ```
@@ -151,7 +151,7 @@ $MINIKUBE_HOME/minikube status
 The above steps have stored some state
 in your `KUBECONFIG` file:
 
-<!-- @catKubeConfig -->
+<!-- @catKubeConfig @test -->
 ```
 printf "=====\n %s \n======\n" "$KUBECONFIG"
 cat $KUBECONFIG
@@ -159,7 +159,7 @@ cat $KUBECONFIG
 
 Confirm versions of client and server:
 
-<!-- @kubectlVersion -->
+<!-- @kubectlVersion @test -->
 ```
 $TUT_BIN/kubectl version
 ```

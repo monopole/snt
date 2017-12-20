@@ -17,7 +17,7 @@ some scheduling information at pod creation time.
 To run, a pod needs memory and CPU.  A node knows
 how much it has of each:
 
-<!-- @nodeCapacities -->
+<!-- @nodeCapacities @test -->
 ```
 tmpl=`cat <<EOF
 {{range .items}}
@@ -80,7 +80,7 @@ suffixes `K`, `M`, `G` etc.
 For the capacity exercise below, express the capacities
 using bash variables:
 
-<!-- @defineDemoCapVars -->
+<!-- @defineDemoCapVars @test -->
 ```
 TUT_CON_CPU=100m     # 10% of a CPU
 TUT_CON_MEMORY=10000Ki
@@ -89,7 +89,7 @@ TUT_CON_MEMORY=10000Ki
 Define a function to create a pod, do so, then
 `get` the pod:
 
-<!-- @funcToCreatePod-->
+<!-- @funcToCreatePod @test -->
 ```
 function tut_CreatePod {
 cat <<EOF | kubectl apply -f -
@@ -126,12 +126,12 @@ EOF
 }
 ```
 
-<!-- @createThePod -->
+<!-- @createThePod @test -->
 ```
 tut_CreatePod pod-tomato
 ```
 
-<!-- @getAllPods -->
+<!-- @getAllPods @test -->
 ```
 kubectl get pods
 ```
@@ -139,14 +139,15 @@ kubectl get pods
 `Describe` the pod to see the _QoS_ class, the _Ready_
 state, the node it's running on, etc.
 
-<!-- @describeOnePod -->
+<!-- @describeOnePod @test -->
 ```
 kubectl describe pod pod-tomato
 ```
 
-<!-- @detailedPod -->
+<!-- @funcDetailPod @test -->
 ```
-tmpl=`cat <<EOF
+function tut_DetailPod {
+  local tmpl=`cat <<EOF
 {{.metadata.name -}}
 {{range .spec.containers -}}
   {{with .resources}}
@@ -166,7 +167,13 @@ tmpl=`cat <<EOF
 {{end}}
 EOF
 `
-kubectl get -o go-template="$tmpl" pod pod-tomato
+  kubectl get -o go-template="$tmpl" pod $1
+}
+```
+
+<!-- @detailPod @test -->
+```
+tut_DetailPod pod-tomato
 ```
 
 ### scheduling test
@@ -225,5 +232,5 @@ tut_CreatePod pop-tomato
 
 <!-- @checkPod -->
 ```
-kubectl get -o go-template="$tmpl" pod pod-tomato
+tut_DetailPod pod-tomato
 ```

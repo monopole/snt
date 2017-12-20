@@ -10,7 +10,7 @@ you should now be able to talk to it via kubectl.
 
 Confirm you have at least one node...
 
-<!-- @getNodes -->
+<!-- @getNodes @test -->
 ```
 kubectl get nodes
 ```
@@ -22,6 +22,7 @@ kubectl get pods
 ```
 
 Get node details:
+<!-- @getPods @test -->
 ```
 kubectl describe nodes
 ```

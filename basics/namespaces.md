@@ -22,12 +22,12 @@ from another, etc.
 
 ## Review current status
 
-<!-- @getNamespaces -->
+<!-- @getNamespaces @test -->
 ```
 kubectl get namespaces
 ```
 
-<!-- @getPodsByNamespace -->
+<!-- @getPodsByNamespace @test -->
 ```
 function tut_showPods {
   echo "---- pods in namespace $1"
@@ -61,7 +61,7 @@ Conceptual differences between labels and namespace:
 
 
 Your current namespace is:
-<!-- @viewNamespace -->
+<!-- @viewNamespace @test -->
 ```
 kubectl config view | grep namespace:
 ```
@@ -71,24 +71,24 @@ kubectl config view | grep namespace:
 First, delete anything created in a previous
 pass through this tutorial:
 
-<!-- @deleteNamespace -->
+<!-- @deleteNamespace @test -->
 ```
 kubectl delete namespace ns-beansprout
 ```
 
 Create and switch to a new namespace:
-<!-- @createNamespace -->
+<!-- @createNamespace @test -->
 ```
 kubectl create namespace ns-beansprout
 ```
 
-<!-- @changeDefault -->
+<!-- @changeDefault @test -->
 ```
 kubectl --namespace=ns-beansprout \
     config set-context $(kubectl config current-context)
 ```
 
-<!-- @viewNamespace -->
+<!-- @viewNamespace @test -->
 ```
 kubectl config view | grep namespace:
 ```
