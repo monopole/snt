@@ -26,7 +26,10 @@ TUT_IMG_NAME=radishwine
 TUT_IMG_V1=1  # to tag version 1
 TUT_IMG_V2=2  # to tag version 2
 TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
+```
 
+<!-- @mkSrcDir @test -->
+```
 mkdir -p $TUT_DIR/src
 ```
 
@@ -129,9 +132,9 @@ function tut_RequestAndQuit {
   # Give server time to fire up.
   sleep 2
   # Dump webpage to stdout
-  curl -m 1 localhost:$port/$path
+  curl --fail --silent -m 1 localhost:$port/$path
   # Send query of death
-  curl -m 1 localhost:$port/quit
+  curl --fail --silent -m 1 localhost:$port/quit
 }
 ```
 

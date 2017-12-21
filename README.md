@@ -1,5 +1,11 @@
 # Kubernetes Cluster Configuration
 
+ <!-- test command
+  mdrip --mode test --label test \
+     --blockTimeOut 4m  --alsologtostderr \
+     --v=2 --stderrthreshold INFO ./
+  -->
+ 
 _A tutorial on installing customized cluster-level apps._
 
 > __status: under development Nov 2017__
@@ -20,8 +26,11 @@ approaches to app-level configuration.
 ### Requirements
 
 [Go](https://golang.org/doc/install),
-[git](https://git-scm.com/downloads) and bash.
-Some command blocks use bash-specific syntax.
+[git](https://git-scm.com/downloads)
+and [curl](https://github.com/curl/curl).
+
+The bash shell is implicitly required, as the
+command blocks use bash syntax.
 
 Further requirements arise from the choice of where you
 run your cluster (discussed next).
@@ -32,7 +41,14 @@ Begin by creating a disposable working directory:
 
 <!-- @mkTmpDir @test -->
 ```
-TUT_DIR=$(mktemp -d)
+# Use fixed location rather than random dir
+# to ease debugging command blocks.
+# TUT_DIR=$(mktemp -d)
+TUT_DIR=$TMPDIR/k8s_config_tutorial
+if [ -d "$TUT_DIR" ]; then
+  /bin/rm -rf $TUT_DIR
+fi
+mkdir $TUT_DIR
 ```
 
 With the exception of the optional gcloud installation
@@ -50,3 +66,4 @@ Cleanup is just
 > ```
 
 which your OS will eventually do on its own.
+

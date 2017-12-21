@@ -66,7 +66,7 @@ echo "DOCKER_HOST=$DOCKER_HOST"
 Harmlessly assure there are no images left over from
 a previous pass through these commands.
 
-<!-- @rmDockerImages @test -->
+<!-- @rmDockerImages -->
 ```
 # docker rm $(docker stop $(docker ps -aq))
 docker rmi $TUT_IMG_TAG:$TUT_IMG_V1
@@ -126,8 +126,8 @@ else
   host=localhost
 fi
 
-curl -m 1 $host:8080/kingGhidorah
-curl -m 1 $host:8080/quit
+curl --fail --silent -m 1 $host:8080/kingGhidorah
+curl --fail --silent -m 1 $host:8080/quit
 ```
 
 <!-- @confirmNoService @test -->

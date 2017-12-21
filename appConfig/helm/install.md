@@ -21,7 +21,7 @@ tarball=helm-v2.7.0-linux-amd64.tar.gz
 
 mkdir -p $TUT_DIR/bin
 pushd $TUT_DIR
-curl -Lo helm.tgz $apis/kubernetes-helm/$tarball
+curl --fail --location --silent -o helm.tgz $apis/kubernetes-helm/$tarball
 gunzip <helm.tgz | tar xvf -
 rm helm.tgz
 mv linux-amd64/helm $TUT_DIR/bin

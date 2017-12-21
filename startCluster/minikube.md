@@ -67,7 +67,8 @@ rm -f $KUBECONFIG
 <!-- @installMk @test -->
 ```
 apis=https://storage.googleapis.com
-curl -Lo $MINIKUBE_HOME/minikube \
+curl --fail --location --silent \
+    --output $MINIKUBE_HOME/minikube \
     $apis/minikube/releases/latest/minikube-linux-amd64
 chmod +x $MINIKUBE_HOME/minikube
 find $MINIKUBE_HOME
@@ -105,7 +106,8 @@ PATH=$TUT_BIN:$PATH
 ```
 apis=https://storage.googleapis.com
 version=$(curl -s $apis/kubernetes-release/release/stable.txt)
-curl -Lo $TUT_DIR/bin/kubectl \
+curl --fail --location --silent \
+  --output $TUT_DIR/bin/kubectl \
   $apis/kubernetes-release/release/$version/bin/linux/amd64/kubectl
 chmod +x $TUT_BIN/kubectl
 ```

@@ -63,17 +63,26 @@ Conceptual differences between labels and namespace:
 Your current namespace is:
 <!-- @viewNamespace @test -->
 ```
-kubectl config view | grep namespace:
+kubectl config view | grep namespace: || true
 ```
+There should be no output, implying you're in the default namespace.
 
 ## Make a Namespace for your App
 
-First, delete anything created in a previous
-pass through this tutorial:
+Before making the namespace to use in this tutorial,
+remove it if it already exists from a previous pass:
 
 <!-- @deleteNamespace @test -->
 ```
-kubectl delete namespace ns-beansprout
+exists=$(kubectl get namespace ns-beansprout 2> /dev/null || true)
+if [ ! -z "$exists" ]; then
+  kubectl delete --ignore-not-found namespace ns-beansprout
+  exists=$(kubectl get namespace ns-beansprout 2> /dev/null || true)
+  while [ ! -z "$exists" ]; do
+     sleep 2
+     exists=$(kubectl get namespace ns-beansprout 2> /dev/null || true)
+  done
+fi
 ```
 
 Create and switch to a new namespace:
@@ -90,7 +99,7 @@ kubectl --namespace=ns-beansprout \
 
 <!-- @viewNamespace @test -->
 ```
-kubectl config view | grep namespace:
+kubectl config view | grep namespace: || true
 ```
 
 The rest of the commands will operate in this

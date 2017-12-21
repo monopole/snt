@@ -13,7 +13,7 @@ static port.
 
 Confirm that there are no services:
 
-<!-- @getService -->
+<!-- @getService @test -->
 ```
 kubectl get service
 ```
@@ -39,7 +39,7 @@ behaviors:
   (like most other things) asynchronous.  Information
   about it appears in the `status.loadBalancer` field.
 
-<!-- @funcCreateService -->
+<!-- @funcCreateService @test -->
 ```
 function tut_CreateService {
 cat <<EOF | kubectl apply -f -
@@ -69,14 +69,14 @@ EOF
 }
 ```
 
-<!-- @createService -->
+<!-- @createService @test -->
 ```
 tut_CreateService
 ```
 
 Check again:
 
-<!-- @getService -->
+<!-- @getService @test -->
 ```
 kubectl get service
 ```
@@ -84,7 +84,7 @@ kubectl get service
 Find out what's going on with the service:
 
 
-<!-- @describeService -->
+<!-- @describeService @test -->
 ```
 kubectl describe service svc-eggplant
 ```
@@ -100,10 +100,10 @@ Crucial aspects of the output are
 
 Grab an address to use with the service:
 
-<!-- @funcGetAddress -->
+<!-- @funcGetAddress @test -->
 ```
 function tut_getServiceAddress {
-  if isMinikube; then
+  if tut_isMinikube; then
     local tmpl='{{range .spec.ports -}}{{.nodePort}}{{end}}'
     local nodePort=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
     echo $($MINIKUBE_HOME/minikube ip):$nodePort
@@ -122,37 +122,48 @@ function tut_getServiceAddress {
 }
 ```
 
-<!-- @getAddress -->
+<!-- @getAddress @test -->
 ```
 echo "This may take around 30 sec after service creation to work."
 TUT_SVC_ADDRESS=$(tut_getServiceAddress)
 echo "Service at $TUT_SVC_ADDRESS"
 ```
 
-<!-- @funcQueryServer -->
+<!-- @funcQueryServer @test -->
 ```
 function tut_Query {
-  local cmd="curl -m 1 $TUT_SVC_ADDRESS/$1"
-  echo $cmd
-  $cmd
+  curl --fail --silent -m 1 $TUT_SVC_ADDRESS/$1
 }
 ```
 
-<!-- @queryService -->
+<!-- @dummy1 @test -->
 ```
-tut_Query bananna
-tut_Query tangerine
+echo dummy1
 ```
 
-[address list page]: https://console.cloud.google.com/networking/addresses/list
+<!-- @dummy2 @test -->
+```
+echo dummy2
+```
 
-If running on GKE, The LB IP address also appears on
-the [address list page] of your developer console, and
-in the entire cluster's information dump:
+<!-- @queryServiceRaw1 @test -->
+```
+curl --fail --silent -m 1 $TUT_SVC_ADDRESS/banana
+```
+
+<!-- @queryServiceRaw2 @test -->
+```
+curl --fail --silent -m 1 $TUT_SVC_ADDRESS/tangerine
+```
+
+If running on GKE, The LB IP address also appears on the
+[address list page](https://console.cloud.google.com/networking/addresses/list)
+of your developer console, and in the entire cluster's
+information dump:
 
 <!-- @dumpClusterInfo -->
 ```
-if ! isMinikube; then
-  kubectl cluster-info dump |grep Ingress
+if ! tut_isMinikube; then
+  kubectl cluster-info dump | grep Ingress
 fi
 ```
