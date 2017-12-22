@@ -21,10 +21,27 @@ kubectl get nodes
 kubectl get pods
 ```
 
-Get node details:
+Get node details, noting the cpu and memory numbers in the capacity section.
+
+
 <!-- @getPods @test -->
 ```
 kubectl describe nodes
 ```
 
-Note the cpu and memory numbers in the capacity section.
+Lastly, define a function used in the remaining sections.
+
+<!-- @funcIsMiniKube @test @debug -->
+```
+function tut_isMinikube() {
+  local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
+  local firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
+  [[ "$firstNodeName" == "minikube" ]]
+}
+if tut_isMinikube; then
+  echo "Using minikube"
+else
+  echo "Using GKE"
+fi
+```
+

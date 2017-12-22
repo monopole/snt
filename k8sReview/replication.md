@@ -161,7 +161,9 @@ function tut_DeleteRandomPod {
 {{end}}
 EOF
 `
-  local victim=$(kubectl get -o go-template="$tmpl" pods | sort -R | head -n 1)
+  local victim=$(\
+      kubectl get -o go-template="$tmpl" pods |\
+      sort -R | head -n 1)
   kubectl delete pod $victim
 }
 ```

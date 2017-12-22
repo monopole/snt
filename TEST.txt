@@ -1,48 +1,34 @@
-#
-cd snt
+These are just notes, not yet a script.
+
+Assume cwd is snt
 
 eval "$(mdrip --label defineEnv .)"
 
 mdrip \
     --mode test \
     --label test \
-    --blockTimeOut 10m \
-    --alsologtostderr \
-    --v 2 \
-    --stderrthreshold INFO \
-    ./
-
-mdrip \
-    --mode test \
-    --label test \
     --blockTimeOut 15m \
     --alsologtostderr \
     --v 2 \
     --stderrthreshold INFO \
-    ./startCluster/README.md \
+    ./README.md \
     ./startCluster/minikube.md \
     ./startCluster/confirm.md \
-    ./basics/buildAServer.md \
-    ./basics/dockerize.md \
-    ./basics/namespaces.md \
-    ./basics/pods.md \
-    ./basics/services.md
+    ./buildAServer.md \
+    ./containerize.md \
+    ./k8sReview/namespaces.md \
+    ./k8sReview/pods.md \
+    ./k8sReview/services.md
 
-mdrip \
-    --mode test \
-    --label test \
-    --blockTimeOut 15m \
-    --alsologtostderr \
-    --v 2 \
-    --stderrthreshold INFO \
-    ./basics/pods.md \
-    ./basics/services.md
-
-eval "$(mdrip \
+eval "$(\
+    mdrip \
     --label debug \
-    ./startCluster/README.md \
+    ./README.md \
     ./startCluster/minikube.md \
     ./startCluster/confirm.md \
-    ./basics/buildAServer.md \
-    ./basics/dockerize.md \
+    ./buildAServer.md \
+    ./containerize.md \
+    ./k8sReview/namespaces.md \
+    ./k8sReview/pods.md \
+    ./k8sReview/services.md
 )"

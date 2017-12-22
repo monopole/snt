@@ -9,20 +9,21 @@ kubectl delete service svc-eggplant
 
 or wipe the entire namespace:
 
-<!-- @deleteNamespace -->
+<!-- @deleteNamespace @test @debug -->
 ```
 kubectl delete namespace ns-beansprout
 ```
 
 Stop the cluster.
 
-<!-- @stopCluster -->
+<!-- @stopCluster @test @debug -->
 ```
-if isMinikube; then
+if tut_isMinikube; then
   $MINIKUBE_HOME/minikube stop
 else
   # This will stop billing.
-  gcloud --quiet container clusters delete $TUT_CLUSTER_NAME
+  gcloud --quiet container clusters \
+       delete $TUT_CLUSTER_NAME
 fi
 ```
 

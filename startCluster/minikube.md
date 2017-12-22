@@ -130,9 +130,9 @@ $MINIKUBE_HOME/minikube \
     --vm-driver=virtualbox >& /dev/null
 ```
 
-Run to assure that minikube is up.
+Assure that minikube is up.
 
-<!-- @waitForIt @test @debug -->
+<!-- @funcToWaitForIt @test @debug -->
 ```
 function tut_awaitMk {
   for i in {1..100}; do
@@ -146,6 +146,10 @@ function tut_awaitMk {
     sleep 2
   done
 }
+```
+
+<!-- @waitForIt @test @debug -->
+```
 tut_awaitMk
 ```
 

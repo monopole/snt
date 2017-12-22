@@ -1,4 +1,4 @@
-# Expose the Pod With a Service
+># Expose the Pod With a Service
 
 > _Make pod services available outside the cluster._
 >
@@ -136,24 +136,16 @@ function tut_Query {
 }
 ```
 
-<!-- @dummy1 @test -->
-```
-echo dummy1
-```
-
-<!-- @dummy2 @test -->
-```
-echo dummy2
-```
-
 <!-- @queryServiceRaw1 @test -->
 ```
 curl --fail --silent -m 1 $TUT_SVC_ADDRESS/banana
+tut_Query banana
 ```
 
 <!-- @queryServiceRaw2 @test -->
 ```
 curl --fail --silent -m 1 $TUT_SVC_ADDRESS/tangerine
+tut_Query tangerine
 ```
 
 If running on GKE, The LB IP address also appears on the

@@ -178,59 +178,30 @@ tut_DetailPod pod-tomato
 
 ### scheduling test
 
-To test resource control, optionally delete the pod and
-recreate it after increasing `TUT_CON_CPU` to `1000m`, i.e.:
-
-<!-- @checkScheduling -->
-```
-kubectl delete pod pod-tomato
-sleep 8
-```
-
-confirm there are no pods:
-
-<!-- @noPods -->
-```
-kubectl get pods
-```
+To test resource control, try to make
+a pod that requires seven CPUS:
 
 <!-- @unschedulablePod -->
 ```
 TUT_CON_CPU=7000m # 7 cpus
-tut_CreatePod pod-tomato2
+tut_CreatePod pod-turnip
 ```
 
-A pod configured to use 1 (entire) CPU is
-unschedulable, since no nodes have 1 cpu available.
-Various jobs (e.g. kubelet, fluentd, etc) consume some
+A pod configured to use this much CPU is unschedulable,
+since no nodes have that many cores available.  Various
+jobs (e.g. kubelet, fluentd, etc) consume some
 percentage of the cpu.
 
-Verify that the pod now suffers from `ContainersNotReady`.
+Verify that the pod has not entered the running phase:
 
 ```
-kubectl get -o go-template="$tmpl" pod pod-tomato2
+tut_DetailPod pod-turnip
 ```
 
-Confirm it can be recreated with a reasonable CPU request:
+Get rid of it:
 
 <!-- @deletePod -->
 ```
-kubectl delete pod pod-tomato2
-sleep 8
+kubectl delete pod pod-turnip
 ```
 
-<!-- @noPods -->
-```
-kubectl get pods
-```
-
-<!-- @recreatePod -->
-```
-TUT_CON_CPU=100m
-tut_CreatePod pop-tomato
-```
-
-<!-- @checkPod -->
-```
-tut_DetailPod pod-tomato
-```

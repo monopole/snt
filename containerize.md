@@ -27,20 +27,6 @@ In what follows:
 
 ## Set up environment
 
-<!-- @funcPlatform @test @debug -->
-```
-function tut_isMinikube() {
-  local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
-  local firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
-  [[ "$firstNodeName" == "minikube" ]]
-}
-if tut_isMinikube; then
-  echo "Using minikube"
-else
-  echo "Using GKE"
-fi
-```
-
 Define an image tag to use as an argument to various
 docker commands and as the value of the `image` field
 in kubernetes pod definitions.
