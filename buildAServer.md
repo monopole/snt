@@ -119,8 +119,9 @@ function tut_BuildProgram {
 ```
 rm -f $TUT_IMG_PATH
 tut_BuildProgram $TUT_IMG_V1
-file $TUT_IMG_PATH
-ls -sh $TUT_IMG_PATH
+if ! type -P $TUT_IMG_PATH >/dev/null 2>&1; then
+  echo Build failed?
+fi
 ```
 
 <!-- @funcRunAndKill @test -->
@@ -137,9 +138,9 @@ function tut_RequestAndQuit {
 }
 ```
 
-<!-- @runAndKill @test @debug -->
+<!-- @runAndKill @test -->
 ```
-TUTORIAL_GREETING=salutations ${TUT_IMG_PATH} \
+TUTORIAL_GREETING=salutations $TUT_IMG_PATH \
     --enableRiskyFeature --port 8100 &
 tut_RequestAndQuit 8100 godzilla
 ```

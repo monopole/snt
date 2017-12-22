@@ -1,9 +1,11 @@
-These are just notes, not yet a script.
+# These are just notes, not yet a script.
 
-Assume cwd is snt
+# The goal for test is to redo everything, including downloads.
 
-eval "$(mdrip --label defineEnv .)"
+# Short form
+mdrip --mode test --label test --blockTimeOut 15m ~/snt
 
+# Long, editable form.
 mdrip \
     --mode test \
     --label test \
@@ -18,17 +20,39 @@ mdrip \
     ./containerize.md \
     ./k8sReview/namespaces.md \
     ./k8sReview/pods.md \
-    ./k8sReview/services.md
+    ./k8sReview/services.md \
+    ./k8sReview/replication.md \
+    ./k8sReview/deployment.md \
+    ./k8sReview/configMap.md \
 
-eval "$(\
-    mdrip \
-    --label debug \
-    ./README.md \
-    ./startCluster/minikube.md \
-    ./startCluster/confirm.md \
-    ./buildAServer.md \
-    ./containerize.md \
-    ./k8sReview/namespaces.md \
-    ./k8sReview/pods.md \
-    ./k8sReview/services.md
+
+# debug does everything other than the downloads, because downloads
+# are so time consuming and their failure is usually an indication of
+# a bad link/server, not bad tutorial logic.
+
+# It assumes that test mode already ran, downloaded everything, and
+# successfully created containers in docker.  It starts a fresh
+# cluster, and does all the k8s commands.
+
+# Short form that does every debug label:
+
+eval "$(mdrip --label debug ~/snt)"
+
+
+# Editable form lets you stop somewhere:
+
+eval "$(mdrip --label debug \
+  ./README.md \
+  ./startCluster/minikube.md \
+  ./startCluster/confirm.md \
+  ./buildAServer.md \
+  ./containerize.md \
+  ./k8sReview/namespaces.md \
+  ./k8sReview/pods.md \
+  ./k8sReview/services.md \
+  ./k8sReview/replication.md \
+  ./k8sReview/deployment.md \
+  ./k8sReview/configMap.md \
+  ./cleanup.md \
 )"
+

@@ -4,8 +4,8 @@
 >
 > _Time: 5min (assuming prerequisites)_
 
-_Skip to [confirmation](/startCluster/confirm) if you
-just set up a minikube cluster._
+__Skip to [confirmation](/startCluster/confirm) if you
+just set up a minikube cluster.__
 
 [gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
 [gcloud]: https://cloud.google.com/sdk/

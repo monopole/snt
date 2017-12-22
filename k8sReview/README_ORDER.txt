@@ -5,4 +5,3 @@ replication
 deployment
 configMap
 ingress
-

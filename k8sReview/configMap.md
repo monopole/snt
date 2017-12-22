@@ -10,7 +10,7 @@
 
 Create a ConfigMap.  It's a set of key:value pairs.
 
-<!-- @applyConfigMap @test -->
+<!-- @applyConfigMap @test @debug -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -23,14 +23,14 @@ data:
 EOF
 ```
 
-<!-- @descConfigMap @test -->
+<!-- @descConfigMap @test @debug -->
 ```
 kubectl describe configmap cfg-parsley
 ```
 
 Create a deployment that uses this configmap:
 
-<!-- @deploymentWithCM @test -->
+<!-- @deploymentWithCM @test @debug -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
@@ -77,13 +77,13 @@ spec:
 EOF
 ```
 
-<!-- @descDeployments @test -->
+<!-- @descDeployments @test @debug -->
 ```
 kubectl describe deployments
 ```
 
 Make sure querying works:
-<!-- @curlService @test -->
+<!-- @curlService @test @debug -->
 ```
 tut_Query lime
 ```
@@ -91,7 +91,7 @@ tut_Query lime
 Apply a change in the configuration that launches the
 risky feature and changes the greeting:
 
-<!-- @applyCMapChange @test -->
+<!-- @applyCMapChange @test @debug -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -104,14 +104,14 @@ data:
 EOF
 ```
 
-<!-- @descConfigMap @test -->
+<!-- @descConfigMap @test @debug -->
 ```
 kubectl describe configmap cfg-parsley
 ```
 
 There are no visible changes in the service yet.
 
-<!-- @curlService @test -->
+<!-- @curlService @test @debug -->
 ```
 tut_Query lemon
 ```
@@ -121,14 +121,15 @@ tut_Query lemon
 Delete one pod at a time and watch as new configuration
 is adopted by new pods.
 
-<!-- @deleteOnePod @test -->
+<!-- @deleteOnePod @test @debug -->
 ```
 tut_DeleteRandomPod
+sleep 2
 ```
 
 Repeat this query ten or so times to hit different pods:
 
-<!-- @tryQuery @test  -->
+<!-- @tryQuery @test @debug  -->
 ```
 tut_Query orange
 ```
@@ -140,13 +141,13 @@ config and deleting a single pod.
 Get everything in sync again by deleting all the pods
 to force recreation at the latest config:
 
-<!-- @deleteAllPods @test -->
+<!-- @deleteAllPods @test @debug -->
 ```
 kubectl delete --all pods
 ```
 
 Confirm the new greeting is always served:
-<!-- @tryQuery @test -->
+<!-- @tryQuery @test @debug -->
 ```
 tut_Query orange
 ```
@@ -160,7 +161,7 @@ points to that new configmap.
 
 Create a second config:
 
-<!-- @createConfigMap2 @test -->
+<!-- @createConfigMap2 @test @debug -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -173,14 +174,14 @@ data:
 EOF
 ```
 
-<!-- @descConfigMap @test -->
+<!-- @descConfigMap @test @debug -->
 ```
 kubectl describe configmap cfg-cilantro
 ```
 
 Define a function to apply a config change:
 
-<!-- @funcRepointDeployment @test -->
+<!-- @funcRepointDeployment @test @debug -->
 ```
 function tut_ApplyConfigChange {
 local newConfig=$1
@@ -217,22 +218,23 @@ EOF
 ```
 
 Confirm existing behavior before applying the change:
-<!-- @curlService @test -->
+<!-- @curlService @test @debug -->
 ```
 tut_Query lime
 ```
 
 Apply the change:
 
-<!-- @changeToConfig2 @test -->
+<!-- @changeToConfig2 @test @debug -->
 ```
 tut_ApplyConfigChange cfg-cilantro
+sleep 3
 ```
 
 Query again, noting the change in the output brought on by the
 change in the values of the environment variables.
 
-<!-- @curlService @test -->
+<!-- @curlService @test @debug -->
 ```
 tut_Query lime
 ```
@@ -259,7 +261,7 @@ done
 
 ### Cleanup
 
-<!-- @deleteStuff @test -->
+<!-- @deleteStuff @test @debug -->
 ```
 kubectl delete deployment dep-kale
 kubectl delete configmap cfg-parsley

@@ -17,11 +17,14 @@ starts with a walk-through of manual configuration
 etc.).  Context established, it compares different
 approaches to app-level configuration.
 
-### Requirements
+### Prerequisites
 
-[Go](https://golang.org/doc/install),
-[git](https://git-scm.com/downloads)
-and [curl](https://github.com/curl/curl).
+[Go]: https://golang.org/doc/install
+[git]: https://git-scm.com/downloads
+[curl]: https://github.com/curl/curl
+[docker]: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu
+
+[Go], [git], [curl], and [docker].
 
 The bash shell is implicitly required, as the
 command blocks use bash syntax.
@@ -29,15 +32,29 @@ command blocks use bash syntax.
 Further requirements arise from the choice of where you
 run your cluster (discussed next).
 
+<!-- @checkPrerequisites @test @debug -->
+```
+function tut_checkProgram {
+  if type -P "$1" >/dev/null 2>&1; then
+    echo Found $1
+  else
+    echo Please install $1
+  fi
+}
+tut_checkProgram go
+tut_checkProgram git
+tut_checkProgram curl
+tut_checkProgram docker
+```
+
 ### Usage
 
 Begin by creating a disposable working directory:
 
 <!-- @defineEnv @test @debug -->
 ```
-# Use fixed (rather than random) directory
-# to ease debugging command blocks.
-# TUT_DIR=$(mktemp -d)
+# Use fixed  directory (rather than TUT_DIR=($mktemp -d))
+# to ease restarting tests at different points.
 TUT_DIR=$TMPDIR/k8s_config_tutorial
 ```
 
@@ -46,7 +63,7 @@ TUT_DIR=$TMPDIR/k8s_config_tutorial
 if [ -d "$TUT_DIR" ]; then
   /bin/rm -rf $TUT_DIR
 fi
-mkdir $TUT_DIR
+mkdir -p $TUT_DIR
 ```
 
 With the exception of the optional gcloud installation

@@ -73,7 +73,7 @@ If running on GKE, there might not be anything here.
 docker ps -a
 ```
 
-<!-- @funcCreateImage @test -->
+<!-- @funcCreateImage @test @debug -->
 ```
 function tut_BuildDockerImage {
   local tag=$TUT_IMG_TAG:$1  # Add version to tag
@@ -105,11 +105,6 @@ Sanity check the container image by running it:
 docker run -d -p 8080:8080 $TUT_IMG_TAG:$TUT_IMG_V1
 docker ps | grep $TUT_IMG_TAG
 
-# Handy trick:
-#   docker ps -a # get container ID
-#   docker exec -it {containerId} bash
-# then cd /tmp to examine logs
-
 if tut_isMinikube; then
   host=$($MINIKUBE_HOME/minikube ip)
 else
@@ -120,7 +115,17 @@ curl --fail --silent -m 1 $host:8080/kingGhidorah
 curl --fail --silent -m 1 $host:8080/quit
 ```
 
-<!-- @confirmNoService @test -->
+To examine logs inside docker:
+
+> ```
+>  docker ps -a # get container ID
+>  docker exec -it {containerId} bash
+> ```
+
+then `cd /tmp` to examine logs.
+
+
+<!-- @confirmQuit @test -->
 ```
 docker ps | grep $TUT_IMG_TAG
 ```
@@ -136,7 +141,6 @@ tut_BuildDockerImage $TUT_IMG_V2
 
 <!-- @confirmDockerCache @test @debug -->
 ```
-ls -1sh $TUT_DIR/src
 docker images | grep ${TUT_IMG_NAME}
 ```
 
@@ -199,15 +203,3 @@ ls -C1 $TUT_DIR/src
 rm -rf $TUT_DIR/src
 ls $TUT_DIR
 ```
-
-   <!--
-   notes about using a local, but not inside minikube, docker daemon:
-
-   Flag `-p` publishes the container port (5000 in this case) to the host.
-   Optionally add flag `--restart always` if it crashes for some reason.
-   The `--name` flag assignes the name, and `registry:2` is the
-   [container's tag](https://hub.docker.com/_/registry/).
-
-   docker run -d -p 5000:5000 --name registry registry:2
-   # Stop it with: docker stop registry
-   -->
