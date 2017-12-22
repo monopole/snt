@@ -1,4 +1,6 @@
 startCluster
-basics
+buildAServer
+containerize
+k8sReview
 appConfig
 cleanup

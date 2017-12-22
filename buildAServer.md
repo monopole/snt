@@ -1,4 +1,4 @@
-# Make a Single-Component App
+# Make a single component App
 
 > _Write a configurable HTTP server
 >  to run on the cluster._

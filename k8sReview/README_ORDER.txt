@@ -1,5 +1,3 @@
-buildAServer
-dockerize
 namespaces
 pods
 services
@@ -7,4 +5,4 @@ replication
 deployment
 configMap
 ingress
-troubleshooting
+
