@@ -80,7 +80,7 @@ suffixes `K`, `M`, `G` etc.
 For the capacity exercise below, express the capacities
 using bash variables:
 
-<!-- @defineDemoCapVars @test -->
+<!-- @defineEnv @test -->
 ```
 TUT_CON_CPU=100m     # 10% of a CPU
 TUT_CON_MEMORY=10000Ki

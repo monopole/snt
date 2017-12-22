@@ -1,11 +1,5 @@
 # Kubernetes Cluster Configuration
 
- <!-- test command
-  mdrip --mode test --label test \
-     --blockTimeOut 4m  --alsologtostderr \
-     --v=2 --stderrthreshold INFO ./
-  -->
- 
 _A tutorial on installing customized cluster-level apps._
 
 > __status: under development Nov 2017__
@@ -39,12 +33,16 @@ run your cluster (discussed next).
 
 Begin by creating a disposable working directory:
 
-<!-- @mkTmpDir @test -->
+<!-- @defineEnv @test @debug -->
 ```
-# Use fixed location rather than random dir
+# Use fixed (rather than random) directory
 # to ease debugging command blocks.
 # TUT_DIR=$(mktemp -d)
 TUT_DIR=$TMPDIR/k8s_config_tutorial
+```
+
+<!-- @resetTmpDir @test -->
+```
 if [ -d "$TUT_DIR" ]; then
   /bin/rm -rf $TUT_DIR
 fi

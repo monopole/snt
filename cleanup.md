@@ -19,7 +19,7 @@ Stop the cluster.
 <!-- @stopCluster -->
 ```
 if isMinikube; then
-  minikube stop
+  $MINIKUBE_HOME/minikube stop
 else
   # This will stop billing.
   gcloud --quiet container clusters delete $TUT_CLUSTER_NAME
@@ -29,9 +29,8 @@ fi
 Recover diskspace (or just wait - the system
 will reclaim it eventually):
 
-<!-- @rmTutDir -->
-```
-if [ -n "$TUT_DIR" ]; then
-  rm -rf $TUT_DIR
-fi
-```
+> ```
+> if [ -n "$TUT_DIR" ]; then
+>  rm -rf $TUT_DIR
+> fi
+> ```

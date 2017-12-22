@@ -19,8 +19,7 @@ To demo rollouts and rollbacks, there will be
 multiple versions of the program, with the
 version appearing on the served web page.
 
-
-<!-- @defineEnv @test -->
+<!-- @defineEnv @test @debug -->
 ```
 TUT_IMG_NAME=radishwine
 TUT_IMG_V1=1  # to tag version 1
@@ -138,7 +137,7 @@ function tut_RequestAndQuit {
 }
 ```
 
-<!-- @runAndKill @test -->
+<!-- @runAndKill @test @debug -->
 ```
 TUTORIAL_GREETING=salutations ${TUT_IMG_PATH} \
     --enableRiskyFeature --port 8100 &

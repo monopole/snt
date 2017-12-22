@@ -20,11 +20,15 @@ Properly facing the web requires an ingress resource at a static
 IP.  They cost about 25 cents per day, even when the cluster is
 not running.  Create one:
 
-<!-- @createStaticIP -->
+<!-- @defineEnv -->
 ```
 TUT_STATIC_IP_NAME=peach-static-ip
+```
 
-# Harmless if the IP (with the given name) was already reserved.
+Harmlessly see if this IP name was already reserved.
+
+<!-- @createStaticIP -->
+```
 gcloud compute --project=$TUT_PROJECT_ID \
   addresses create $TUT_STATIC_IP_NAME \
   --description=for\ scriptingandtooling.com \

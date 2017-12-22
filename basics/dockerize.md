@@ -27,7 +27,7 @@ In what follows:
 
 ## Set up environment
 
-<!-- @funcPlatform @test -->
+<!-- @funcPlatform @test @debug -->
 ```
 function tut_isMinikube() {
   local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
@@ -45,18 +45,22 @@ Define an image tag to use as an argument to various
 docker commands and as the value of the `image` field
 in kubernetes pod definitions.
 
-<!-- @defineImageTag @test -->
+<!-- @defineEnv @test @debug -->
+```
+export TUT_IMG_TAG=$TUT_IMG_NAME
+```
+
+<!-- @defineImageTag @test @debug -->
 ```
 if tut_isMinikube; then
   # use local registry
-  TUT_IMG_TAG=$TUT_IMG_NAME
   eval $($MINIKUBE_HOME/minikube docker-env)
+  echo "DOCKER_HOST=$DOCKER_HOST"
 else
-  # use GCR
+  # use GCR, and override the tag
   TUT_IMG_TAG=gcr.io/$TUT_PROJECT_ID/$TUT_IMG_NAME
 fi
 echo "TUT_IMG_TAG=$TUT_IMG_TAG"
-echo "DOCKER_HOST=$DOCKER_HOST"
 ```
 
 > _TODO_: maybe use non-VM but local registry via `minikube start --insecure-registry`
@@ -78,7 +82,7 @@ See what processes are running in the container.
 If running a local minikube, there will be many processes.
 If running on GKE, there might not be anything here.
 
-<!-- @peekAtRunning @test -->
+<!-- @peekAtRunning @test @debug -->
 ```
 docker ps -a
 ```
@@ -103,14 +107,14 @@ EOF
 tut_BuildDockerImage $TUT_IMG_V1
 ```
 
-<!-- @listImages @test -->
+<!-- @listImages @test @debug -->
 ```
 docker images --no-trunc | grep $TUT_IMG_NAME
 ```
 
 Sanity check the container image by running it:
 
-<!-- @runDockerImage @test -->
+<!-- @runDockerImage @test @debug -->
 ```
 docker run -d -p 8080:8080 $TUT_IMG_TAG:$TUT_IMG_V1
 docker ps | grep $TUT_IMG_TAG
@@ -144,7 +148,7 @@ tut_BuildProgram     $TUT_IMG_V2
 tut_BuildDockerImage $TUT_IMG_V2
 ```
 
-<!-- @confirmDockerCache @test -->
+<!-- @confirmDockerCache @test @debug -->
 ```
 ls -1sh $TUT_DIR/src
 docker images | grep ${TUT_IMG_NAME}

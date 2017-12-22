@@ -20,7 +20,31 @@ following uses the virtualbox hypervisor instead.
 [virtualbox]: https://www.virtualbox.org/
 [docker]: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
 
-### Clean up from previous runs (if any)
+### Define environment
+
+<!-- @defineEnv @test @debug -->
+```
+# Where .minikube directory will live
+export MINIKUBE_HOME=$TUT_DIR/mk
+
+# k8s/minikube stores its config here.
+export KUBECONFIG=$MINIKUBE_HOME/tut-minikube-config
+
+# Suppress prompts to report error messages.
+export MINIKUBE_WANTREPORTERRORPROMPT=false
+
+# See
+# https://github.com/kubernetes/minikube/
+#    blob/master/cmd/minikube/cmd/start.go#L315
+export CHANGE_MINIKUBE_NONE_USER=true
+
+export TUT_BIN=$TUT_DIR/bin
+PATH=$TUT_BIN:$PATH
+```
+
+### Clean up VMs
+
+Optionally remove VMs (if any) from previous runs through the tutorial.
 
 <!-- @purgePrevMk @test -->
 ```
@@ -39,27 +63,18 @@ function tut_purgePrevVmUsage {
 tut_purgePrevVmUsage
 ```
 
-Confirm no minikube vms (yet):
+Check your list of VMs:
 
-<!-- @listVms @test -->
+<!-- @listVms @test @debug -->
 ```
 vboxmanage list vms
 ```
 
 <!-- @removeOldMkState @test -->
 ```
-# Where .minikube directory will live
-export MINIKUBE_HOME=$TUT_DIR/mk
+rm -f $KUBECONFIG
 rm -rf $MINIKUBE_HOME/.minikube
 mkdir -p $MINIKUBE_HOME
-```
-
-Preserve existing kube config (if any)
-
-<!-- @useTmpKubeConfig @test -->
-```
-export KUBECONFIG=$MINIKUBE_HOME/tut-minikube-config
-rm -f $KUBECONFIG
 ```
 
 ### Install minikube
@@ -70,63 +85,54 @@ apis=https://storage.googleapis.com
 curl --fail --location --silent \
     --output $MINIKUBE_HOME/minikube \
     $apis/minikube/releases/latest/minikube-linux-amd64
-chmod +x $MINIKUBE_HOME/minikube
-find $MINIKUBE_HOME
 ```
 
-<!-- @confirmVersion @test -->
+<!-- @mkMinikubeExecutable @test -->
+```
+chmod +x $MINIKUBE_HOME/minikube
+```
+
+<!-- @confirmVersion @test @debug -->
 ```
 $MINIKUBE_HOME/minikube version
 ```
-
-<!-- @defineMkEnvVars @test -->
-```
-# Suppress prompts to report error messages.
-export MINIKUBE_WANTREPORTERRORPROMPT=false
-
-# See
-# https://github.com/kubernetes/minikube/blob/master/cmd/minikube/cmd/start.go#L315
-export CHANGE_MINIKUBE_NONE_USER=true
-```
-
 
 ### Install open-source kubectl
 
 Install `kubectl` before starting `minikube` to be
 ready to talk to it.
 
-<!-- @mkTutBin @test -->
-```
-mkdir -p $TUT_DIR/bin
-TUT_BIN=$TUT_DIR/bin
-PATH=$TUT_BIN:$PATH
-```
-
 <!-- @downloadKubectl @test -->
 ```
+mkdir -p $TUT_BIN
 apis=https://storage.googleapis.com
 version=$(curl -s $apis/kubernetes-release/release/stable.txt)
 curl --fail --location --silent \
-  --output $TUT_DIR/bin/kubectl \
+  --output $TUT_BIN/kubectl \
   $apis/kubernetes-release/release/$version/bin/linux/amd64/kubectl
+```
+
+<!-- @mkKubectlExecutable @test -->
+```
 chmod +x $TUT_BIN/kubectl
 ```
 
 ### Start the cluster
 
-This can take a couple of minutes because
-it downloads an OS image.
+This downloads an OS image, and can thus take many
+minutes.
 
-<!-- @startClusterOnMk @test -->
+<!-- @startClusterOnMk @test @debug -->
 ```
 # sudo -E minikube start --vm-driver=none
-time $MINIKUBE_HOME/minikube \
-    start --memory 8192 --cpus 6 --vm-driver=virtualbox
+$MINIKUBE_HOME/minikube \
+    start --memory 8192 --cpus 6 \
+    --vm-driver=virtualbox >& /dev/null
 ```
 
 Run to assure that minikube is up.
 
-<!-- @waitForIt @test -->
+<!-- @waitForIt @test @debug -->
 ```
 function tut_awaitMk {
   for i in {1..100}; do
@@ -145,7 +151,7 @@ tut_awaitMk
 
 Confirm expectations
 
-<!-- @confirmUp @test -->
+<!-- @confirmUp @test @debug -->
 ```
 $MINIKUBE_HOME/minikube status
 ```
@@ -161,7 +167,7 @@ cat $KUBECONFIG
 
 Confirm versions of client and server:
 
-<!-- @kubectlVersion @test -->
+<!-- @kubectlVersion @test @debug -->
 ```
 $TUT_BIN/kubectl version
 ```
