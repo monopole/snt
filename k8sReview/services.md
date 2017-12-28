@@ -138,6 +138,7 @@ function tut_Query {
 
 <!-- @queryServiceRaw1 @test @debug -->
 ```
+sleep 2
 tut_Query banana
 ```
 
