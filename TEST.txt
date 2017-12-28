@@ -25,6 +25,28 @@ mdrip \
     ./k8sReview/deployment.md \
     ./k8sReview/configMap.md \
 
+# Initialization form - run in current shell to install everything.
+eval "$(mdrip --label test \
+  ./README.md \
+  ./startCluster/minikube.md \
+  ./startCluster/confirm.md \
+  ./buildAServer.md \
+  ./containerize.md \
+  ./k8sReview/namespaces.md \
+  ./k8sReview/pods.md \
+)"
+
+# After the above, try this.
+mdrip \
+    --mode test \
+    --label test \
+    --blockTimeOut 2m \
+    --alsologtostderr \
+    --v 2 \
+    --stderrthreshold INFO \
+    ./k8sReview/services.md
+
+
 
 # debug does everything other than the downloads, because downloads
 # are so time consuming and their failure is usually an indication of
@@ -55,4 +77,3 @@ eval "$(mdrip --label debug \
   ./k8sReview/configMap.md \
   ./cleanup.md \
 )"
-

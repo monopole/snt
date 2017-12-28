@@ -48,7 +48,7 @@ PATH=$TUT_BIN:$PATH
 
 Optionally remove VMs (if any) from previous runs through the tutorial.
 
-<!-- @purgePrevMk @test -->
+<!-- @stopPrevMk @test -->
 ```
 if type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1; then
   $MINIKUBE_HOME/minikube status
@@ -56,7 +56,7 @@ if type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1; then
 fi
 ```
 
-<!-- @funcToPurgePrevMk @test -->
+<!-- @funcToPurgePrevMk @test @debug -->
 ```
 function tut_purgePrevVmUsage {
   for line in "$(vboxmanage list vms)"; do
@@ -93,7 +93,7 @@ mkdir -p $MINIKUBE_HOME
 
 ### Install minikube
 
-<!-- @funcInstallMk @test @debug-->
+<!-- @funcInstallMk @test -->
 ```
 function tut_installMk {
   local apis=https://storage.googleapis.com
@@ -105,7 +105,7 @@ function tut_installMk {
 }
 ```
 
-<!-- @installMk @test @debug-->
+<!-- @installMk @test -->
 ```
 if ! type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1; then
   tut_installMk
@@ -151,7 +151,7 @@ fi
 This downloads an OS image, and can thus take many
 minutes.
 
-<!-- @stopMkCluster @test @debug -->
+<!-- @stopMkCluster @test -->
 ```
 if $MINIKUBE_HOME/minikube status  >/dev/null 2>&1; then
   echo Stopping minikube...
@@ -159,7 +159,7 @@ if $MINIKUBE_HOME/minikube status  >/dev/null 2>&1; then
 fi
 ```
 
-<!-- @startMkCluster @test @debug -->
+<!-- @startMkCluster @test -->
 ```
 $MINIKUBE_HOME/minikube \
     start --memory 8192 --cpus 6 \

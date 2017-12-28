@@ -2,7 +2,9 @@
 
 This tutorial assumes
 
- * git installed
+[git]: https://git-scm.com/downloads
+
+ * [git] installed
  * Go 1.9.1 installed
  * You have a [gcloud](https://cloud.google.com) account,
    or can adapt what follows to some other cluster host.

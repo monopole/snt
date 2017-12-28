@@ -1,4 +1,4 @@
-># Expose the Pod With a Service
+# Expose the Pod With a Service
 
 > _Make pod services available outside the cluster._
 >

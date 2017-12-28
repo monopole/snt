@@ -20,11 +20,10 @@ approaches to app-level configuration.
 ### Prerequisites
 
 [Go]: https://golang.org/doc/install
-[git]: https://git-scm.com/downloads
 [curl]: https://github.com/curl/curl
 [docker]: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu
 
-[Go], [git], [curl], and [docker].
+[Go], [curl], and [docker].
 
 The bash shell is implicitly required, as the
 command blocks use bash syntax.
@@ -35,14 +34,11 @@ run your cluster (discussed next).
 <!-- @checkPrerequisites @test @debug -->
 ```
 function tut_checkProgram {
-  if type -P "$1" >/dev/null 2>&1; then
-    echo Found $1
-  else
+  if ! type -P "$1" >/dev/null 2>&1; then
     echo Please install $1
   fi
 }
 tut_checkProgram go
-tut_checkProgram git
 tut_checkProgram curl
 tut_checkProgram docker
 ```
@@ -55,7 +51,7 @@ Begin by creating a disposable working directory:
 ```
 # Use fixed  directory (rather than TUT_DIR=($mktemp -d))
 # to ease restarting tests at different points.
-TUT_DIR=$TMPDIR/k8s_config_tutorial
+export TUT_DIR=$TMPDIR/k8s_config_tutorial
 ```
 
 <!-- @resetTmpDir @test -->
@@ -81,4 +77,3 @@ Cleanup is just
 > ```
 
 which your OS will eventually do on its own.
-
