@@ -39,7 +39,7 @@ behaviors:
   (like most other things) asynchronous.  Information
   about it appears in the `status.loadBalancer` field.
 
-<!-- @funcCreateService @env @test @debug -->
+<!-- @funcCreateService @env @test -->
 ```
 function tut_CreateService {
 cat <<EOF | kubectl apply -f -
@@ -69,14 +69,14 @@ EOF
 }
 ```
 
-<!-- @createService @test @debug -->
+<!-- @createService @test -->
 ```
 tut_CreateService
 ```
 
 Check again:
 
-<!-- @getService @test @debug -->
+<!-- @getService @test -->
 ```
 kubectl get service
 ```
@@ -84,7 +84,7 @@ kubectl get service
 Find out what's going on with the service:
 
 
-<!-- @describeService @test @debug -->
+<!-- @describeService @test -->
 ```
 kubectl describe service svc-eggplant
 ```
@@ -100,7 +100,7 @@ Crucial aspects of the output are
 
 Grab an address to use with the service:
 
-<!-- @funcGetAddress @env @test @debug -->
+<!-- @funcGetAddress @env @test -->
 ```
 function tut_getServiceAddress {
   if tut_isMinikube; then
@@ -122,14 +122,14 @@ function tut_getServiceAddress {
 }
 ```
 
-<!-- @getAddress @test @debug -->
+<!-- @getAddress @test -->
 ```
 echo "This may take around 30 sec after service creation to work."
 TUT_SVC_ADDRESS=$(tut_getServiceAddress)
 echo "Service at $TUT_SVC_ADDRESS"
 ```
 
-<!-- @funcQueryServer @env @test @debug -->
+<!-- @funcQueryServer @env @test -->
 ```
 # Try a few times to allow for server startup time.
 function tut_Query {
@@ -152,12 +152,12 @@ function tut_Query {
 }
 ```
 
-<!-- @queryServiceRaw1 @test @debug -->
+<!-- @queryServiceRaw1 @test -->
 ```
 tut_Query banana
 ```
 
-<!-- @queryServiceRaw2 @test @debug -->
+<!-- @queryServiceRaw2 @test -->
 ```
 tut_Query tangerine
 ```

@@ -31,7 +31,7 @@ command blocks use bash syntax.
 Further requirements arise from the choice of where you
 run your cluster (discussed next).
 
-<!-- @checkPrerequisites @env @test @debug -->
+<!-- @checkPrerequisites @env @test -->
 ```
 function tut_checkProgram {
   if ! type -P "$1" >/dev/null 2>&1; then
@@ -50,7 +50,7 @@ Use a fixed directory (rather than `mktemp -d`)
 to ease restarting tests at different points.
 
 
-<!-- @defTmpDir @env @test @debug -->
+<!-- @defTmpDir @env @test -->
 ```
 export TUT_DIR=$TMPDIR/k8s_config_tutorial
 ```

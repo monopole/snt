@@ -1,13 +1,11 @@
-# These are just notes, not yet a script.
+# Commands for running various parts of the tutorial.
 
-# The goal for test is to redo everything, including downloads.
-
-# Short form
+# Test everything in a subprocess.
+# If this exits with $?==0, everything with the @test label works.
 mdrip --mode test --label test --blockTimeOut 15m ~/snt
 
-
-# Long, editable form.
-mdrip \
+# A more verbose, edittable form of the above.
+cd ~/snt; mdrip \
     --mode test \
     --label test \
     --blockTimeOut 15m \
@@ -27,8 +25,8 @@ mdrip \
     ./k8sReview/configMap.md
 
 
-# Initialization form - run in current shell to install everything.
-eval "$(mdrip --label test \
+# Runs in current shell, leaving the modified environment to play with.
+cd ~/snt; eval "$(mdrip --label test \
   ./README.md \
   ./startCluster/minikube.md \
   ./startCluster/confirm.md \
@@ -38,15 +36,17 @@ eval "$(mdrip --label test \
   ./k8sReview/pods.md \
 )"
 
-# Do this to just re-establish environment.
+# Re-establish environment.
 # Assumes that all downloads are done and that the cluster is up.
 eval "$(mdrip --label env ~/snt)"
 
-# export all the functions in the current shell
+# Export all the functions in the current shell.
+# Do this to allow partial tests in subprocesses to work.
 while IFS= read -r line; do export -f $line; done < <(
     declare -F | grep tut_ | awk '{ print $3 }')
 
-# After the above, try this.
+# E.g., after the above, try running just
+# the service tutorial in test mode.
 mdrip \
     --mode test \
     --label test \
@@ -55,35 +55,3 @@ mdrip \
     --v 2 \
     --stderrthreshold INFO \
     ./k8sReview/services.md
-
-
-
-# debug does everything other than the downloads, because downloads
-# are so time consuming and their failure is usually an indication of
-# a bad link/server, not bad tutorial logic.
-
-# It assumes that test mode already ran, downloaded everything, and
-# successfully created containers in docker.  It starts a fresh
-# cluster, and does all the k8s commands.
-
-# Short form that does every debug label:
-
-eval "$(mdrip --label debug ~/snt)"
-
-
-# Editable form lets you stop somewhere:
-
-eval "$(mdrip --label debug \
-  ./README.md \
-  ./startCluster/minikube.md \
-  ./startCluster/confirm.md \
-  ./buildAServer.md \
-  ./containerize.md \
-  ./k8sReview/namespaces.md \
-  ./k8sReview/pods.md \
-  ./k8sReview/services.md \
-  ./k8sReview/replication.md \
-  ./k8sReview/deployment.md \
-  ./k8sReview/configMap.md \
-  ./cleanup.md \
-)"

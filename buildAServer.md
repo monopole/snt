@@ -19,7 +19,7 @@ To demo rollouts and rollbacks, there will be
 multiple versions of the program, with the
 version appearing on the served web page.
 
-<!-- @env @test @debug -->
+<!-- @env @test -->
 ```
 TUT_IMG_NAME=radishwine
 TUT_IMG_V1=1  # to tag version 1

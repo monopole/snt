@@ -18,7 +18,7 @@ Root access complicates testing this tutorial, so the
 following uses the virtualbox hypervisor instead.
 
 
-<!-- @checkPrerequisites @test @debug -->
+<!-- @checkPrerequisites @test -->
 ```
 # The CLI client to virtualbox
 tut_checkProgram vboxmanage
@@ -26,7 +26,7 @@ tut_checkProgram vboxmanage
 
 ### Define environment
 
-<!-- @env @test @debug -->
+<!-- @env @test -->
 ```
 # Where .minikube directory will live
 export MINIKUBE_HOME=$TUT_DIR/mk
@@ -57,7 +57,7 @@ fi
 ```
 
 Delete vestigial VMs:
-<!-- @funcToPurgePrevMk @env @test @debug -->
+<!-- @funcToPurgePrevMk @env @test -->
 ```
 function tut_purgePrevVmUsage {
   set +e  # ignore errors
@@ -87,7 +87,7 @@ tut_purgePrevVmUsage
 
 Check your list of VMs:
 
-<!-- @listVms @test @debug -->
+<!-- @listVms @test -->
 ```
 vboxmanage list vms
 ```
@@ -120,7 +120,7 @@ if ! type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1; then
 fi
 ```
 
-<!-- @confirmVersion @test @debug -->
+<!-- @confirmVersion @test -->
 ```
 $MINIKUBE_HOME/minikube version
 ```
@@ -177,7 +177,7 @@ $MINIKUBE_HOME/minikube \
 
 Assure that minikube is up.
 
-<!-- @funcToWaitForIt @env @test @debug -->
+<!-- @funcToWaitForIt @env @test -->
 ```
 function tut_awaitMk {
   for i in {1..100}; do
@@ -193,14 +193,14 @@ function tut_awaitMk {
 }
 ```
 
-<!-- @waitForIt @test @debug -->
+<!-- @waitForIt @test -->
 ```
 tut_awaitMk
 ```
 
 Confirm expectations
 
-<!-- @confirmUp @test @debug -->
+<!-- @confirmUp @test -->
 ```
 $MINIKUBE_HOME/minikube status
 ```
@@ -216,7 +216,7 @@ cat $KUBECONFIG
 
 Confirm versions of client and server:
 
-<!-- @kubectlVersion @test @debug -->
+<!-- @kubectlVersion @test -->
 ```
 $TUT_BIN/kubectl version
 ```

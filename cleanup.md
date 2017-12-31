@@ -9,14 +9,14 @@ kubectl delete service svc-eggplant
 
 or wipe the entire namespace:
 
-<!-- @deleteNamespace @test @debug -->
+<!-- @deleteNamespace @test -->
 ```
 kubectl delete namespace ns-beansprout
 ```
 
 Stop the cluster.
 
-<!-- @stopCluster @test @debug -->
+<!-- @stopCluster @test -->
 ```
 if tut_isMinikube; then
   $MINIKUBE_HOME/minikube stop

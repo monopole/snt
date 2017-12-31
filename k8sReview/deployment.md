@@ -30,7 +30,7 @@ Kubernetes adds layers to avoid toil.
 Deployment yaml looks like replicaset yaml.
 Only the `kind` changes:
 
-<!-- @createDeployment @test @debug -->
+<!-- @createDeployment @test -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
@@ -62,12 +62,12 @@ spec:
 EOF
 ```
 
-<!-- @getDeployments @test @debug -->
+<!-- @getDeployments @test -->
 ```
 kubectl get deployments
 ```
 
-<!-- @descDeployments @test @debug -->
+<!-- @descDeployments @test -->
 ```
 kubectl describe deployments
 ```
@@ -76,7 +76,7 @@ A deployment contains a replicaset. The cluster now has
 one, with a generated name built from the deployment
 name:
 
-<!-- @getReplicaSets @test @debug -->
+<!-- @getReplicaSets @test -->
 ```
 kubectl get replicasets
 ```
@@ -87,7 +87,7 @@ new one while turning down the old one.
 
 Observe this by upgrading the image from v1 to v2.
 
-<!-- @checkVersion @test @debug -->
+<!-- @checkVersion @test -->
 ```
 kubectl describe pods | egrep '(Status:|Image:)'
 tut_Query kiwi
@@ -95,7 +95,7 @@ tut_Query kiwi
 
 Apply a change in the deployment image (to v2):
 
-<!-- @applyUpgrade @test @debug -->
+<!-- @applyUpgrade @test -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
@@ -119,7 +119,7 @@ EOF
 Try the following repeatedly to watch the pod count
 change as the new image rolls out:
 
-<!-- @checkAgain @test @debug -->
+<!-- @checkAgain @test -->
 ```
 kubectl describe pods | egrep '(Status:|Image:)'
 sleep 3
@@ -129,13 +129,13 @@ kubectl describe pods | egrep '(Status:|Image:)'
 ```
 
 The service still works during this process:
-<!-- @queryService @test @debug -->
+<!-- @queryService @test -->
 ```
 tut_Query tangerine
 ```
 
 When finished, delete the deployent.
-<!-- @deleteDeployment @test @debug -->
+<!-- @deleteDeployment @test -->
 ```
 kubectl delete deployment dep-kale
 ```

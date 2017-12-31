@@ -10,7 +10,7 @@ you should now be able to talk to it via kubectl.
 
 Confirm you have at least one node...
 
-<!-- @getNodes @test @debug -->
+<!-- @getNodes @test -->
 ```
 kubectl get nodes
 ```
@@ -31,7 +31,7 @@ kubectl describe nodes
 
 Lastly, define a function used in the remaining sections.
 
-<!-- @funcIsMiniKube @env @test @debug -->
+<!-- @funcIsMiniKube @env @test -->
 ```
 function tut_isMinikube() {
   local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
