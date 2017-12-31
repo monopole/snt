@@ -80,7 +80,7 @@ suffixes `K`, `M`, `G` etc.
 For the capacity exercise below, express the capacities
 using bash variables:
 
-<!-- @defineEnv @test -->
+<!-- @env @test -->
 ```
 TUT_CON_CPU=100m     # 10% of a CPU
 TUT_CON_MEMORY=10000Ki
@@ -89,7 +89,7 @@ TUT_CON_MEMORY=10000Ki
 Define a function to create a pod, do so, then
 `get` the pod:
 
-<!-- @funcToCreatePod @test -->
+<!-- @funcToCreatePod @env @test -->
 ```
 function tut_CreatePod {
 cat <<EOF | kubectl apply -f -
@@ -144,7 +144,7 @@ state, the node it's running on, etc.
 kubectl describe pod pod-tomato
 ```
 
-<!-- @funcDetailPod @test -->
+<!-- @funcDetailPod @env @test -->
 ```
 function tut_DetailPod {
   local tmpl=`cat <<EOF
@@ -204,4 +204,3 @@ Get rid of it:
 ```
 kubectl delete pod pod-turnip
 ```
-

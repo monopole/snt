@@ -153,7 +153,7 @@ kubectl get pods
 
 Define function to delete a random pod:
 
-<!-- @funcDeleteRandomPod @test @debug -->
+<!-- @funcDeleteRandomPod @env @test @debug -->
 ```
 function tut_DeleteRandomPod {
   local tmpl=`cat <<EOF
@@ -172,7 +172,7 @@ EOF
 Define a pod watch that self-terminates in _n_ steps
 (unlike `kubectl -w`):
 
-<!-- @funcToWatchPods @test @debug -->
+<!-- @funcToWatchPods @env @test @debug -->
 ```
 function tut_WatchPods {
   kubectl get pods

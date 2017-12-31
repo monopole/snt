@@ -39,7 +39,7 @@ behaviors:
   (like most other things) asynchronous.  Information
   about it appears in the `status.loadBalancer` field.
 
-<!-- @funcCreateService @test @debug -->
+<!-- @funcCreateService @env @test @debug -->
 ```
 function tut_CreateService {
 cat <<EOF | kubectl apply -f -
@@ -100,7 +100,7 @@ Crucial aspects of the output are
 
 Grab an address to use with the service:
 
-<!-- @funcGetAddress @test @debug -->
+<!-- @funcGetAddress @env @test @debug -->
 ```
 function tut_getServiceAddress {
   if tut_isMinikube; then
@@ -129,16 +129,31 @@ TUT_SVC_ADDRESS=$(tut_getServiceAddress)
 echo "Service at $TUT_SVC_ADDRESS"
 ```
 
-<!-- @funcQueryServer @test @debug -->
+<!-- @funcQueryServer @env @test @debug -->
 ```
+# Try a few times to allow for server startup time.
 function tut_Query {
-  curl --fail --silent --max-time 3 $TUT_SVC_ADDRESS/$1
+  local count=1
+  set +e  # ignore errors
+  while [ $count -le 4 ]; do
+    curl --fail --silent --max-time 3 $TUT_SVC_ADDRESS/$1
+    local code=$?
+    if [ $code -eq 0 ]; then
+      set -e # fail on error
+      return
+    fi
+    # Codes at https://curl.haxx.se/libcurl/c/libcurl-errors.html
+    echo "Query failed with code $code; trying again."
+    sleep 3
+    (( count++ ))
+  done
+  set -e # fail on error
+  /bin/false # fail immediately
 }
 ```
 
 <!-- @queryServiceRaw1 @test @debug -->
 ```
-sleep 2
 tut_Query banana
 ```
 

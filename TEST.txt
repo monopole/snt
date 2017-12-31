@@ -5,6 +5,7 @@
 # Short form
 mdrip --mode test --label test --blockTimeOut 15m ~/snt
 
+
 # Long, editable form.
 mdrip \
     --mode test \
@@ -23,7 +24,8 @@ mdrip \
     ./k8sReview/services.md \
     ./k8sReview/replication.md \
     ./k8sReview/deployment.md \
-    ./k8sReview/configMap.md \
+    ./k8sReview/configMap.md
+
 
 # Initialization form - run in current shell to install everything.
 eval "$(mdrip --label test \
@@ -35,6 +37,14 @@ eval "$(mdrip --label test \
   ./k8sReview/namespaces.md \
   ./k8sReview/pods.md \
 )"
+
+# Do this to just re-establish environment.
+# Assumes that all downloads are done and that the cluster is up.
+eval "$(mdrip --label env ~/snt)"
+
+# export all the functions in the current shell
+while IFS= read -r line; do export -f $line; done < <(
+    declare -F | grep tut_ | awk '{ print $3 }')
 
 # After the above, try this.
 mdrip \

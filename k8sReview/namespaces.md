@@ -27,7 +27,7 @@ from another, etc.
 kubectl get namespaces
 ```
 
-<!-- @getPodsByNamespace @test -->
+<!-- @funcShowPods @env @test -->
 ```
 function tut_showPods {
   echo "---- pods in namespace $1"
@@ -35,10 +35,13 @@ function tut_showPods {
   echo "---- "
   echo " "
 }
+```
+
+<!-- @showPodsByNs @test -->
+```
 tut_showPods default
 tut_showPods kube-system
 tut_showPods kube-public
-unset -f tut_showPods
 ```
 
 Labels offer another way to partition resources.

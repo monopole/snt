@@ -31,7 +31,7 @@ command blocks use bash syntax.
 Further requirements arise from the choice of where you
 run your cluster (discussed next).
 
-<!-- @checkPrerequisites @test @debug -->
+<!-- @checkPrerequisites @env @test @debug -->
 ```
 function tut_checkProgram {
   if ! type -P "$1" >/dev/null 2>&1; then
@@ -45,14 +45,17 @@ tut_checkProgram docker
 
 ### Usage
 
-Begin by creating a disposable working directory:
+Begin by creating a disposable working directory.
+Use a fixed directory (rather than `mktemp -d`)
+to ease restarting tests at different points.
 
-<!-- @defineEnv @test @debug -->
+
+<!-- @defTmpDir @env @test @debug -->
 ```
-# Use fixed  directory (rather than TUT_DIR=($mktemp -d))
-# to ease restarting tests at different points.
 export TUT_DIR=$TMPDIR/k8s_config_tutorial
 ```
+
+Optionally wipe it:
 
 <!-- @resetTmpDir @test -->
 ```
@@ -67,7 +70,8 @@ With the exception of the optional gcloud installation
 disposable directory.
 
 ```
-echo $TUT_DIR; ls $TUT_DIR
+echo $TUT_DIR
+ls $TUT_DIR
 ```
 
 Cleanup is just

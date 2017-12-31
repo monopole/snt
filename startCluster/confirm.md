@@ -31,7 +31,7 @@ kubectl describe nodes
 
 Lastly, define a function used in the remaining sections.
 
-<!-- @funcIsMiniKube @test @debug -->
+<!-- @funcIsMiniKube @env @test @debug -->
 ```
 function tut_isMinikube() {
   local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
@@ -44,4 +44,3 @@ else
   echo "Using GKE"
 fi
 ```
-

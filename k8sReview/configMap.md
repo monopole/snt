@@ -181,7 +181,7 @@ kubectl describe configmap cfg-cilantro
 
 Define a function to apply a config change:
 
-<!-- @funcRepointDeployment @test @debug -->
+<!-- @funcRepointDeployment @env @test @debug -->
 ```
 function tut_ApplyConfigChange {
 local newConfig=$1

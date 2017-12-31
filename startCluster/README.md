@@ -3,7 +3,7 @@
 > _Time: 1min_
 
 _Starting_ a cluster means marshalling the underlying machines (real
-or virtual) needed to run k8s.
+or virtual) needed to run raw k8s.
 
 _Configuring_ a k8s cluster means talking to the k8s API server
 to start and maintain your apps.
@@ -30,8 +30,8 @@ practice ingress configuration and make your tutorial app accessible
 world-wide, even if only for a few minutes.  You can easily build from
 there.
 
-It requires a Google account and credit card, and the (well-tested)
-installation of some Google programs.  New users are given more than
-enough free credit to complete this tutorial.
+It requires the installation of some Google tools, a Google account and credit
+card. New users are given free cloud credit, many times more than is necessary
+to complete this tutorial.
 
 -> Choose __[GKE](/startCluster/GKE)__.

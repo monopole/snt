@@ -31,7 +31,7 @@ Define an image tag to use as an argument to various
 docker commands and as the value of the `image` field
 in kubernetes pod definitions.
 
-<!-- @defineEnv @test @debug -->
+<!-- @env @test @debug -->
 ```
 export TUT_IMG_TAG=$TUT_IMG_NAME
 ```
@@ -73,7 +73,7 @@ If running on GKE, there might not be anything here.
 docker ps -a
 ```
 
-<!-- @funcCreateImage @test @debug -->
+<!-- @funcCreateImage @env @test @debug -->
 ```
 function tut_BuildDockerImage {
   local tag=$TUT_IMG_TAG:$1  # Add version to tag

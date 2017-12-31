@@ -19,7 +19,7 @@ To demo rollouts and rollbacks, there will be
 multiple versions of the program, with the
 version appearing on the served web page.
 
-<!-- @defineEnv @test @debug -->
+<!-- @env @test @debug -->
 ```
 TUT_IMG_NAME=radishwine
 TUT_IMG_V1=1  # to tag version 1
@@ -102,7 +102,7 @@ EOF
 
 Build version 1 of the program to see that it works.
 
-<!-- @funcToBuild @test -->
+<!-- @funcToBuild @env @test -->
 ```
 # Builds binary with a hard-coded version stamp.
 function tut_BuildProgram {
@@ -124,14 +124,14 @@ if ! type -P $TUT_IMG_PATH >/dev/null 2>&1; then
 fi
 ```
 
-<!-- @funcRunAndKill @test -->
+<!-- @funcRunAndKill @env @test -->
 ```
 function tut_RequestAndQuit {
   local port=$1
   local path=$2
   # Give server time to fire up.
   sleep 2
-  # Dump webpage to stdout
+  # Dump html to stdout
   curl --fail --silent -m 1 localhost:$port/$path
   # Send query of death
   curl --fail --silent -m 1 localhost:$port/quit

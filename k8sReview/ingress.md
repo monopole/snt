@@ -20,7 +20,7 @@ Properly facing the web requires an ingress resource at a static
 IP.  They cost about 25 cents per day, even when the cluster is
 not running.  Create one:
 
-<!-- @defineEnv -->
+<!-- @env -->
 ```
 TUT_STATIC_IP_NAME=peach-static-ip
 ```

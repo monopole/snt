@@ -17,6 +17,7 @@ all your local true cores, but it requires `sudo`.
 Root access complicates testing this tutorial, so the
 following uses the virtualbox hypervisor instead.
 
+
 <!-- @checkPrerequisites @test @debug -->
 ```
 # The CLI client to virtualbox
@@ -25,7 +26,7 @@ tut_checkProgram vboxmanage
 
 ### Define environment
 
-<!-- @defineEnv @test @debug -->
+<!-- @env @test @debug -->
 ```
 # Where .minikube directory will live
 export MINIKUBE_HOME=$TUT_DIR/mk
@@ -46,8 +47,7 @@ PATH=$TUT_BIN:$PATH
 
 ### Clean up VMs
 
-Optionally remove VMs (if any) from previous runs through the tutorial.
-
+If minikube installed, ask it to stop:
 <!-- @stopPrevMk @test -->
 ```
 if type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1; then
@@ -56,19 +56,27 @@ if type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1; then
 fi
 ```
 
-<!-- @funcToPurgePrevMk @test @debug -->
+Delete vestigial VMs:
+<!-- @funcToPurgePrevMk @env @test @debug -->
 ```
 function tut_purgePrevVmUsage {
-  for line in "$(vboxmanage list vms)"; do
-    echo $line
-    if [[ $line =~ .*minikube.*\{[0-9a-f\-]+\}.* ]]; then
+  set +e  # ignore errors
+  vboxmanage list vms |
+  while IFS= read -r line; do
+    local id=$(echo $line | sed 's/.*{\(.*\)}.*/\1/')
+    if [[ $line =~ .*minikube.* ]]; then
       local id=$(echo $line | sed 's/.*{\(.*\)}.*/\1/')
-      echo "powering down $id"
-      vboxmanage controlvm $id poweroff
+      echo "Powering down minikube VM $id"
+      vboxmanage controlvm $id poweroff >& /dev/null
       sleep 8
-      vboxmanage unregistervm $id --delete
+      vboxmanage unregistervm $id --delete >& /dev/null
+    fi
+    if [[ $line =~ .*\<inaccessible\>.* ]]; then
+      echo "Deleting inaccessible VM $id"
+      vboxmanage unregistervm $id --delete >& /dev/null
     fi
   done
+  set -e  # fail on error
 }
 ```
 
@@ -93,7 +101,7 @@ mkdir -p $MINIKUBE_HOME
 
 ### Install minikube
 
-<!-- @funcInstallMk @test -->
+<!-- @funcInstallMk @env @test -->
 ```
 function tut_installMk {
   local apis=https://storage.googleapis.com
@@ -122,7 +130,7 @@ $MINIKUBE_HOME/minikube version
 Install `kubectl` before starting `minikube` to be
 ready to talk to it.
 
-<!-- @downloadKubectl @test -->
+<!-- @downloadKubectl @env @test -->
 ```
 function tut_installKubectl {
   mkdir -p $TUT_BIN
@@ -159,16 +167,17 @@ if $MINIKUBE_HOME/minikube status  >/dev/null 2>&1; then
 fi
 ```
 
+Start minikube, piping download progress meter to /dev/null:
 <!-- @startMkCluster @test -->
 ```
 $MINIKUBE_HOME/minikube \
     start --memory 8192 --cpus 6 \
-    --vm-driver=virtualbox >& /dev/null
+    --vm-driver=virtualbox > /dev/null
 ```
 
 Assure that minikube is up.
 
-<!-- @funcToWaitForIt @test @debug -->
+<!-- @funcToWaitForIt @env @test @debug -->
 ```
 function tut_awaitMk {
   for i in {1..100}; do

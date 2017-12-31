@@ -14,6 +14,7 @@ find $TUT_DIR/sample
 ### Dig into the details.
 
 Make a helper function:
+<!-- @createSampleApp @env -->
 ```
 function tut_showSample {
   local f=$TUT_DIR/sample/$1
