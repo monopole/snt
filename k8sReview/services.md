@@ -134,12 +134,18 @@ echo "Service at $TUT_SVC_ADDRESS"
 # Try a few times to allow for server startup time.
 function tut_Query {
   local count=1
-  set +e  # ignore errors
-  while [ $count -le 4 ]; do
+  local errexit=0
+  if [[ "$SHELLOPTS" =~ "errexit" ]]; then
+    errexit=1
+  fi
+  set +e  # assure errexit off (ignore errors)
+  while [ $count -le 3 ]; do
     curl --fail --silent --max-time 3 $TUT_SVC_ADDRESS/$1
     local code=$?
     if [ $code -eq 0 ]; then
-      set -e # fail on error
+      if [ "$errexit" -eq 1 ]; then
+        set -e
+      fi
       return
     fi
     # Codes at https://curl.haxx.se/libcurl/c/libcurl-errors.html
@@ -147,7 +153,9 @@ function tut_Query {
     sleep 3
     (( count++ ))
   done
-  set -e # fail on error
+  if [ "$errexit" -eq 1 ]; then
+    set -e
+  fi
   /bin/false # fail immediately
 }
 ```
