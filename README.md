@@ -17,7 +17,7 @@ starts with a walk-through of manual configuration
 etc.).  Context established, it compares different
 approaches to app-level configuration.
 
-### Prerequisites
+## Prerequisites
 
 [Go]: https://golang.org/doc/install
 [curl]: https://github.com/curl/curl
@@ -42,42 +42,3 @@ tut_checkProgram go
 tut_checkProgram curl
 tut_checkProgram docker
 ```
-
-### Usage
-
-Begin by creating a disposable working directory.
-Use a fixed directory (rather than `mktemp -d`)
-to ease restarting tests at different points.
-
-
-<!-- @defTmpDir @env @test -->
-```
-export TUT_DIR=$TMPDIR/k8s_config_tutorial
-```
-
-Optionally wipe it:
-
-<!-- @resetTmpDir @test -->
-```
-if [ -d "$TUT_DIR" ]; then
-  /bin/rm -rf $TUT_DIR
-fi
-mkdir -p $TUT_DIR
-```
-
-With the exception of the optional gcloud installation
-(discussed later), all file system use happens in this
-disposable directory.
-
-```
-echo $TUT_DIR
-ls $TUT_DIR
-```
-
-Cleanup is just
-
-> ```
-> rm -rf $TUT_DIR
-> ```
-
-which your OS will eventually do on its own.

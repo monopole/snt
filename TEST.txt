@@ -55,3 +55,8 @@ mdrip \
     --v 2 \
     --stderrthreshold INFO \
     ./k8sReview/services.md
+
+
+# Global string replace
+cd ~/snt
+find ./ -name "*.md" | sed -i 's/tut_BuildProgram/tut_buildProgram/'

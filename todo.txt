@@ -2,7 +2,7 @@
 
 #### gcloud install isolation
 
-see if gcloud installation can be constrained to TUT_DIR
+constrain  gcloud installation  to TUT_DIR
 
 #### support OSX
 
@@ -64,6 +64,8 @@ Along with a time estimate.  this was done in configmaps.
 
 
 
+
+
 ####
 
 Maybe use a local, but not inside minikube, docker daemon?
@@ -78,3 +80,31 @@ docker run -d -p 5000:5000 --name registry registry:2
 Stop it with:
 
 docker stop registry
+
+
+-----------------
+<!-- @pushToGcr -->
+```
+if ! tut_isMinikube; then
+  docker push $TUT_IMG_TAG:$TUT_IMG_V1
+  docker push $TUT_IMG_TAG:$TUT_IMG_V2
+fi
+```
+
+Having done push, make sure pull works.
+
+<!-- @exerciseGcr -->
+```
+if ! tut_isMinikube; then
+  # Confirm the cached image
+  docker images | grep $TUT_IMG_TAG
+  # Remove the cached image
+  docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
+  # Confirm it's gone
+  docker images | grep $TUT_IMG_TAG
+  # Pull it from the registry
+  docker pull $TUT_IMG_TAG:$TUT_IMG_V2
+  # Confirm it's back.
+  docker images | grep $TUT_IMG_TAG
+fi
+```

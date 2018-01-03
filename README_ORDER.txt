@@ -1,3 +1,4 @@
+environment
 startCluster
 buildAServer
 containerize
