@@ -35,7 +35,7 @@ command blocks use bash syntax.
 
 The tutorial is tested on [ubuntu], but
 should work on any linux distro, or on OSX with
-some command modification (TODO: OS detection/branching).
+some command modification.
 
 <!-- @checkPrerequisites @env @test -->
 ```

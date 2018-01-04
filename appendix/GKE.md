@@ -1,27 +1,27 @@
 # Start a GKE Cluster
 
-> _Do the prep work to run this tutorial on Google's cloud._
+> _Run this tutorial on Google's cloud instead of minikube._
 >
 > _Time: 5min (assuming prerequisites)_
 
 [minikube]: /startCluster/minikube
 
 __This is a drop-in replacement for the
-[minikube] section.__
-
-__Do this instead of, not in addition to, [minikube].__
+[minikube] section, to let one run the tutorial
+on Google Kubernetes Engine rather than minikube.__
 
 __Go to [confirmation](/startCluster/confirm) if you
 just set up a minikube cluster and came here by mistake.__
+
+
+## Prerequisites
 
 [gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
 [gcloud]: https://cloud.google.com/sdk/
 [Enable billing]: https://support.google.com/cloud/answer/6158867?hl=en
 
-Prerequisites:
-
  * Install [gcloud].
- * [Enable billing] for a GCP project.
+ * [Enable billing].
 
 Pick any name for the cluster made below.
 The name is used in project billing.

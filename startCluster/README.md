@@ -2,25 +2,29 @@
 
 > _Total Time: ~5min_
 
-_Starting_ a cluster means marshalling the underlying
-machines (real or virtual) needed to run raw k8s.
+You have to find a hosted cluster - raw k8s components
+running on some set of real or virtual hardware -
+before you can practice configuring it.
 
-_Configuring_ a k8s cluster means talking to the k8s
-API server to start and maintain your apps.
+[hard way]: https://github.com/kelseyhightower/kubernetes-the-hard-way
 
-Short of ingress (how one makes the cluster accessible
-to the world), the commands that configure the cluster
-are the same regardless of where it is hosted, because
-kubernetes is a portable cloud.
+You can procure machines and do this the [hard way],
+or you can use one of several existing hosted clusters.
+Two choices are listed below.
 
 ## Host on your laptop
 
 [Minikube](https://github.com/kubernetes/minikube/releases)
-allows one to run a k8s cluser on your laptop.
+is an open source project that brings up a k8s cluster
+on your laptop.
 
-This avoids detours into cloud authentication and
-billing issues, but requires installation of the
-software necessary to run VMs on your laptop.
+It avoids detours into cloud authentication and billing
+issues, and is good investment as it lets you
+experiment locally even after you start using corporate
+clouds.
+
+It requires installation of the software necessary to
+run VMs on your laptop.
 
 -> Choose __[minikube](/startCluster/minikube)__.
 
@@ -38,4 +42,11 @@ complete this tutorial.
 
 -> Choose __[GKE](/appendix/GKE)__.
 
-A reasonable strategy is try it locally, then try it on GKE.
+A sensible strategy is first try the tutorial locally
+with minikube, then try it on GKE.
+
+The process to configure the cluster is the same
+regardless of where it is hosted, because kubernetes is
+a portable cloud.  Variation appears when you set up
+_ingress_, which is how the rest of the world gets access
+to your cluster.

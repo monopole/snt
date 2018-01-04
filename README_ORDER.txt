@@ -5,6 +5,5 @@ containerize
 k8sReview
 appConfig
 cleanup
-appendix
 help
-testing
+appendix

@@ -15,7 +15,6 @@ all your local true cores, but it requires `sudo`.
 Root access complicates testing this tutorial, so the
 following uses the virtualbox hypervisor instead.
 
-
 <!-- @checkPrerequisites @test -->
 ```
 # The CLI client to virtualbox
@@ -125,7 +124,7 @@ fi
 $MINIKUBE_HOME/minikube version
 ```
 
-## Install open-source kubectl
+## Install kubectl
 
 Install `kubectl` before starting `minikube` to be
 ready to talk to it.

@@ -16,15 +16,14 @@ Download the content and the [mdrip] tool:
 ```
 dir=$(mktemp -d)
 repo=https://github.com/monopole/snt.git
-git clone $repo $dir/tutorial
-mkdir -p $dir/bin
-GOBIN=$dir/bin go install github.com/monopole/mdrip
+git clone $repo $TST_DIR/tutorial
+GOBIN=$TST_DIR go install github.com/monopole/mdrip
 ```
 
 Now serve the content with `mdrip`:
 
 ```
-$dir/bin/mdrip --mode demo --port 8081 $dir/tutorial
+$TST_DIR/mdrip --mode demo --port 8081 $TST_DIR/tutorial
 ```
 
 Then visit http://localhost:8081 to see the material

@@ -7,15 +7,18 @@
 
 ## Shell state
 
-As an informal namespace, all global shell
-variables and functions start with `TUT_` or `tut_`.
+Global shell variables and functions
+start with `TUT_` or `tut_` (an informal namespace).
 
-E.g., the following manages _exit on error_ behavior so
-it can be restored when changed (important for
-testing).
+For example, the following stores the initial _exit on
+error_ behavior in a variable, and defines a function
+to reset this behavior after running a command block.
+
+This is crucial for placing blocks under CI/CD testing.
 
 <!-- @exitOnErrStatus @env @test -->
 ```
+# Store initial state.
 export TUT_EXIT_ON_ERR=0
 if [[ "$SHELLOPTS" =~ "errexit" ]]; then
   TUT_EXIT_ON_ERR=1
@@ -23,7 +26,7 @@ fi
 
 function tut_restoreErrorOnExit {
   if [ "$TUT_EXIT_ON_ERR" -eq 1 ]; then
-    # Normal for testing.
+    # Normal for batch testing.
     set -e
   else
     # Normal for interactive use.
@@ -34,10 +37,10 @@ function tut_restoreErrorOnExit {
 
 ## Workspace
 
-Begin by creating a disposable working directory.
+Create a disposable working directory.
 
 Use a specifically named directory rather than randomly
-named directory (`mktemp -d`) to ease restarting at
+named directory (`mktemp -d`) to ease restarting
 the tutorial at different points.
 
 <!-- @defTmpDir @env @test -->

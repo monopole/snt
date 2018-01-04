@@ -30,7 +30,8 @@ the capacity section.
 kubectl describe nodes
 ```
 
-Lastly, define a function used in the remaining sections.
+Lastly, define a function that detects wether the host is minikube
+or something else (see [GKE](/appendix/GKE)).
 
 <!-- @funcIsMiniKube @env @test -->
 ```
