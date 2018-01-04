@@ -9,15 +9,22 @@ visit remaining content.
 
 ## For a better experience
 
-Download the content and serve it locally with
-[mdrip](https://github.com/monopole/mdrip):
+[mdrip]: https://github.com/monopole/mdrip
+
+Download the content and the [mdrip] tool:
 
 ```
 dir=$(mktemp -d)
-git clone https://github.com/monopole/snt.git $dir/snt
+repo=https://github.com/monopole/snt.git
+git clone $repo $dir/tutorial
 mkdir -p $dir/bin
 GOBIN=$dir/bin go install github.com/monopole/mdrip
-$dir/bin/mdrip --mode demo --port 8081 $dir/snt
+```
+
+Now serve the content with `mdrip`:
+
+```
+$dir/bin/mdrip --mode demo --port 8081 $dir/tutorial
 ```
 
 Then visit http://localhost:8081 to see the material
@@ -40,5 +47,6 @@ Then, with focus constantly in the browser, just hit
 the `Enter` key to succesively execute code blocks in
 tmux without using the mouse.
 
-Use the `w` and `a` keys to skip blocks or otherwise navigate
-(hit `?` to see all bindings).
+Use the `w` and `a` keys to skip blocks or otherwise navigate.
+
+Hit `?` to see all bindings.

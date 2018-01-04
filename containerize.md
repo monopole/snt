@@ -4,13 +4,12 @@
 >
 > _Time: 2-5min_
 
-
-The server you just wrote and tested must be placed in
-a container image (a tar ball with metadata), and that
-in turn must be placed in a container registry.  This
-is because k8s runs containers, pulling them as needed
+k8s runs _containers_, pulling them as needed
 from a (presumably trustworthy) registry.
 
+Therefore, the server you just wrote must be placed in
+a container image (a tar ball with metadata), and that
+in turn must be placed in a container registry.
 
 In what follows:
 

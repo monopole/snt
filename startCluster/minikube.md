@@ -8,9 +8,6 @@
 
 [virtualbox]: https://www.virtualbox.org/
 
-* Ubuntu - in the sense that this tutorial is tested on ubuntu.
-  It should work on any linux distro, or on OSX with
-  some modification  (TODO: OS detection/branching).
 * [virtualbox] for use as minikube's vmdriver.
 
 minikube's flag `--vm-driver=none` provides access to
@@ -205,7 +202,7 @@ tut_awaitMk
 
 Confirm expectations
 
-<!-- @confirmUp @test -->
+<!-- @confirmUp @test @sleep-->
 ```
 $MINIKUBE_HOME/minikube status
 ```

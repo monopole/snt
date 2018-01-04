@@ -27,8 +27,8 @@ app-like properties:
 In addition, the set will usually have
 
 * A versioned API, distinct and independent of the
-  implemention version, with a clear API deprecation
-  policy and version skew compatibility policy.
+  implemention version, with a deprecation and version
+  skew compatibility policy.
 
 * An SLA.
 

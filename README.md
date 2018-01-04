@@ -26,11 +26,16 @@ approaches to configuring _cluster apps_.
 [Go]: https://golang.org/doc/install
 [curl]: https://github.com/curl/curl
 [docker]: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu
+[ubuntu]: https://www.ubuntu.com
 
 [Go], [curl], and [docker].
 
 The bash shell is implicitly required;
 command blocks use bash syntax.
+
+The tutorial is tested on [ubuntu], but
+should work on any linux distro, or on OSX with
+some command modification (TODO: OS detection/branching).
 
 <!-- @checkPrerequisites @env @test -->
 ```

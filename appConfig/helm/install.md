@@ -8,11 +8,11 @@
 means to define, install and upgrade a k8s application,
 offered by Microsoft.
 
-## Download
+## Install to disk
 
-Canonical doc
-[here](https://github.com/kubernetes/helm/blob/master/docs/install.md),
-shortened to:
+[install doc]: https://github.com/kubernetes/helm/blob/master/docs/install.md
+
+Try the following (or visit the canonical [install doc]):
 
 <!-- @installHelm -->
 ```
@@ -21,7 +21,8 @@ tarball=helm-v2.7.0-linux-amd64.tar.gz
 
 mkdir -p $TUT_DIR/bin
 pushd $TUT_DIR
-curl --fail --location --silent -o helm.tgz $apis/kubernetes-helm/$tarball
+curl --fail --location --silent \
+    -o helm.tgz $apis/kubernetes-helm/$tarball
 gunzip <helm.tgz | tar xvf -
 rm helm.tgz
 mv linux-amd64/helm $TUT_DIR/bin
@@ -30,14 +31,20 @@ popd
 alias helm=$TUT_DIR/bin/helm
 ```
 
-## Installation
+## Install in the cluster
 
-Helm installs a service into a cluster,
-so you must have one up - i.e.
-this command should work:
+To work, helm must install a service called `tiller`
+into the cluster.
+
+Confirm that the cluster started earlier in the
+tutorial is still up:
+
+<!-- @isTheClusterUp -->
 ```
 kubectl cluster-info
 ```
+
+Then initialize helm:
 
 <!-- @initialize -->
 ```
@@ -52,6 +59,9 @@ helm init
 kubectl get pods --namespace kube-system | grep tiller
 ```
 
+The following won't work till tiller is up:
+
+<!-- @confirmVersion -->
 ```
 helm version
 ```

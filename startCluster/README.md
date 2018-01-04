@@ -13,9 +13,6 @@ to the world), the commands that configure the cluster
 are the same regardless of where it is hosted, because
 kubernetes is a portable cloud.
 
-A reasonable strategy: do the tutorial first on
-your laptop, then again on GKE.
-
 ## Host on your laptop
 
 [Minikube](https://github.com/kubernetes/minikube/releases)
@@ -40,3 +37,5 @@ free cloud credit, many times more than is necessary to
 complete this tutorial.
 
 -> Choose __[GKE](/appendix/GKE)__.
+
+A reasonable strategy is try it locally, then try it on GKE.
