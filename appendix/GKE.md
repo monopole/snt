@@ -4,8 +4,15 @@
 >
 > _Time: 5min (assuming prerequisites)_
 
-__Skip to [confirmation](/startCluster/confirm) if you
-just set up a minikube cluster.__
+[minikube]: /startCluster/minikube
+
+__This is a drop-in replacement for the
+[minikube] section.__
+
+__Do this instead of, not in addition to, [minikube].__
+
+__Go to [confirmation](/startCluster/confirm) if you
+just set up a minikube cluster and came here by mistake.__
 
 [gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
 [gcloud]: https://cloud.google.com/sdk/
@@ -93,3 +100,6 @@ Do the following once - it launches three nodes by default.
 ```
 gcloud container clusters create $TUT_CLUSTER_NAME
 ```
+
+Now proceed to [confirmation](/startCluster/confirm)
+and continue the tutorial.

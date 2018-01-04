@@ -2,6 +2,8 @@
 
 _A tutorial on installing customized cluster-level apps._
 
+> _Total Time: ~1hour_
+
 > __status: under development Nov 2017__
 
 This tutorial requires no knowledge of kubernetes,
@@ -12,10 +14,12 @@ discussion that can be found at https://kubernetes.io
 and many other sites.
 
 To establish context for the main topic, this tutorial
-starts with a walk-through of manual configuration
-(individual commands to create a pod, create a service,
-etc.).  Context established, it compares different
-approaches to app-level configuration.
+begins with the creation of a service, then does a
+walk-through of manual configuration of a cluster
+offering the service.
+
+Context established, the tutorial compares different
+approaches to configuring _cluster apps_.
 
 ## Prerequisites
 
@@ -25,11 +29,8 @@ approaches to app-level configuration.
 
 [Go], [curl], and [docker].
 
-The bash shell is implicitly required, as the
+The bash shell is implicitly required;
 command blocks use bash syntax.
-
-Further requirements arise from the choice of where you
-run your cluster (discussed next).
 
 <!-- @checkPrerequisites @env @test -->
 ```
@@ -42,3 +43,6 @@ tut_checkProgram go
 tut_checkProgram curl
 tut_checkProgram docker
 ```
+
+Further requirements (discussed shortly) arise from
+your choice of cluster host.

@@ -77,15 +77,17 @@ remove it if it already exists from a previous pass:
 
 <!-- @deleteNamespace @test -->
 ```
-exists=$(kubectl get namespace ns-beansprout 2> /dev/null || true)
+set +e
+exists=$(kubectl get namespace ns-beansprout 2> /dev/null)
 if [ ! -z "$exists" ]; then
   kubectl delete --ignore-not-found namespace ns-beansprout
-  exists=$(kubectl get namespace ns-beansprout 2> /dev/null || true)
+  exists=$(kubectl get namespace ns-beansprout 2> /dev/null)
   while [ ! -z "$exists" ]; do
      sleep 2
-     exists=$(kubectl get namespace ns-beansprout 2> /dev/null || true)
+     exists=$(kubectl get namespace ns-beansprout 2> /dev/null)
   done
 fi
+tut_restoreErrorOnExit
 ```
 
 Create and switch to a new namespace:

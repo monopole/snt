@@ -21,7 +21,8 @@ kubectl get nodes
 kubectl get pods
 ```
 
-Get node details, noting the cpu and memory numbers in the capacity section.
+Get node details, noting the cpu and memory numbers in
+the capacity section.
 
 
 <!-- @getPods @test -->
@@ -33,14 +34,14 @@ Lastly, define a function used in the remaining sections.
 
 <!-- @funcIsMiniKube @env @test -->
 ```
-function tut_isMinikube() {
-  local tmpl='{{ with index .items 0}}{{.metadata.name}}{{end}}'
-  local firstNodeName=$(kubectl get -o go-template="$tmpl" nodes)
-  [[ "$firstNodeName" == "minikube" ]]
+function tut_isMinikube {
+  local t='{{ with index .items 0}}{{.metadata.name}}{{end}}'
+  local name=$(kubectl get -o go-template="$t" nodes)
+  [[ "$name" == "minikube" ]]
 }
 if tut_isMinikube; then
   echo "Using minikube"
 else
-  echo "Using GKE"
+  echo "Presumably using GKE"
 fi
 ```

@@ -1,3 +1,2 @@
 minikube
-GKE
 confirm

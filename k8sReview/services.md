@@ -133,23 +133,25 @@ echo "Service at $TUT_SVC_ADDRESS"
 ```
 # Try a few times to allow for server startup time.
 function tut_Query {
-  local count=1
-  # Disble exit on error.
+  # Disable exit on error.
   set +e
-  while [ $count -le 3 ]; do
+  for i in {1..3}; do
     curl --fail --silent --max-time 3 $TUT_SVC_ADDRESS/$1
     local code=$?
+    # https://curl.haxx.se/libcurl/c/libcurl-errors.html
     if [ $code -eq 0 ]; then
       tut_restoreErrorOnExit
       return
     fi
-    # Codes at https://curl.haxx.se/libcurl/c/libcurl-errors.html
-    echo "Query failed with code $code; trying again."
-    sleep 3
-    (( count++ ))
+    if [ $i -lt 3 ]; then
+      echo "Query failed with code $code; trying again."
+      sleep 3
+    fi
   done
   tut_restoreErrorOnExit
-  /bin/false # fail immediately
+  echo Query failed.
+  # fail immediately
+  /bin/false
 }
 ```
 

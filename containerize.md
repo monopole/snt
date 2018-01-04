@@ -115,20 +115,14 @@ curl --fail --silent -m 1 $host:8080/kingGhidorah
 curl --fail --silent -m 1 $host:8080/quit
 ```
 
-To examine logs inside docker:
-
+> To examine logs inside docker:
+>
 > ```
 >  docker ps -a # get container ID
 >  docker exec -it {containerId} bash
 > ```
-
-then `cd /tmp` to examine logs.
-
-
-<!-- @confirmQuit @test -->
-```
-docker ps | grep $TUT_IMG_TAG
-```
+>
+> then `cd /tmp` to examine logs.
 
 Build another image at version 2 to allow
 rollout/rollback practice later:
@@ -141,7 +135,7 @@ tut_BuildDockerImage $TUT_IMG_V2
 
 <!-- @confirmDockerCache @test -->
 ```
-docker images | grep ${TUT_IMG_NAME}
+docker images | grep $TUT_IMG_NAME
 ```
 
 [GCR]: http://gcr.io

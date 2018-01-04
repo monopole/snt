@@ -189,7 +189,7 @@ Delete a pod, and wait for it to be rescheduled:
 ```
 kubectl get pods
 tut_DeleteRandomPod
-tut_WatchPods 10
+tut_WatchPods 5
 ```
 
 Delete _all_ pods, and try interleaving requests with

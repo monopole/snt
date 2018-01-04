@@ -4,12 +4,13 @@
 >
 > _Time: 5min_
 
-### Prerequisites
+## Prerequisites
 
 [virtualbox]: https://www.virtualbox.org/
 
-* Linux.  It will also work on OSX with some modification
-   (TODO: OS detection/branching)
+* Ubuntu - in the sense that this tutorial is tested on ubuntu.
+  It should work on any linux distro, or on OSX with
+  some modification  (TODO: OS detection/branching).
 * [virtualbox] for use as minikube's vmdriver.
 
 minikube's flag `--vm-driver=none` provides access to
@@ -24,7 +25,7 @@ following uses the virtualbox hypervisor instead.
 tut_checkProgram vboxmanage
 ```
 
-### Define environment
+## Define environment
 
 <!-- @env @test -->
 ```
@@ -45,12 +46,13 @@ export TUT_BIN=$TUT_DIR/bin
 PATH=$TUT_BIN:$PATH
 ```
 
-### Clean up VMs
+## Clean up VMs
 
 If minikube installed, ask it to stop:
 <!-- @stopPrevMk @test -->
 ```
-if type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1; then
+if type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1
+then
   $MINIKUBE_HOME/minikube status
   $MINIKUBE_HOME/minikube stop
 fi
@@ -76,7 +78,7 @@ function tut_purgePrevVmUsage {
       vboxmanage unregistervm $id --delete >& /dev/null
     fi
   done
-  set -e  # fail on error
+  tut_restoreErrorOnExit
 }
 ```
 
@@ -99,7 +101,7 @@ rm -rf $MINIKUBE_HOME/.minikube
 mkdir -p $MINIKUBE_HOME
 ```
 
-### Install minikube
+## Install minikube
 
 <!-- @funcInstallMk @env @test -->
 ```
@@ -115,7 +117,8 @@ function tut_installMk {
 
 <!-- @installMk @test -->
 ```
-if ! type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1; then
+if ! type -P $MINIKUBE_HOME/minikube >/dev/null 2>&1
+then
   tut_installMk
 fi
 ```
@@ -125,7 +128,7 @@ fi
 $MINIKUBE_HOME/minikube version
 ```
 
-### Install open-source kubectl
+## Install open-source kubectl
 
 Install `kubectl` before starting `minikube` to be
 ready to talk to it.
@@ -148,20 +151,22 @@ function tut_installKubectl {
 
 <!-- @funcInstallKubectl @test -->
 ```
-if ! type -P $TUT_BIN/kubectl >/dev/null 2>&1; then
+if ! type -P $TUT_BIN/kubectl >/dev/null 2>&1
+then
   tut_installKubectl
 fi
 ```
 
 
-### Start the cluster
+## Start the cluster
 
 This downloads an OS image, and can thus take many
 minutes.
 
 <!-- @stopMkCluster @test -->
 ```
-if $MINIKUBE_HOME/minikube status  >/dev/null 2>&1; then
+if $MINIKUBE_HOME/minikube status  >/dev/null 2>&1
+then
   echo Stopping minikube...
   $MINIKUBE_HOME/minikube stop
 fi
@@ -180,12 +185,12 @@ Assure that minikube is up.
 <!-- @funcToWaitForIt @env @test -->
 ```
 function tut_awaitMk {
-  for i in {1..100}; do
+  for i in {1..10}; do
     kubectl get nodes &> /dev/null
     local foo="$?"
     if [ $foo -eq 0 ]; then
       echo "k8s API appears to be up."
-      return
+      break
     fi
     echo "sleeping"
     sleep 2

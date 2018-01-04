@@ -10,11 +10,11 @@
 As an informal namespace, all global shell
 variables and functions start with `TUT_` or `tut_`.
 
-E.g., the following notes your shell's current _exit on
-error_ status so it can be restored if changed.  This
-is important for testing.
+E.g., the following manages _exit on error_ behavior so
+it can be restored when changed (important for
+testing).
 
-<!-- @exitOnErrState @env @test -->
+<!-- @exitOnErrStatus @env @test -->
 ```
 export TUT_EXIT_ON_ERR=0
 if [[ "$SHELLOPTS" =~ "errexit" ]]; then
@@ -23,8 +23,10 @@ fi
 
 function tut_restoreErrorOnExit {
   if [ "$TUT_EXIT_ON_ERR" -eq 1 ]; then
+    # Normal for testing.
     set -e
   else
+    # Normal for interactive use.
     set +e
   fi
 }
@@ -34,8 +36,9 @@ function tut_restoreErrorOnExit {
 
 Begin by creating a disposable working directory.
 
-Use a specifically named rather than random one (`mktemp -d`) to
-ease restarting at different points.
+Use a specifically named directory rather than randomly
+named directory (`mktemp -d`) to ease restarting at
+the tutorial at different points.
 
 <!-- @defTmpDir @env @test -->
 ```
