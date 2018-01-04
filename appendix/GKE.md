@@ -4,13 +4,13 @@
 >
 > _Time: 5min (assuming prerequisites)_
 
-[minikube]: /startCluster/minikube
+[minikube]: /hosting/minikube
 
 __This is a drop-in replacement for the
 [minikube] section, to let one run the tutorial
 on Google Kubernetes Engine rather than minikube.__
 
-__Go to [confirmation](/startCluster/confirm) if you
+__Go to [confirmation](/hosting/confirm) if you
 just set up a minikube cluster and came here by mistake.__
 
 
@@ -101,5 +101,5 @@ Do the following once - it launches three nodes by default.
 gcloud container clusters create $TUT_CLUSTER_NAME
 ```
 
-Now proceed to [confirmation](/startCluster/confirm)
+Now proceed to [confirmation](/hosting/confirm)
 and continue the tutorial.

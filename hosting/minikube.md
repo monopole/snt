@@ -224,4 +224,4 @@ $TUT_BIN/kubectl version
 
 If this spits out a version for the client and server,
 you've got a cluster.  Proceed to
-[confirm](/startCluster/confirm) step.
+[confirm](/hosting/confirm) step.

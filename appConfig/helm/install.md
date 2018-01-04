@@ -5,8 +5,8 @@
 > _Time: 6min_
 
 [Helm](https://helm.sh/) is a relatively mature
-means to define, install and upgrade a k8s application,
-offered by Microsoft.
+means to define, install and upgrade a k8s application.
+
 
 ## Install to disk
 
@@ -50,7 +50,6 @@ Then initialize helm:
 ```
 helm init
 ```
-
 
 ## Are the lights on?
 

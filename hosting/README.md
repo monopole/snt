@@ -26,7 +26,7 @@ clouds.
 It requires installation of the software necessary to
 run VMs on your laptop.
 
--> Choose __[minikube](/startCluster/minikube)__.
+-> Choose __[minikube](/hosting/minikube)__.
 
 ## Host on Google Kubernetes Engine
 

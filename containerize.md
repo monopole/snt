@@ -1,15 +1,13 @@
-# Containerize the App Component
+# Containerize the Server
 
-> _Bundle your server into a container._
+> _k8s exclusively runs containers,
+> pulling them as needed from a registry._
 >
 > _Time: 2-5min_
 
-k8s runs _containers_, pulling them as needed
-from a (presumably trustworthy) registry.
-
-Therefore, the server you just wrote must be placed in
-a container image (a tar ball with metadata), and that
-in turn must be placed in a container registry.
+The server you just wrote must be placed in a container
+image (a tar ball with metadata), and that in turn must
+be placed in a container registry.
 
 In what follows:
 

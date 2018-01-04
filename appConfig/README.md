@@ -1,45 +1,39 @@
 # Cluster App Configuration
 
-People access Amazon, Facebook, Google etc. through
-mobile or web apps supported by
-services distributed on a cluster.
-
 [Google Maps API]: https://enterprise.google.com/maps/products/mapsapi.html
+[third-party]: https://www.noupe.com/development/collection-of-the-coolest-uses-of-the-google-maps-api.html
 
-This _set of distributed services_ has distinct
-app-like properties:
+The [Google Maps API] is, most literally, a _set of
+replicated frontend servers_ running on Google's
+clusters.  It backs an enormous number of
+[third-party] services.
 
-* Despite its size and complexity, the set has some
-  singular description and purpose - e.g. _Serve the
-  [Google Maps API]_.
+Despite its size and complexity, this set has
+properties like a phone app.
 
-* It has an owner - e.g. a team of engineers, product
-  managers, testers, etc.
+* It has a singular description and purpose -
+  e.g. _Serve the Maps API_.
 
-* It has a lifecycle of development, testing, release
-  with release notes and documentation.
+* It can be installed and deleted.
 
-* It has a versioned implementation, likely associated
-  with a list of versions of its components, and likely
-  expressed as a set of text files in a version control
-  system.
+* It has a lifecycle of development, test and release,
+  with docs and release notes.
 
-In addition, the set will usually have
+* It has a versioned implementation - albeit likely
+  associated with a _list_ of versions of its components
+  (servers, probers, monitors, static data).
 
-* A versioned API, distinct and independent of the
+* It may offer a versioned API, independent of the
   implemention version, with a deprecation and version
   skew compatibility policy.
 
-* An SLA.
+* It co-exists on its hardware with other server sets,
+  e.g. email servers, photo servers.
 
-Moreover
+* It may be unaware of these sets, or it may need to
+  discover and depend on them.
 
-* The set may co-exist on a cluster with other sets.
-
-* Theses sets may depend on each other, or be unaware
-  of each other.
-
-E.g the maps API is supported by sets of distributed
+In particular, a maps API depends on distributed
 services offering map tiles, satellite photos, reviews,
 translations, traffic updates, user preferences, etc.
 These sets of services evolve on uncoordinated
@@ -54,23 +48,21 @@ In kubernetes, cluster apps are characterized by the
 set of all k8s resources needed to serve them - the
 ConfigMaps, the Deployments, etc.
 
-As has been seen in the [review](/k8sReview), this is
-just a collection of one or more yaml files.  The yaml
-files are recipes, and the container images themselves
-are the ingredients.  Where containers come from is a
-related, yet distinct, concern.
+As covered in the [review](/k8sReview), this is just a
+collection of one or more yaml files, hopefully stored
+in a version control system.  The yaml files are
+recipes, and the container images pulled from some
+registry are the ingredients.  The set of yaml files
+looks even more like an app if one bundles them with a
+manifest file listing them and describing their overall
+purpose.
 
-## Instance Configuration
+[outside]: https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/#what-kubernetes-is-not
 
-A cluster app will have many instances, differing on
-various dimensions:
+From there one could build a tool to discover, perhaps
+buy, and install such bundles - creating yet another app
+ecosystem. That's [outside] the purview of the core
+kubernetes project.
 
-* quality: production, staging, QA, dev snapshot, ...
-* regions: Asia, Europe, The Americas, ...
-* security:  public, goverment, HIPPA, ITAR, ...
-* tier: frontend, middle, backend, ...
-
-Managing these instances is a configuration problem.
-
-The following discusses two approaches to cluster
-app configuration in k8s: _helm_ and _kinflate_.
+The rest of this tutorial focusses on the important
+problem of managing different instances of an app.

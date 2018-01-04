@@ -4,11 +4,14 @@
 >
 > _Total Time: 5-30min_
 
-The next sections deploy the server built above to a
-k8s cluster using manual, declarative configuration.
+At this point, you have a raw k8s cluster, and a
+bespoke server with several configuration knobs that
+you'd like to run on your cluster.
 
-I.e.  you write raw YAML files for everything, and use
-`kubectl` to _apply_ the YAML to your cluster.
+The next sections deploy your server to the cluster
+using manual, declarative configuration.  I.e.  you'll
+write raw YAML files for everything, and use `kubectl`
+to _apply_ that YAML to your cluster.
 
-This is necessary to understand and appreciate
-higher level abstractions for cluster configuration.
+This sets the stage for higher level configuration
+techniques discussed later.

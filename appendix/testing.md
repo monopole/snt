@@ -58,8 +58,8 @@ cd $TST_DIR/tutorial
 eval "$($TST_DIR/mdrip --label test \
     ./README.md \
     ./environment.md \
-    ./startCluster/minikube.md \
-    ./startCluster/confirm.md \
+    ./hosting/minikube.md \
+    ./hosting/confirm.md \
     ./buildAServer.md \
     ./containerize.md \
     ./k8sReview/namespaces.md \
@@ -149,8 +149,8 @@ $TST_DIR/mdrip \
     --mode test --label test --blockTimeOut 15m \
     ./README.md \
     ./environment.md \
-    ./startCluster/minikube.md \
-    ./startCluster/confirm.md \
+    ./hosting/minikube.md \
+    ./hosting/confirm.md \
     ./buildAServer.md \
     ./containerize.md \
     ./k8sReview/namespaces.md \

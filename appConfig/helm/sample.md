@@ -1,14 +1,14 @@
-# Helm's Canonical Sample App
+# The Sample App
 
-Make the sample app:
+Make Helm's canonical sample app:
 
-<!-- @makeSampleApp -->
+<!-- @makeTheSample @test -->
 ```
 cd $TUT_DIR
 helm create sample
 ```
 
-What does the sample contain?
+<!-- @listContents -->
 ```
 find $TUT_DIR/sample
 ```
@@ -29,20 +29,22 @@ function tut_printSample {
 
 ## Metadata
 
-Self-explanatory
-metadata about the app goes into `Chart.yaml`:
+Self-explanatory metadata about the app
+goes into `Chart.yaml`:
 
 ```
 tut_printSample Chart.yaml
 ```
 
-
 ## Templates
 
+[Go language template]: https://golang.org/pkg/text/template/
 
-The `templates` directory holds template files
-with 1:1 correspondence to k8s resources types like
-_Service_, _Deployment_ and _Ingress_.
+The `templates` directory holds [Go language template]
+files that correspond to k8s resources types like
+_Service_ and _Deployment_.
+
+The templates hold the commonality.
 
 ```
 tut_printSample templates/service.yaml
@@ -52,19 +54,17 @@ tut_printSample templates/service.yaml
 tut_printSample templates/deployment.yaml
 ```
 
-```
-tut_printSample templates/ingress.yaml
-```
-
 ## Values
 
 Templates in hand, the `values.yaml` file is the thing
 one wants to edit.
 
-The values are injected by helm into the templates,
-which are in turn "rendered" into k8s objects for
-instantiation in the cluster.
-
 ```
 tut_printSample values.yaml
 ```
+
+The values hold the differences.
+
+Installation of an app via helm means uses these values
+are to fill in the templates and instantiate k8s
+resources in the cluster.
