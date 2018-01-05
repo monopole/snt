@@ -53,16 +53,16 @@ The templates hold the commonality instances will share.
 ```
 tut_printSample templates/service.yaml
 ```
-<!-- @printDeployment @test -->
 
+<!-- @printDeployment @test -->
 ```
 tut_printSample templates/deployment.yaml
 ```
 
 ## Values
 
-Templates in hand, the `values.yaml` file is the thing
-one wants to edit to make instances different.
+The `values.yaml` holds information to
+make instances different.
 
 <!-- @printValues @test -->
 ```
@@ -72,3 +72,40 @@ tut_printSample values.yaml
 Installation of an app via helm means using these
 values to fill in the templates to instantiate
 differing k8s resources in the cluster.
+
+## Try the sample
+
+Install and remove two instances
+<!-- @noteCurrentState @test -->
+```
+kubectl get services
+kubectl get deployments
+```
+
+<!-- @installOne @test -->
+```
+helm install $TUT_DIR/sample --name sample1
+kubectl get services
+kubectl get deployments
+```
+
+<!-- @installAnother @test -->
+```
+helm install $TUT_DIR/sample --name sample2
+kubectl get services
+kubectl get deployments
+```
+
+<!-- @list @test -->
+```
+helm ls
+```
+
+<!-- @delete @test -->
+```
+helm delete sample1
+helm delete sample2
+helm ls
+kubectl get services
+kubectl get deployments
+```
