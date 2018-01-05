@@ -27,7 +27,7 @@ Kubernetes adds layers to avoid toil.
   downgrading the pods therein, etc., so one invents a
   _deployment_ with those concepts built in.
 
-Deployment yaml looks like replicaset yaml.
+Deployment YAML looks like replicaset YAML.
 Only the `kind` changes:
 
 <!-- @createDeployment @test -->

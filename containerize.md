@@ -5,7 +5,7 @@
 >
 > _Time: 2-5min_
 
-The server you just wrote must be placed in a container
+The `tuthello` server must be placed in a container
 image (a tar ball with metadata), and that in turn must
 be placed in a container registry.
 
@@ -171,11 +171,13 @@ List the cloud-homed images:
 ```
 if ! tut_isMinikube; then
   (
-  gcloud container images list --repository gcr.io/$TUT_PROJECT_ID
+  gcloud container images list \
+    --repository gcr.io/$TUT_PROJECT_ID
   echo "--------------------"
   gcloud container images list-tags $TUT_IMG_TAG
   echo "--------------------"
-  gcloud container images list-tags --format='get(digest)' $TUT_IMG_TAG
+  gcloud container images list-tags \
+    --format='get(digest)' $TUT_IMG_TAG
   )
 fi
 ```

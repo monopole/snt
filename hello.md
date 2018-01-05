@@ -1,30 +1,31 @@
-# Make a Server
+# Make a Hello World Server
 
 > _Write a configurable HTTP server
 >  to run on the cluster._
 >
 > _Time: 30sec_
 
-A cluster-wide app may involve any number of
-components - web servers, log capturers, databases,
-etc.  This tutorial will use just one component, with
-the minimal complexity needed to demonstrate
-configuration, rollout, rollback, upgrade, etc.
+A cluster-wide app may involve any number of programs -
+web servers, log capturers, databases, etc.
 
-The program will serve a tiny web page
-whose appearance is influenced by flags and
-shell env variables.
+This tutorial will use just one program, called
+`tuthello`, with the minimal complexity needed to
+demonstrate configuration, rollout, rollback and
+upgrade.
 
-To demo rollouts and rollbacks, there will be
-multiple versions of the program, with the
-version appearing on the served web page.
+It will serve a tiny hello-world style web page whose
+appearance is influenced by flags and shell variables.
+
+To demo rollouts and rollbacks, there will be multiple
+versions of the program, with the version appearing on
+the served web page.
 
 <!-- @env @test -->
 ```
-TUT_IMG_NAME=radishwine
-TUT_IMG_V1=1  # to tag version 1
-TUT_IMG_V2=2  # to tag version 2
-TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
+export TUT_IMG_NAME=tuthello
+export TUT_IMG_V1=1  # to tag version 1
+export TUT_IMG_V2=2  # to tag version 2
+export TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
 ```
 
 <!-- @mkSrcDir @test -->
@@ -52,7 +53,7 @@ type server struct {C *config; P string; V int}
 
 const (
     version = 0
-    tmplName = "whatever"
+    tmplName = "homepage"
     tmplBody = `
 {{define "` + tmplName + `" -}}
 <html><body>
@@ -100,7 +101,16 @@ func main() {
 EOF
 ```
 
-Build version 1 of the program to see that it works.
+This web server is configurable via
+
+ * one compile-time constant: `version`
+ * two flags: `--enableRiskyFeature`, `--port`
+ * one environment variable: `TUTORIAL_GREETING`
+
+It uses its URL query path in the greeting, or to quit.
+
+Define a function to build the server, changing the
+compile-time constant:
 
 <!-- @funcToBuild @env @test -->
 ```
@@ -114,6 +124,8 @@ function tut_BuildProgram {
       go build -o $TUT_IMG_PATH -a -installsuffix cgo $src
 }
 ```
+
+Build it at v1.
 
 <!-- @buildAtV1 @test -->
 ```
@@ -138,11 +150,11 @@ function tut_RequestAndQuit {
 }
 ```
 
+Run and kill it.
+
 <!-- @runAndKill @test -->
 ```
 TUTORIAL_GREETING=salutations $TUT_IMG_PATH \
     --enableRiskyFeature --port 8100 &
 tut_RequestAndQuit 8100 godzilla
 ```
-
-The server works.  It just needs a place to run.

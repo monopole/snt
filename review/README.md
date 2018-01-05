@@ -4,9 +4,9 @@
 >
 > _Total Time: 5-30min_
 
-At this point, you have a raw k8s cluster, and a
-bespoke server with several configuration knobs that
-you'd like to run on your cluster.
+At this point, you have a raw k8s cluster, and two
+binary versions of `tuthello` stored in a container
+registry.
 
 The next sections deploy your server to the cluster
 using manual, declarative configuration.  I.e.  you'll

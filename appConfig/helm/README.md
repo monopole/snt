@@ -1,12 +1,11 @@
 # Helm
 
-> _Configure your cluster using templates._
+> _Configure your cluster using Go templates._
 >
 > _Time: 6min_
 
-[Helm](https://helm.sh/) is a relatively mature
-means to define, install and upgrade a k8s application.
-
+[Helm](https://helm.sh/) is a relatively mature means
+to manage app instances via template substitution.
 
 ## Install to disk
 
@@ -14,7 +13,7 @@ means to define, install and upgrade a k8s application.
 
 Try the following (or visit the canonical [install doc]):
 
-<!-- @installHelm -->
+<!-- @installHelm @test -->
 ```
 apis=https://storage.googleapis.com
 tarball=helm-v2.7.0-linux-amd64.tar.gz
@@ -39,28 +38,30 @@ into the cluster.
 Confirm that the cluster started earlier in the
 tutorial is still up:
 
-<!-- @isTheClusterUp -->
+<!-- @isTheClusterUp @test -->
 ```
 kubectl cluster-info
 ```
 
 Then initialize helm:
 
-<!-- @initialize -->
+<!-- @initialize @test -->
 ```
 helm init
+sleep 4  # init returns before completion
 ```
 
 ## Are the lights on?
 
-<!-- @confirmTiller -->
+<!-- @confirmTiller @test -->
 ```
-kubectl get pods --namespace kube-system | grep tiller
+kubectl get pods --namespace kube-system |\
+    grep tiller
 ```
 
 The following won't work till tiller is up:
 
-<!-- @confirmVersion -->
+<!-- @confirmVersion @test -->
 ```
 helm version
 ```

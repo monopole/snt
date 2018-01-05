@@ -1,9 +1,9 @@
 environment
 hosting
-buildAServer
+hello
 containerize
-k8sReview
-appConfig
+review
+apps
 cleanup
 help
 appendix

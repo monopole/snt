@@ -1,6 +1,7 @@
 # The Sample App
 
-Make Helm's canonical sample app:
+Make the bundle of files associated with helm's
+canonical sample app:
 
 <!-- @makeTheSample @test -->
 ```
@@ -8,14 +9,14 @@ cd $TUT_DIR
 helm create sample
 ```
 
-<!-- @listContents -->
+<!-- @listContents @test -->
 ```
 find $TUT_DIR/sample
 ```
 
 Make a helper function for use below:
 
-<!-- @funcPrintSample @env -->
+<!-- @funcPrintSample @env @test -->
 ```
 function tut_printSample {
   local f=$TUT_DIR/sample/$1
@@ -27,11 +28,12 @@ function tut_printSample {
 }
 ```
 
-## Metadata
+## The Chart
 
-Self-explanatory metadata about the app
-goes into `Chart.yaml`:
+Self-explanatory metadata about the app goes into a
+single manifest file called `Chart.yaml`:
 
+<!-- @printChart @test -->
 ```
 tut_printSample Chart.yaml
 ```
@@ -40,15 +42,18 @@ tut_printSample Chart.yaml
 
 [Go language template]: https://golang.org/pkg/text/template/
 
-The `templates` directory holds [Go language template]
+The manifest (aka chart) is associated with a
+`templates` directory holding [Go language template]
 files that correspond to k8s resources types like
-_Service_ and _Deployment_.
+_service_ and _deployment_.
 
-The templates hold the commonality.
+The templates hold the commonality instances will share.
 
+<!-- @printService @test -->
 ```
 tut_printSample templates/service.yaml
 ```
+<!-- @printDeployment @test -->
 
 ```
 tut_printSample templates/deployment.yaml
@@ -57,14 +62,13 @@ tut_printSample templates/deployment.yaml
 ## Values
 
 Templates in hand, the `values.yaml` file is the thing
-one wants to edit.
+one wants to edit to make instances different.
 
+<!-- @printValues @test -->
 ```
 tut_printSample values.yaml
 ```
 
-The values hold the differences.
-
-Installation of an app via helm means uses these values
-are to fill in the templates and instantiate k8s
-resources in the cluster.
+Installation of an app via helm means using these
+values to fill in the templates to instantiate
+differing k8s resources in the cluster.

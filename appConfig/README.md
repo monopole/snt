@@ -1,31 +1,29 @@
 # Cluster App Configuration
 
 [Google Maps API]: https://enterprise.google.com/maps/products/mapsapi.html
-[third-party]: https://www.noupe.com/development/collection-of-the-coolest-uses-of-the-google-maps-api.html
 
-The [Google Maps API] is, most literally, a _set of
-replicated frontend servers_ running on Google's
-clusters.  It backs an enormous number of
-[third-party] services.
+The [Google Maps API] is a set of replicated frontend
+servers running on Google's clusters.  It backs many
+Google and third-party services.
 
 Despite its size and complexity, this set has
 properties like a phone app.
 
-* It has a singular description and purpose -
-  e.g. _Serve the Maps API_.
+* It has a singular description and purpose:
+  _serve the Maps API_.
 
 * It can be installed and deleted.
 
 * It has a lifecycle of development, test and release,
   with docs and release notes.
 
-* It has a versioned implementation - albeit likely
-  associated with a _list_ of versions of its components
+* It has a versioned _implementation_ - albeit likely
+  associated with a list of versions of its components
   (servers, probers, monitors, static data).
 
-* It may offer a versioned API, independent of the
-  implemention version, with a deprecation and version
-  skew compatibility policy.
+* It offers a versioned _API_ allowing other server sets
+  to talk to it per compatibility and deprecation
+  policies.
 
 * It co-exists on its hardware with other server sets,
   e.g. email servers, photo servers.
@@ -33,36 +31,35 @@ properties like a phone app.
 * It may be unaware of these sets, or it may need to
   discover and depend on them.
 
-In particular, a maps API depends on distributed
-services offering map tiles, satellite photos, reviews,
-translations, traffic updates, user preferences, etc.
-These sets of services evolve on uncoordinated
-lifecycles managed by independent teams.
+The maps API depends on distributed services offering
+map tiles, satellite photos, reviews, translations,
+traffic updates, user preferences, etc.  These sets of
+services evolve on uncoordinated lifecycles managed by
+independent teams.
 
 For simplicity, the following calls these sets
 _cluster apps_.
 
-## Kubernetes Apps
+## Kubernetes Apps are a bundle of YAML
 
-In kubernetes, cluster apps are characterized by the
-set of all k8s resources needed to serve them - the
-ConfigMaps, the Deployments, etc.
+Per the [review](/review), cluster apps are - minimally -
+the set of all YAML files needed to create k8s
+resources like [services](/review/services),
+[deployments](/review/deployment), and [config
+maps](/review/configMap).
 
-As covered in the [review](/k8sReview), this is just a
-collection of one or more yaml files, hopefully stored
-in a version control system.  The yaml files are
-recipes, and the container images pulled from some
-registry are the ingredients.  The set of yaml files
-looks even more like an app if one bundles them with a
-manifest file listing them and describing their overall
-purpose.
+The YAML files are recipes, and the container images
+pulled from some registry are the ingredients.
 
 [outside]: https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/#what-kubernetes-is-not
 
-From there one could build a tool to discover, perhaps
-buy, and install such bundles - creating yet another app
-ecosystem. That's [outside] the purview of the core
-kubernetes project.
+The set of YAML files looks even more like an app if
+one bundles them with a manifest file listing them and
+describing their overall purpose.  From there one could
+build a tool to discover, perhaps buy, and install such
+bundles - creating yet another app ecosystem. That's
+[outside] the purview of the core kubernetes project.
 
-The rest of this tutorial focusses on the important
-problem of managing different instances of an app.
+The rest of this tutorial focusses on further defining
+an app, guided by the need for different app
+_instances_.

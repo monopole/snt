@@ -129,7 +129,7 @@ sleep 2
 
 Repeat this query ten or so times to hit different pods:
 
-<!-- @tryQuery @test  -->
+<!-- @tryQuery  -->
 ```
 tut_Query orange
 ```

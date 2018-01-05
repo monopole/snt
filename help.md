@@ -14,7 +14,7 @@ visit remaining content.
 Download the content and the [mdrip] tool:
 
 ```
-dir=$(mktemp -d)
+TST_DIR=$(mktemp -d)
 repo=https://github.com/monopole/snt.git
 git clone $repo $TST_DIR/tutorial
 GOBIN=$TST_DIR go install github.com/monopole/mdrip

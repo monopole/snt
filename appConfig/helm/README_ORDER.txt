@@ -1,2 +1,2 @@
-install
 sample
+run

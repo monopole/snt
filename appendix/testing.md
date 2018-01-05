@@ -19,14 +19,20 @@ git clone $repo $TST_DIR/tutorial
 GOBIN=$TST_DIR go install github.com/monopole/mdrip
 ```
 
+All commands below assume
+
+```
+PATH=$TST_DIR:$PATH
+cd $TST_DIR/tutorial
+```
+
 ## Test the entire tutorial
 
 The following is meant to be used as a CI/CD step:
 
 <!-- @testAllContent -->
 ```
-$TST_DIR/mdrip --mode test --label test \
-    --blockTimeOut 15m $TST_DIR/tutorial
+mdrip --mode test --label test --blockTimeOut 15m .
 echo $?
 ```
 No output (other than zero from __`echo $?`__)
@@ -52,18 +58,18 @@ first, followed by file names as they appear in the
 specified by `README_ORDER.txt` files, recursively
 descending as needed, stopping where desired.
 
+To go from zero to the point where one pod runs, try this:
 
 ```
-cd $TST_DIR/tutorial
-eval "$($TST_DIR/mdrip --label test \
+eval "$(mdrip --label test \
     ./README.md \
     ./environment.md \
     ./hosting/minikube.md \
     ./hosting/confirm.md \
-    ./buildAServer.md \
+    ./hello.md \
     ./containerize.md \
-    ./k8sReview/namespaces.md \
-    ./k8sReview/pods.md \
+    ./review/namespaces.md \
+    ./review/pods.md \
 )"
 ```
 
@@ -85,7 +91,7 @@ all blocks with the `@test` label:
 
 <!-- @printScript -->
 ```
-$TST_DIR/mdrip --label test $TST_DIR/tutorial | more
+mdrip --label test . | more
 ```
 
 
@@ -98,7 +104,7 @@ To quickly re-establish the environment, run only blocks
 labelled `@env`:
 
 ```
-eval "$($TST_DIR/mdrip --label env $TST_DIR/tutorial)"
+eval "$(mdrip --label env .)"
 ```
 
 Obviously this depends on the placement of `@env` labels
@@ -126,8 +132,7 @@ while IFS= read -r line; do export -f $line; done < <(
 Then run only the file you want to test, e.g.:
 
 ```
-$TST_DIR/mdrip --mode test --label test \
-    $TST_DIR/tutorial/k8sReview/services.md
+mdrip --mode test --label test review/services.md
 ```
 
 For more logging, add
@@ -144,15 +149,14 @@ proper order), rather than specifying the containing
 directory:
 
 ```
-cd $TST_DIR/tutorial
-$TST_DIR/mdrip \
+mdrip \
     --mode test --label test --blockTimeOut 15m \
     ./README.md \
     ./environment.md \
     ./hosting/minikube.md \
     ./hosting/confirm.md \
-    ./buildAServer.md \
+    ./hello.md \
     ./containerize.md \
-    ./k8sReview/namespaces.md \
-    ./k8sReview/pods.md  # stop whereever
+    ./review/namespaces.md \
+    ./review/pods.md  # stop whereever
 ```

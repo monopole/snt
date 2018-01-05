@@ -135,7 +135,7 @@ echo "Service at $TUT_SVC_ADDRESS"
 function tut_Query {
   # Disable exit on error.
   set +e
-  for i in {1..3}; do
+  for i in {1..4}; do
     curl --fail --silent --max-time 3 $TUT_SVC_ADDRESS/$1
     local code=$?
     # https://curl.haxx.se/libcurl/c/libcurl-errors.html
