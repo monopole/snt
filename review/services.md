@@ -127,32 +127,17 @@ function tut_getServiceAddress {
 <!-- @getAddress @test -->
 ```
 echo "This may take around 30 sec after service creation to work."
-TUT_SVC_ADDRESS=$(tut_getServiceAddress)
+export TUT_SVC_ADDRESS=$(tut_getServiceAddress)
 echo "Service at $TUT_SVC_ADDRESS"
 ```
 
 <!-- @funcQueryServer @env @test -->
 ```
 function tut_query {
-  # Disable exit on error.
-  set +e
-  # Retry to allow for server startup time.
-  for i in {1..5}; do
-    curl --fail --silent --max-time 3 $TUT_SVC_ADDRESS/$1
-    local code=$?
-    # https://curl.haxx.se/libcurl/c/libcurl-errors.html
-    if [ $code -eq 0 ]; then
-      tut_restoreErrorOnExit
-      return
-    fi
-    if [ $i -lt 5 ]; then
-      echo "Query failed with code $code; trying again."
-      sleep 2
-    fi
-  done
-  tut_restoreErrorOnExit
-  echo Query failed.
-  /bin/false # Fail.
+  # See curl exit codes at
+  # https://curl.haxx.se/libcurl/c/libcurl-errors.html
+  tut_retry 4 curl --fail --silent --max-time 3 \
+      $TUT_SVC_ADDRESS/$1
 }
 ```
 

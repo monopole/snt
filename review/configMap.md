@@ -91,7 +91,7 @@ tut_query lime
 Apply a change in the configuration that launches the
 risky feature and changes the greeting:
 
-<!-- @applyCMapChange @test -->
+<!-- @applyMapChange @test -->
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1

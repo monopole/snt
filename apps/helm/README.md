@@ -48,7 +48,7 @@ Then initialize helm:
 <!-- @initialize @test -->
 ```
 helm init
-sleep 6  # init returns before completion
+sleep 2  # init returns before completion
 ```
 
 ## Are the lights on?
@@ -59,9 +59,7 @@ kubectl get pods --namespace kube-system |\
     grep tiller
 ```
 
-The following won't work till tiller is up:
-
-<!-- @confirmVersion @test -->
+<!-- @awaitHelm @test -->
 ```
-helm version
+tut_retry 4 helm version
 ```

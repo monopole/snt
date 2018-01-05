@@ -148,7 +148,7 @@ TUTORIAL_GREETING=salutations \
 sleep 2
 
 # Dump html to stdout
-curl --fail --silent -m 1 localhost:8100/gozilla
+curl --fail --silent -m 1 localhost:8100/godzilla
 
 # Send query of death
 curl --fail --silent -m 1 localhost:8100/quit

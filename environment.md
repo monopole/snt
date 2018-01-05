@@ -11,8 +11,8 @@ Global shell variables and functions
 start with `TUT_` or `tut_` (an informal namespace).
 
 For example, the following stores the initial _exit on
-error_ behavior in a variable, and defines a function
-to reset this behavior after running a command block.
+error_ behavior in a variable, defines a function
+to reset this behavior, and uses it in a retry function.
 
 This is crucial for placing blocks under CI/CD testing.
 
@@ -31,6 +31,30 @@ function tut_restoreErrorOnExit {
     # Normal for interactive use.
     set +e
   fi
+}
+
+function tut_retry {
+  local code=0
+  local i=$1
+  shift
+  local cmd="$@"
+  set +e
+  while [ $i -gt 0 ]; do
+    $cmd
+    code=$?
+    if [ $code -eq 0 ]; then
+      tut_restoreErrorOnExit
+      return
+    fi
+    i=$((i - 1))
+    if [ $i -gt 0 ]; then
+      echo "Exit status $code - retrying..."
+      sleep 2;
+    fi
+  done
+  echo Failed with ${code}: $cmd
+  tut_restoreErrorOnExit
+  /bin/false # Fail.
 }
 ```
 

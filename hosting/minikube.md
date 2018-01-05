@@ -178,34 +178,12 @@ $MINIKUBE_HOME/minikube \
 
 Assure that minikube is up.
 
-<!-- @funcToWaitForIt @env @test -->
-```
-function tut_awaitMk {
-  set +e
-  for i in {1..10}; do
-    echo "Getting node report."
-    kubectl get nodes &> /dev/null
-    local foo="$?"
-    if [ $foo -eq 0 ]; then
-      echo "k8s API appears to be up."
-      tut_restoreErrorOnExit
-      return
-    fi
-    echo "sleeping"
-    sleep 2
-  done
-  echo "Unable to contact minikube."
-  tut_restoreErrorOnExit
-  /bin/false # Fail.
-}
-```
-
 <!-- @waitForIt @test -->
 ```
-tut_awaitMk
+tut_retry 4 kubectl get nodes &> /dev/null
 ```
 
-Confirm expectations
+Print status:
 
 <!-- @confirmUp @test @sleep-->
 ```

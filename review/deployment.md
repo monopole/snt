@@ -31,7 +31,7 @@ Deployment YAML looks like replicaset YAML.
 Only the `kind` changes:
 
 <!-- @createDeployment @test -->
-```yaml
+```
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -96,7 +96,7 @@ tut_query kiwi
 Apply a change in the deployment image (to v2):
 
 <!-- @applyUpgrade @test -->
-```yaml
+```
 cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1beta1
 kind: Deployment
