@@ -90,7 +90,7 @@ Observe this by upgrading the image from v1 to v2.
 <!-- @checkVersion @test -->
 ```
 kubectl describe pods | egrep '(Status:|Image:)'
-tut_Query kiwi
+tut_query kiwi
 ```
 
 Apply a change in the deployment image (to v2):
@@ -131,7 +131,7 @@ kubectl describe pods | egrep '(Status:|Image:)'
 The service still works during this process:
 <!-- @queryService @test -->
 ```
-tut_Query tangerine
+tut_query tangerine
 ```
 
 When finished, delete the deployent.

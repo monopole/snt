@@ -115,7 +115,7 @@ compile-time constant:
 <!-- @funcToBuild @env @test -->
 ```
 # Builds binary with a hard-coded version stamp.
-function tut_BuildProgram {
+function tut_buildProgram {
   local version=$1
   local src=${TUT_IMG_PATH}${version}.go
   cat ${TUT_IMG_PATH}.go \
@@ -130,31 +130,26 @@ Build it at v1.
 <!-- @buildAtV1 @test -->
 ```
 rm -f $TUT_IMG_PATH
-tut_BuildProgram $TUT_IMG_V1
+tut_buildProgram $TUT_IMG_V1
 if ! type -P $TUT_IMG_PATH >/dev/null 2>&1; then
   echo Build failed?
 fi
 ```
 
-<!-- @funcRunAndKill @env @test -->
-```
-function tut_RequestAndQuit {
-  local port=$1
-  local path=$2
-  # Give server time to fire up.
-  sleep 2
-  # Dump html to stdout
-  curl --fail --silent -m 1 localhost:$port/$path
-  # Send query of death
-  curl --fail --silent -m 1 localhost:$port/quit
-}
-```
+Run it and shut it down.
 
-Run and kill it.
-
-<!-- @runAndKill @test -->
+<!-- @runAndQuit @test -->
 ```
-TUTORIAL_GREETING=salutations $TUT_IMG_PATH \
-    --enableRiskyFeature --port 8100 &
-tut_RequestAndQuit 8100 godzilla
+# Start server
+TUTORIAL_GREETING=salutations \
+    $TUT_IMG_PATH --enableRiskyFeature --port 8100 &
+
+# Let it get ready
+sleep 2
+
+# Dump html to stdout
+curl --fail --silent -m 1 localhost:8100/gozilla
+
+# Send query of death
+curl --fail --silent -m 1 localhost:8100/quit
 ```

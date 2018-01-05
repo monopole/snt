@@ -72,7 +72,7 @@ docker ps -a
 
 <!-- @funcCreateImage @env @test -->
 ```
-function tut_BuildDockerImage {
+function tut_buildDockerImage {
   local tag=$TUT_IMG_TAG:$1  # Add version to tag
   local dockerFile=$TUT_DIR/src/Dockerfile
   cat <<EOF >$dockerFile
@@ -87,7 +87,7 @@ EOF
 
 <!-- @createImageV1 @test -->
 ```
-tut_BuildDockerImage $TUT_IMG_V1
+tut_buildDockerImage $TUT_IMG_V1
 ```
 
 <!-- @listImages @test -->
@@ -126,8 +126,8 @@ rollout/rollback practice later:
 
 <!-- @buildVersion2 @test -->
 ```
-tut_BuildProgram     $TUT_IMG_V2
-tut_BuildDockerImage $TUT_IMG_V2
+tut_buildProgram     $TUT_IMG_V2
+tut_buildDockerImage $TUT_IMG_V2
 ```
 
 <!-- @confirmDockerCache @test -->

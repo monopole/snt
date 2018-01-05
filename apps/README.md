@@ -19,34 +19,33 @@ properties like a phone app.
 
 * It has a versioned _implementation_ - albeit likely
   associated with a list of versions of its components
-  (servers, probers, monitors, static data).
+  (server, prober, monitor, static data set).
 
 * It offers a versioned _API_ allowing other server sets
   to talk to it per compatibility and deprecation
   policies.
 
-* It co-exists on its hardware with other server sets,
-  e.g. email servers, photo servers.
+* It co-exists on its host with other server sets,
+  e.g. mail servers.
 
 * It may be unaware of these sets, or it may need to
-  discover and depend on them.
+  discover and depend on them, e.g. satellite photo
+  servers, road traffic update servers.
 
-The maps API depends on distributed services offering
-map tiles, satellite photos, reviews, translations,
-traffic updates, user preferences, etc.  These sets of
-services evolve on uncoordinated lifecycles managed by
-independent teams.
+* The release lifecycle of these other sets is
+  unorchestrated, and performed by different teams.
 
-For simplicity, the following calls these sets
-_cluster apps_.
+For simplicity, the following refers to these sets
+as _cluster apps_.
 
 ## Kubernetes Apps are a bundle of YAML
 
-Per the [review](/review), cluster apps are - minimally -
-the set of all YAML files needed to create k8s
-resources like [services](/review/services),
-[deployments](/review/deployment), and [config
-maps](/review/configMap).
+Per the [review](/review), a cluster app is -
+minimally - the set of all YAML files needed to create
+the k8s resources ([services](/review/services),
+[deployments](/review/deployment), [config
+maps](/review/configMap), etc.) that assure the
+associated service set runs in the cluster.
 
 The YAML files are recipes, and the container images
 pulled from some registry are the ingredients.

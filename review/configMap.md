@@ -85,7 +85,7 @@ kubectl describe deployments
 Make sure querying works:
 <!-- @curlService @test -->
 ```
-tut_Query lime
+tut_query lime
 ```
 
 Apply a change in the configuration that launches the
@@ -113,7 +113,7 @@ There are no visible changes in the service yet.
 
 <!-- @curlService @test -->
 ```
-tut_Query lemon
+tut_query lemon
 ```
 
 ### Mixed states
@@ -123,7 +123,7 @@ is adopted by new pods.
 
 <!-- @deleteOnePod @test -->
 ```
-tut_DeleteRandomPod
+tut_deleteRandomPod
 sleep 2
 ```
 
@@ -131,7 +131,7 @@ Repeat this query ten or so times to hit different pods:
 
 <!-- @tryQuery  -->
 ```
-tut_Query orange
+tut_query orange
 ```
 
 One can get the cluster into a (presumably
@@ -149,7 +149,7 @@ kubectl delete --all pods
 Confirm the new greeting is always served:
 <!-- @tryQuery @test -->
 ```
-tut_Query orange
+tut_query orange
 ```
 
 ### Treat configs as immutable
@@ -183,7 +183,7 @@ Define a function to apply a config change:
 
 <!-- @funcRepointDeployment @env @test -->
 ```
-function tut_ApplyConfigChange {
+function tut_applyConfigChange {
 local newConfig=$1
 echo Changing to config $newConfig
 cat <<EOF | kubectl apply -f -
@@ -220,14 +220,14 @@ EOF
 Confirm existing behavior before applying the change:
 <!-- @curlService @test -->
 ```
-tut_Query lime
+tut_query lime
 ```
 
 Apply the change:
 
 <!-- @changeToConfig2 @test -->
 ```
-tut_ApplyConfigChange cfg-cilantro
+tut_applyConfigChange cfg-cilantro
 sleep 3
 ```
 
@@ -236,25 +236,25 @@ change in the values of the environment variables.
 
 <!-- @curlService @test -->
 ```
-tut_Query lime
+tut_query lime
 ```
 
 Change it back and forth, and rapidly query to watch the turnover.
 
 <!-- @changeToC1WithQuery @test -->
 ```
-tut_ApplyConfigChange cfg-parsley
+tut_applyConfigChange cfg-parsley
 for i in {1..10}; do
-  tut_Query movingTo1
+  tut_query movingTo1
   sleep 0.5
 done
 ```
 
 <!-- @changeToC2WithQuery @test -->
 ```
-tut_ApplyConfigChange cfg-cilantro
+tut_applyConfigChange cfg-cilantro
 for i in {1..10}; do
-  tut_Query movingTo2
+  tut_query movingTo2
   sleep 0.5
 done
 ```

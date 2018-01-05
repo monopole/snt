@@ -9,7 +9,7 @@ their configuration across various dimensions:
 * security:  public, government, HIPPA, ITAR, ...
 * age: latest, last week, last month, ...
 
-How to configure and manage these instances?
+These instances must be configured and managed.
 
 ## Imperative configuration
 

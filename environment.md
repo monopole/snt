@@ -18,7 +18,6 @@ This is crucial for placing blocks under CI/CD testing.
 
 <!-- @exitOnErrStatus @env @test -->
 ```
-# Store initial state.
 export TUT_EXIT_ON_ERR=0
 if [[ "$SHELLOPTS" =~ "errexit" ]]; then
   TUT_EXIT_ON_ERR=1

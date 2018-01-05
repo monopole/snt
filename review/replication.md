@@ -23,7 +23,7 @@ deleted.
 
 <!-- @queryBusted -->
 ```
-tut_Query bananna
+tut_query bananna
 ```
 
 Once the replica set starts making pods, the load
@@ -34,7 +34,7 @@ behaviors.
 Create a replica set:
 
 <!-- @applyReplicaSet @test -->
-```yaml
+```
 cat <<EOF | kubectl apply -f -
 apiVersion: extensions/v1beta1
 kind: ReplicaSet
@@ -81,7 +81,7 @@ kubectl get pods
 The service should take traffic now:
 <!-- @queryService @test -->
 ```
-tut_Query jackfruit
+tut_query jackfruit
 ```
 
 ## Examine the pods
@@ -129,6 +129,7 @@ has a copy of the image:
 
 <!-- @grepNodesForImage @test -->
 ```
+echo $TUT_IMG_NAME
 kubectl get nodes -o yaml | grep $TUT_IMG_NAME
 ```
 
@@ -141,7 +142,7 @@ terminated by the system.
 <!-- @oneTooMany @test -->
 ```
 kubectl get pods
-tut_CreatePod another-pod
+tut_createPod another-pod
 kubectl get pods
 ```
 
@@ -155,7 +156,7 @@ Define function to delete a random pod:
 
 <!-- @funcDeleteRandomPod @env @test -->
 ```
-function tut_DeleteRandomPod {
+function tut_deleteRandomPod {
   local tmpl=`cat <<EOF
 {{range .items -}}
 {{.metadata.name}}
@@ -174,7 +175,7 @@ Define a pod watch that self-terminates in _n_ steps
 
 <!-- @funcToWatchPods @env @test -->
 ```
-function tut_WatchPods {
+function tut_watchPods {
   kubectl get pods
   for i in $(seq 2 $1); do
     sleep 1
@@ -188,8 +189,8 @@ Delete a pod, and wait for it to be rescheduled:
 <!-- @deleteRandomPod @test -->
 ```
 kubectl get pods
-tut_DeleteRandomPod
-tut_WatchPods 5
+tut_deleteRandomPod
+tut_watchPods 5
 ```
 
 Delete _all_ pods, and try interleaving requests with
@@ -198,12 +199,12 @@ enough to fail a request.
 
 <!-- @deleteAllPods -->
 ```
-tut_Query peach
+tut_query peach
 kubectl get pods
 kubectl delete --all pods
-tut_Query apple
-tut_WatchPods 5
-tut_Query peach
+tut_query apple
+tut_watchPods 5
+tut_query peach
 ```
 
 When done playing, delete the replica set:
@@ -211,7 +212,7 @@ When done playing, delete the replica set:
 <!-- @deleteReplicaSet @test -->
 ```
 kubectl delete replicaset repset-asparagus
-tut_WatchPods 3
+tut_watchPods 3
 ```
 
 The service can be left alone for now.

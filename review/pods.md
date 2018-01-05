@@ -91,7 +91,7 @@ Define a function to create a pod, do so, then
 
 <!-- @funcToCreatePod @env @test -->
 ```
-function tut_CreatePod {
+function tut_createPod {
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
@@ -128,7 +128,7 @@ EOF
 
 <!-- @createThePod @test -->
 ```
-tut_CreatePod pod-tomato
+tut_createPod pod-tomato
 ```
 
 <!-- @getAllPods @test -->
@@ -146,7 +146,7 @@ kubectl describe pod pod-tomato
 
 <!-- @funcDetailPod @env @test -->
 ```
-function tut_DetailPod {
+function tut_detailPod {
   local tmpl=`cat <<EOF
 {{.metadata.name -}}
 {{range .spec.containers -}}
@@ -173,7 +173,7 @@ EOF
 
 <!-- @detailPod @test -->
 ```
-tut_DetailPod pod-tomato
+tut_detailPod pod-tomato
 ```
 
 ### scheduling test
@@ -184,7 +184,7 @@ a pod that requires seven CPUS:
 <!-- @unschedulablePod -->
 ```
 TUT_CON_CPU=7000m # 7 cpus
-tut_CreatePod pod-turnip
+tut_createPod pod-turnip
 ```
 
 A pod configured to use this much CPU is unschedulable,
@@ -195,7 +195,7 @@ percentage of the cpu.
 Verify that the pod has not entered the running phase:
 
 ```
-tut_DetailPod pod-turnip
+tut_detailPod pod-turnip
 ```
 
 Get rid of it:

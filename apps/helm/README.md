@@ -48,7 +48,7 @@ Then initialize helm:
 <!-- @initialize @test -->
 ```
 helm init
-sleep 4  # init returns before completion
+sleep 6  # init returns before completion
 ```
 
 ## Are the lights on?

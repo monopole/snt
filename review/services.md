@@ -41,7 +41,7 @@ behaviors:
 
 <!-- @funcCreateService @env @test -->
 ```
-function tut_CreateService {
+function tut_createService {
 cat <<EOF | kubectl apply -f -
 kind: Service
 apiVersion: v1
@@ -71,7 +71,7 @@ EOF
 
 <!-- @createService @test -->
 ```
-tut_CreateService
+tut_createService
 ```
 
 Check again:
@@ -104,15 +104,17 @@ Grab an address to use with the service:
 ```
 function tut_getServiceAddress {
   if tut_isMinikube; then
-    local tmpl='{{range .spec.ports -}}{{.nodePort}}{{end}}'
-    local nodePort=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
+    local tm='{{range .spec.ports -}}{{.nodePort}}{{end}}'
+    local nodePort=$(kubectl get -o go-template="$tm" \
+        service svc-eggplant)
     echo $($MINIKUBE_HOME/minikube ip):$nodePort
   else
     # Running on GKE presumably
-    local tmpl='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'
+    local tm='{{range .status.loadBalancer.ingress -}}{{.ip}}{{end}}'
     local lbAddress=""
     while [ -z "$lbAddress" ]; do
-      lbAddress=$(kubectl get -o go-template="$tmpl" service svc-eggplant)
+      lbAddress=$(kubectl get -o go-template="$tm" \
+          service svc-eggplant)
       if [ -z "$lbAddress" ]; then
         sleep 2
       fi
@@ -131,11 +133,11 @@ echo "Service at $TUT_SVC_ADDRESS"
 
 <!-- @funcQueryServer @env @test -->
 ```
-# Try a few times to allow for server startup time.
-function tut_Query {
+function tut_query {
   # Disable exit on error.
   set +e
-  for i in {1..4}; do
+  # Retry to allow for server startup time.
+  for i in {1..5}; do
     curl --fail --silent --max-time 3 $TUT_SVC_ADDRESS/$1
     local code=$?
     # https://curl.haxx.se/libcurl/c/libcurl-errors.html
@@ -143,26 +145,25 @@ function tut_Query {
       tut_restoreErrorOnExit
       return
     fi
-    if [ $i -lt 3 ]; then
+    if [ $i -lt 5 ]; then
       echo "Query failed with code $code; trying again."
-      sleep 3
+      sleep 2
     fi
   done
   tut_restoreErrorOnExit
   echo Query failed.
-  # fail immediately
-  /bin/false
+  /bin/false # Fail.
 }
 ```
 
 <!-- @queryServiceRaw1 @test -->
 ```
-tut_Query banana
+tut_query banana
 ```
 
 <!-- @queryServiceRaw2 @test -->
 ```
-tut_Query tangerine
+tut_query tangerine
 ```
 
 If running on GKE, The LB IP address also appears on the
