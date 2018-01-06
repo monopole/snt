@@ -2,12 +2,10 @@
 
 > _Define the tutorial environment._
 >
-> _Time: 30sec_
+> _Time: 30s_
 
 Global shell variables and functions
 start with `TUT_` or `tut_` (an informal namespace).
-
-## Workspace
 
 All file system use is confined to the following
 disposable directory:

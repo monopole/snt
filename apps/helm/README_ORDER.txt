@@ -1,2 +1,5 @@
 sample
-run
+instances
+tuthello
+lifecycle
+summary

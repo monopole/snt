@@ -8,7 +8,7 @@
 
 [mdrip]: https://github.com/monopole/mdrip
 
-Install [mdrip]; it extracts command blocks from markdown for testing:
+[mdrip] rips command blocks from markdown for execution.
 
 <!-- @installMdrip -->
 ```
@@ -19,8 +19,8 @@ alias mdrip=$TMPDIR/mdrip
 
 The tutorial content lives on github.
 It's convenient for what follows to explicitly
-download it (rather than have mdrip do it with
-every invocation):
+download it, rather than have mdrip do so with
+every invocation:
 
 <!-- @installContent -->
 ```
@@ -39,7 +39,7 @@ mdrip --mode test --label test --blockTimeOut 15m .
 echo $?
 ```
 
-No output (other than a zero from __`echo $?`__) means
+A zero from __`echo $?`__ means
 all blocks with the `@test` label ran without error. The
 blockTimeout allows downloads of VM ISO files over
 slow wifi, the slowest step in the test.
@@ -93,7 +93,7 @@ eval "$(mdrip --label test \
     ./environment.md \
     ./hosting/minikube.md \
     ./hosting/confirm.md \
-    ./hello.md \
+    ./tuthello.md \
     ./containerize.md \
     ./review/namespaces.md \
     ./review/pods.md \
@@ -121,7 +121,7 @@ mdrip --mode test --label test --blockTimeOut 15m \
     ./environment.md \
     ./hosting/minikube.md \
     ./hosting/confirm.md \
-    ./hello.md \
+    ./tuthello.md \
     ./containerize.md \
     ./review/namespaces.md \
     ./review/pods.md  # stop whereever

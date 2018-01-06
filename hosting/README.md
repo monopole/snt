@@ -1,6 +1,8 @@
-# Where to Host Your k8s Cluster
+# Hosting
 
-> _Total Time: ~5min_
+> _Start your k8s Cluster after choosing where to host it._
+>
+> _Total Time: ~5m_
 
 One needs a hosted cluster - raw k8s components running
 on some set of real or virtual hardware - before one
@@ -12,18 +14,18 @@ portable cloud.
 
 [hard way]: https://github.com/kelseyhightower/kubernetes-the-hard-way
 
-You can obtain machines and do this the [hard way],
-or you can use one of several existing hosted clusters.
+One can obtain machines and do this the [hard way],
+or one can use one of several existing hosted clusters.
 Two choices are offered here.
 
-## Host on your laptop
+## Host on a laptop
 
 [Minikube](https://github.com/kubernetes/minikube/releases)
-is an open source project that brings up a k8s cluster
+is an open source project that launches a k8s cluster
 on your laptop.
 
 It avoids detours into cloud authentication and billing
-issues, and is good investment as it lets you
+issues, and is good long term investment as it lets you
 experiment locally even after you start using corporate
 clouds.
 

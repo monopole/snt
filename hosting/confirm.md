@@ -1,12 +1,11 @@
-# Can kubectl Talk to your Cluster?
+# Confirmation
 
 > _Are the lights on?_
 >
-> _Time: 10sec_
-
+> _Time: 10s_
 
 Regardless of which cluster you've set up,
-you should now be able to talk to it via kubectl.
+you should now be able to talk to it via `kubectl`.
 
 Confirm you have at least one node...
 

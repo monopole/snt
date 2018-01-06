@@ -1,5 +1,6 @@
 # Cluster App Configuration
 
+
 [Google Maps API]: https://enterprise.google.com/maps/products/mapsapi.html
 
 The [Google Maps API] is a set of replicated frontend
@@ -33,7 +34,8 @@ properties like a phone app.
   servers, road traffic update servers.
 
 * The release lifecycle of these other sets is
-  unorchestrated, and performed by different teams.
+  unorchestrated, performed by teams that don't know
+  each other, etc.
 
 For simplicity, the following refers to these sets
 as _cluster apps_.
@@ -44,7 +46,7 @@ Per the [review](/review), a cluster app is
 the set of all YAML files needed to create
 the k8s resources ([services](/review/services),
 [deployments](/review/deployment), [config
-maps](/review/configMap), etc.) that run the
+maps](/review/configuration), etc.) that run the
 associated service set in the cluster.
 
 The YAML files are recipes, and the container images
@@ -52,12 +54,16 @@ pulled from some registry are the ingredients.
 
 [outside]: https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/#what-kubernetes-is-not
 
+[manifest file]: https://en.wikipedia.org/wiki/Manifest_file
+
 The set of YAML files looks even more like an app if
-one bundles them with a manifest file listing them and
-describing their overall purpose.  From there one could
-build a tool to discover, perhaps buy, and install such
-bundles - creating yet another app ecosystem. That's
-[outside] the purview of the core kubernetes project.
+one bundles them with a [manifest file] listing them
+and describing their overall purpose.
+
+From there one could build a tool to discover, perhaps
+buy, and install such bundles - creating yet another
+app ecosystem. That's [outside] the purview of the core
+kubernetes project.
 
 The rest of this tutorial focusses on further defining
 an app, guided by the need for different app

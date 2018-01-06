@@ -2,7 +2,7 @@
 
 > _Make pod services available outside the cluster._
 >
-> _Time: 5min_
+> _Time: 5m_
 
 Pods are ephemeral by design; they are expected to
 crash or be killed, then be reanmimated.
@@ -57,7 +57,7 @@ metadata:
 spec:
   #  Which pods to map to.
   selector:
-    app: avocado
+    app: tuthello
 
   type: LoadBalancer
 
@@ -109,10 +109,11 @@ Obtain the service's address:
 <!-- @funcGetAddress @env @test -->
 ```
 function tut_getServiceAddress {
+  local name=$1
   if tut_isMinikube; then
     local tm='{{range .spec.ports -}}{{.nodePort}}{{end}}'
     local nodePort=$(kubectl get -o go-template="$tm" \
-        service svc-eggplant)
+        service $name)
     echo $($MINIKUBE_HOME/minikube ip):$nodePort
   else
     # Running on GKE presumably
@@ -120,7 +121,7 @@ function tut_getServiceAddress {
     local lbAddress=""
     while [ -z "$lbAddress" ]; do
       lbAddress=$(kubectl get -o go-template="$tm" \
-          service svc-eggplant)
+          service $name)
       if [ -z "$lbAddress" ]; then
         sleep 2
       fi
@@ -130,23 +131,16 @@ function tut_getServiceAddress {
 }
 ```
 
-This may take around 30 sec after service creation to work:
-
-<!-- @getAddress @test -->
-```
-export TUT_SVC_ADDRESS=$(tut_getServiceAddress)
-echo "Service at $TUT_SVC_ADDRESS"
-```
-
 Make a function to query the service with curl:
 
 <!-- @funcQueryServer @env @test -->
 ```
 function tut_query {
+  local addr=$(tut_getServiceAddress $1)
+  local path=$2
   # See curl exit codes at
   # https://curl.haxx.se/libcurl/c/libcurl-errors.html
-  tut_retry 4 curl --fail --silent --max-time 3 \
-      $TUT_SVC_ADDRESS/$1
+  tut_retry 5 curl --fail --silent --max-time 3 $addr/$path
 }
 ```
 
@@ -154,8 +148,8 @@ Try it, with different argument to see their role:
 
 <!-- @queryService @test -->
 ```
-tut_query banana
-tut_query tangerine
+tut_query svc-eggplant banana
+tut_query svc-eggplant tangerine
 ```
 
 If running on GKE, The LB IP address also appears on the
@@ -168,4 +162,11 @@ information dump:
 if ! tut_isMinikube; then
   kubectl cluster-info dump | grep Ingress
 fi
+```
+
+Delete the pod to avoid confusion in what follows:
+
+<!-- @deletePod @test -->
+```
+kubectl delete pod pod-tomato
 ```

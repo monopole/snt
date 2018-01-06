@@ -1,15 +1,14 @@
 # Containerize the Server
 
-> _k8s exclusively runs containers,
-> pulling them as needed from a registry._
+> _Learn to put a Go server into a container._
 >
-> _Time: 2-5min_
+> _Time: 3m_
 
-The `tuthello` server must be placed in a container
-image (a tar ball with metadata), and that in turn must
-be placed in a container registry.
+k8s exclusively runs containers (tar balls with metadata),
+pulling them as needed from a container registry.
 
-In what follows:
+The following puts `tuthello` into a container, and
+in turn puts the container into a registry.
 
  * If you're using minikube for your cluster, you'll use a
    registry built into minikube.
@@ -28,20 +27,16 @@ Define an image tag to use as an argument to various
 docker commands and as the value of the `image` field
 in kubernetes pod definitions.
 
-<!-- @env @test -->
+<!-- @defineImageTag @env @test -->
 ```
-export TUT_IMG_TAG=$TUT_IMG_NAME
-```
-
-<!-- @defineImageTag @test -->
-```
+export TUT_IMG_TAG=tuthello
 if tut_isMinikube; then
   # use local registry
   eval $($MINIKUBE_HOME/minikube docker-env)
   echo "DOCKER_HOST=$DOCKER_HOST"
 else
-  # use GCR, and override the tag
-  TUT_IMG_TAG=gcr.io/$TUT_PROJECT_ID/$TUT_IMG_NAME
+  # Use GCR, which requires a longer tag.
+  TUT_IMG_TAG=gcr.io/$TUT_PROJECT_ID/tuthello
 fi
 echo "TUT_IMG_TAG=$TUT_IMG_TAG"
 ```
@@ -56,8 +51,8 @@ a previous pass through these commands.
 <!-- @rmDockerImages -->
 ```
 # docker rm $(docker stop $(docker ps -aq))
-docker rmi $TUT_IMG_TAG:$TUT_IMG_V1
-docker rmi $TUT_IMG_TAG:$TUT_IMG_V2
+docker rmi $TUT_IMG_TAG:1
+docker rmi $TUT_IMG_TAG:2
 ```
 
 See what processes are running in the container.
@@ -77,8 +72,8 @@ function tut_buildDockerImage {
   local dockerFile=$TUT_DIR/src/Dockerfile
   cat <<EOF >$dockerFile
 FROM scratch
-ADD ${TUT_IMG_NAME} /
-CMD ["/${TUT_IMG_NAME}"]
+ADD tuthello /
+CMD ["/tuthello"]
 EOF
   docker build -t $tag -f $dockerFile $TUT_DIR/src
   rm $dockerFile
@@ -87,19 +82,19 @@ EOF
 
 <!-- @createImageV1 @test -->
 ```
-tut_buildDockerImage $TUT_IMG_V1
+tut_buildDockerImage 1
 ```
 
 <!-- @listImages @test -->
 ```
-docker images --no-trunc | grep $TUT_IMG_NAME
+docker images --no-trunc | grep tuthello
 ```
 
 Sanity check the container image by running it:
 
 <!-- @runDockerImage @test -->
 ```
-docker run -d -p 8080:8080 $TUT_IMG_TAG:$TUT_IMG_V1
+docker run -d -p 8080:8080 $TUT_IMG_TAG:1
 docker ps | grep $TUT_IMG_TAG
 
 if tut_isMinikube; then
@@ -126,13 +121,13 @@ rollout/rollback practice later:
 
 <!-- @buildVersion2 @test -->
 ```
-tut_buildProgram     $TUT_IMG_V2
-tut_buildDockerImage $TUT_IMG_V2
+tut_buildProgram     2
+tut_buildDockerImage 2
 ```
 
 <!-- @confirmDockerCache @test -->
 ```
-docker images | grep $TUT_IMG_NAME
+docker images | grep tuthello
 ```
 
 [GCR]: http://gcr.io
@@ -146,8 +141,8 @@ Optionally start by deleting old images (if any):
 <!-- @deleteImages -->
 ```
 if ! tut_isMinikube; then
-  gcloud --quiet container images delete $TUT_IMG_TAG:$TUT_IMG_V1
-  gcloud --quiet container images delete $TUT_IMG_TAG:$TUT_IMG_V2
+  gcloud --quiet container images delete $TUT_IMG_TAG:1
+  gcloud --quiet container images delete $TUT_IMG_TAG:2
 fi
 ```
 
@@ -160,8 +155,8 @@ Then upload:
 <!-- @uploadImages -->
 ```
 if ! tut_isMinikube; then
-  gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V1
-  gcloud docker -- push $TUT_IMG_TAG:$TUT_IMG_V2
+  gcloud docker -- push $TUT_IMG_TAG:1
+  gcloud docker -- push $TUT_IMG_TAG:2
 fi
 ```
 

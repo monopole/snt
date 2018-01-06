@@ -2,7 +2,7 @@
 
 > _The atomic unit of kubernetes._
 >
-> _Time: 5min_
+> _Time: 5m_
 
 The example below creates one pod, holding just one
 container.  The container in turn holds just one server,
@@ -87,7 +87,7 @@ TUT_CON_MEMORY=10000Ki
 ```
 
 Define a function to create a pod,
-and give it the label _avocado_:
+and give the pod the label pair _app : tuthello_:
 
 <!-- @funcToCreatePod @env @test -->
 ```
@@ -98,12 +98,12 @@ kind: Pod
 metadata:
   name: $1
   labels:
-    app: avocado
+    app: tuthello
 spec:
   # Pod must have at least one container.
   containers:
     - name: cnt-carrot
-      image: $TUT_IMG_TAG:$TUT_IMG_V1
+      image: $TUT_IMG_TAG:1
       imagePullPolicy: IfNotPresent
       resources:
         limits:

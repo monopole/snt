@@ -2,7 +2,7 @@
 
 > _Isolate the tutorial work in your cluster._
 >
-> _Time: 2min_
+> _Time: 2m_
 
 
 [namespace]: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces

@@ -1,3 +1,0 @@
-GKE
-ingress
-testing

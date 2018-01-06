@@ -1,9 +1,9 @@
-# Make a Hello World Server
+# Configurable Hello World
 
 > _Write a configurable HTTP server
 >  to run on the cluster._
 >
-> _Time: 30sec_
+> _Time: 30s_
 
 A cluster-wide app may involve any number of programs -
 web servers, log capturers, databases, etc.
@@ -13,19 +13,15 @@ This tutorial will use just one program, called
 demonstrate configuration, rollout, rollback and
 upgrade.
 
-It will serve a tiny hello-world style web page whose
-appearance is influenced by flags and shell variables.
-
-To demo rollouts and rollbacks, there will be multiple
-versions of the program, with the version appearing on
-the served web page.
+`tuthello` serves a tiny hello-world style web page
+whose appearance is influenced by flags and shell
+variables.  Further, there will be two distinct binary
+versions of `tuthello` differing in a hardcoded
+constant.
 
 <!-- @env @test -->
 ```
-export TUT_IMG_NAME=tuthello
-export TUT_IMG_V1=1  # to tag version 1
-export TUT_IMG_V2=2  # to tag version 2
-export TUT_IMG_PATH=$TUT_DIR/src/$TUT_IMG_NAME
+TUT_IMG_PATH=$TUT_DIR/src/tuthello
 ```
 
 <!-- @mkSrcDir @test -->
@@ -71,7 +67,7 @@ var (
 
 func getConfig() *config {
     flag.Parse()
-    greeting := os.Getenv("TUTORIAL_GREETING")
+    greeting := os.Getenv("ALT_GREETING")
     if len(greeting) == 0 {
         greeting = "Hello"
     }
@@ -105,7 +101,7 @@ This web server is configurable via
 
  * one compile-time constant: `version`
  * two flags: `--enableRiskyFeature`, `--port`
- * one environment variable: `TUTORIAL_GREETING`
+ * one environment variable: `ALT_GREETING`
 
 It uses its URL query path in the greeting, or to quit.
 
@@ -130,7 +126,7 @@ Build it at v1.
 <!-- @buildAtV1 @test -->
 ```
 rm -f $TUT_IMG_PATH
-tut_buildProgram $TUT_IMG_V1
+tut_buildProgram 1  # version one
 if ! type -P $TUT_IMG_PATH >/dev/null 2>&1; then
   echo Build failed?
 fi
@@ -141,7 +137,7 @@ Run it and shut it down.
 <!-- @runAndQuit @test -->
 ```
 # Start server
-TUTORIAL_GREETING=salutations \
+ALT_GREETING=salutations \
     $TUT_IMG_PATH --enableRiskyFeature --port 8100 &
 
 # Let it get ready

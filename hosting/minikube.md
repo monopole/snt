@@ -1,8 +1,8 @@
-# Start a Minikube Cluster
+# Minikube
 
 > _Create a multi-pod cluster on your laptop._
 >
-> _Time: 5min_
+> _Time: 5m_
 
 ## Prerequisites
 

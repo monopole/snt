@@ -1,34 +1,26 @@
 # Clean up
 
-One can individually delete things, e.g.
-
-```
-kubectl delete deployment dep-kale
-kubectl delete service svc-eggplant
-```
-
-or wipe the entire namespace:
+For optional entertainment, wipe the entire namespace:
 
 <!-- @deleteNamespace @test -->
 ```
 kubectl delete namespace ns-beansprout
 ```
 
-Stop the cluster.
+Stop the cluster.  On GKE, this stops billing.
 
 <!-- @stopCluster @test -->
 ```
 if tut_isMinikube; then
   $MINIKUBE_HOME/minikube stop
 else
-  # This will stop billing.
   gcloud --quiet container clusters \
-       delete $TUT_CLUSTER_NAME
+      delete $TUT_CLUSTER_NAME
 fi
 ```
 
-Recover diskspace (or just wait - the system
-will reclaim it eventually):
+Recover diskspace - or just wait, the system
+will reclaim it eventually:
 
 > ```
 > if [ -n "$TUT_DIR" ]; then

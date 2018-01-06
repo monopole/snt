@@ -2,10 +2,9 @@
 
 > _Configure your cluster using Go templates._
 >
-> _Time: 6min_
+> _Time: 8m_
 
-[Helm](https://helm.sh/) is a relatively mature means
-to manage app instances via template substitution.
+[Helm](https://helm.sh/) manages app instances via template substitution.
 
 ## Install to disk
 
@@ -43,7 +42,7 @@ tutorial is still up:
 kubectl cluster-info
 ```
 
-Then initialize helm:
+Install tiller, and create whatever other state helm needs:
 
 <!-- @initialize @test -->
 ```

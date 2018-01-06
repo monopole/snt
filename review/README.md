@@ -2,7 +2,7 @@
 
 > _An overview of the concepts needed to discuss configuration._
 >
-> _Total Time: 5-30min_
+> _Total Time: 30min_
 
 At this point, you have a raw k8s cluster, and two
 binary versions of `tuthello` stored in a container

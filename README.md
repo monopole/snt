@@ -1,26 +1,40 @@
 # Kubernetes Cluster Configuration
 
-_A tutorial on installing customized cluster-level apps._
-
-> _Total Time: ~1hour_
-
+> _A tutorial on installing customized cluster-level apps._
+>
+> _Total Time: ~1.5h_
+>
 > __status: under development Nov 2017__
 
+
+<!--
+Kate Winslet, Kate Beckinsale and Kate Capshaw walked
+into a bar.  The bartender said "Fáilte Kates!", coining
+an alternative pronounciation for kubernetes, spelled
+_k8s_.
+-->
+
 This tutorial requires no knowledge of kubernetes,
-also known as _k8s_ (pronounced _k-eight-s_).
+also called _k8s_.
 
-It focusses on command execution, eschewing deeper
-discussion that can be found at
-[kubernetes.io](https://kubernetes.io) and many other
-sites.
+[_Kubernetes Up and Running_]: http://shop.oreilly.com/product/0636920043874.do
+[k8s.io]: https://kubernetes.io
 
-To establish context for the main topic, this tutorial
-begins with the creation of a service, then does a
-walk-through of manual configuration of a cluster
-offering the service.
+The focus here is exploring the notion of a
+_cluster-level app_ by executing the commands needed
+to make one.
 
-Context established, the tutorial compares different
-approaches to configuring _cluster apps_.
+Excellent, broader discussion of kubernetes (including
+things ignored here, like history, storage, networking,
+security, etc.) can be found in [_Kubernetes Up and
+Running_], at [k8s.io], and at many other sites.
+
+To establish context for app configuration, this
+tutorial begins by writing a small server with a
+sufficient number of configurable knobs.  It then runs
+the server through a lifecycle as a cluster app using
+raw k8s, and then moves on to use two higher level
+approaches to cluster apps.
 
 ## Prerequisites
 
@@ -31,9 +45,9 @@ approaches to configuring _cluster apps_.
 
 [Go], [curl], and [docker].  Command blocks use bash syntax.
 
-The tutorial is tested on [ubuntu], but
-should work on any linux distro, or on OSX with
-some command modification.
+__The tutorial is tested on [ubuntu].__  It's not (yet)
+tested on OSX; some commands may require edits to work
+due to bash and coreutil (sed, grep, etc.) differences.
 
 <!-- @checkPrerequisites @env @test -->
 ```
