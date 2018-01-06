@@ -1,4 +1,4 @@
-# Ingress and DNS
+# Ingress
 
 > _Make your service available worldwide._
 >
@@ -8,17 +8,21 @@
 __Skip this if using minikube - this section about
 exposing a service from GKE to the outside world__
 
-The TCP loadbalancer user here, despite serving HTTP in
-examples above, is [not designed] to terminate [TLS]
-(transport layer security) connections.
+__Warning: Not under CI/CD testing (due to auth and billing issues).__
+
+The loadbalancer defined in the
+[services](/review/services) section is [not designed]
+to terminate [TLS] connections.
+
 
 [not designed]: https://cloud.google.com/container-engine/docs/tutorials/http-balancer
-
 [TLS]: https://cloud.google.com/compute/docs/load-balancing/http/#tls_support
 
-Properly facing the web requires an ingress resource at a static
-IP.  They cost about 25 cents per day, even when the cluster is
-not running.  Create one:
+Properly facing the web requires an _ingress resource_
+at a static IP.  They cost about 25 cents per day, even
+when the cluster is not running.
+
+Create one:
 
 <!-- @env -->
 ```
@@ -47,7 +51,8 @@ List known addresses:
 gcloud compute addresses list
 ```
 
-Create an associated ingress:
+Create an associated ingress, pointing it at `svc-eggplant`
+(created in the [services](/review/services) section):
 
 <!-- @createIngress -->
 ```
@@ -97,25 +102,24 @@ curl -m 1 http://$TUT_STATIC_IP_VALUE:80
 
 ## Cleanup
 
-Either join the internet or delete ingress.
+At this point you can delete the static IP (and stop paying for it):
 
-I.e. add an address record
+<!-- @deleteStaticIp -->
+```
+gcloud compute --project=$TUT_PROJECT_ID  \
+    addresses delete $TUT_STATIC_IP_NAME
+```
+
+Or you can join the internet, i.e. add an address record
 
 ```
 A * $TUT_STATIC_IP_NAME
 ```
 
-to some naming service (e.g. namebright.com) then check it with
+to some DNS, e.g. [namebright](https://namebright.com).
+
+See if the name you want is open:
 
 ```
 nslookup your-new-website.com ns1.namebrightdns.com
-```
-
-or delete the static IP so we stop paying for it:
-
-<!-- @deleteStaticIp -->
-```
-#  Obviously don't do this if you've recorded it in DNS records.
-gcloud compute --project=$TUT_PROJECT_ID  \
-    addresses delete $TUT_STATIC_IP_NAME
 ```

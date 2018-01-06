@@ -86,8 +86,8 @@ TUT_CON_CPU=100m     # 10% of a CPU
 TUT_CON_MEMORY=10000Ki
 ```
 
-Define a function to create a pod, do so, then
-`get` the pod:
+Define a function to create a pod,
+and give it the label _avocado_:
 
 <!-- @funcToCreatePod @env @test -->
 ```
@@ -98,10 +98,7 @@ kind: Pod
 metadata:
   name: $1
   labels:
-    #  Label critical for this example.
     app: avocado
-    #  Not used, but including to see it in output.
-    env: monkey-staging
 spec:
   # Pod must have at least one container.
   containers:
@@ -131,12 +128,14 @@ EOF
 tut_createPod pod-tomato
 ```
 
+This prints the name of all pods:
 <!-- @getAllPods @test -->
 ```
 kubectl get pods
 ```
 
-`Describe` the pod to see the _QoS_ class, the _Ready_
+This describes the name pod in more detail,
+report its _QoS_ class, its _Ready_
 state, the node it's running on, etc.
 
 <!-- @describeOnePod @test -->

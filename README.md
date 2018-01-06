@@ -7,11 +7,12 @@ _A tutorial on installing customized cluster-level apps._
 > __status: under development Nov 2017__
 
 This tutorial requires no knowledge of kubernetes,
-also known as _k8s_.
+also known as _k8s_ (pronounced _k-eight-s_).
 
 It focusses on command execution, eschewing deeper
-discussion that can be found at https://kubernetes.io
-and many other sites.
+discussion that can be found at
+[kubernetes.io](https://kubernetes.io) and many other
+sites.
 
 To establish context for the main topic, this tutorial
 begins with the creation of a service, then does a
@@ -28,10 +29,7 @@ approaches to configuring _cluster apps_.
 [docker]: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu
 [ubuntu]: https://www.ubuntu.com
 
-[Go], [curl], and [docker].
-
-The bash shell is implicitly required;
-command blocks use bash syntax.
+[Go], [curl], and [docker].  Command blocks use bash syntax.
 
 The tutorial is tested on [ubuntu], but
 should work on any linux distro, or on OSX with

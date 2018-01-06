@@ -33,7 +33,7 @@ It's best to eschew imperative commands entirely.
 
 This is much better. There are files that can be stored
 in version control, and the declarative usage described
-(`kubectl apply`) means one need only _read_ the
+(`kubectl apply`) means one need merely _read_ the
 YAML files to understand the state of the cluster.
 
 One can verify this state with `kubectl diff`,

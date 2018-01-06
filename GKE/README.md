@@ -13,6 +13,7 @@ on Google Kubernetes Engine rather than minikube.__
 __Go to [confirmation](/hosting/confirm) if you
 just set up a minikube cluster and came here by mistake.__
 
+__Warning: Not under CI/CD testing (due to auth and billing issues).__
 
 ## Prerequisites
 

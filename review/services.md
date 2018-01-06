@@ -4,10 +4,16 @@
 >
 > _Time: 5min_
 
-Pods are not exposed to the outside world directly.  To
-access a service on a pod, one  needs a k8s [Service] -
-providing a fixed (albeit perhaps ephemeral) IP and a
-static port.
+Pods are ephemeral by design; they are expected to
+crash or be killed, then be reanmimated.
+
+Their cluster IP and port change as they come and go,
+but their k8s _labels_ stay the same.  To reliably
+contact them, one must _select them by label_.
+
+In k8s, the thing that does this is called a [Service].
+A k8s service is a pod label selector with a _fixed_ IP
+and port.
 
 [Service]: https://kubernetes.io/docs/concepts/services-networking/service
 
@@ -34,10 +40,10 @@ behaviors:
   appears in `<NodeIP>:spec.ports[*].nodePort` and
   `spec.clusterIp:spec.ports[*].port`.
 
-* The example below uses `LoadBalancer`, which will
-  round-robin requests to pods.  Balancer creation is
-  (like most other things) asynchronous.  Information
-  about it appears in the `status.loadBalancer` field.
+* The example below uses `LoadBalancer`, which
+  round-robins requests to pods with the right label.
+  Information about it appears in the
+  `status.loadBalancer` field.
 
 <!-- @funcCreateService @env @test -->
 ```
@@ -98,7 +104,7 @@ Crucial aspects of the output are
 * Ingress - the external IP of the service;
   not present in minikube.
 
-Grab an address to use with the service:
+Obtain the service's address:
 
 <!-- @funcGetAddress @env @test -->
 ```
@@ -124,12 +130,15 @@ function tut_getServiceAddress {
 }
 ```
 
+This may take around 30 sec after service creation to work:
+
 <!-- @getAddress @test -->
 ```
-echo "This may take around 30 sec after service creation to work."
 export TUT_SVC_ADDRESS=$(tut_getServiceAddress)
 echo "Service at $TUT_SVC_ADDRESS"
 ```
+
+Make a function to query the service with curl:
 
 <!-- @funcQueryServer @env @test -->
 ```
@@ -141,13 +150,11 @@ function tut_query {
 }
 ```
 
-<!-- @queryServiceRaw1 @test -->
+Try it, with different argument to see their role:
+
+<!-- @queryService @test -->
 ```
 tut_query banana
-```
-
-<!-- @queryServiceRaw2 @test -->
-```
 tut_query tangerine
 ```
 

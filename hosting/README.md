@@ -2,15 +2,19 @@
 
 > _Total Time: ~5min_
 
-You have to find a hosted cluster - raw k8s components
-running on some set of real or virtual hardware -
-before you can practice configuring it.
+One needs a hosted cluster - raw k8s components running
+on some set of real or virtual hardware - before one
+can practice configuring it.
+
+The process to configure the cluster is the same
+regardless of where it is hosted, because k8s is a
+portable cloud.
 
 [hard way]: https://github.com/kelseyhightower/kubernetes-the-hard-way
 
-You can procure machines and do this the [hard way],
+You can obtain machines and do this the [hard way],
 or you can use one of several existing hosted clusters.
-Two choices are listed below.
+Two choices are offered here.
 
 ## Host on your laptop
 
@@ -44,9 +48,3 @@ complete this tutorial.
 
 A sensible strategy is first try the tutorial locally
 with minikube, then try it on GKE.
-
-The process to configure the cluster is the same
-regardless of where it is hosted, because kubernetes is
-a portable cloud.  Variation appears when you set up
-_ingress_, which is how the rest of the world gets access
-to your cluster.

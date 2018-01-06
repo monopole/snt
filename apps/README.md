@@ -40,12 +40,12 @@ as _cluster apps_.
 
 ## Kubernetes Apps are a bundle of YAML
 
-Per the [review](/review), a cluster app is -
-minimally - the set of all YAML files needed to create
+Per the [review](/review), a cluster app is
+the set of all YAML files needed to create
 the k8s resources ([services](/review/services),
 [deployments](/review/deployment), [config
-maps](/review/configMap), etc.) that assure the
-associated service set runs in the cluster.
+maps](/review/configMap), etc.) that run the
+associated service set in the cluster.
 
 The YAML files are recipes, and the container images
 pulled from some registry are the ingredients.

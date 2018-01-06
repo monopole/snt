@@ -5,5 +5,6 @@ containerize
 review
 apps
 cleanup
-help
-appendix
+GKE
+testing
+about
