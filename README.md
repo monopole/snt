@@ -25,7 +25,7 @@ _cluster-level app_ by executing the commands needed
 to make one.
 
 Excellent, broader discussion of kubernetes (including
-things ignored here, like history, storage, networking,
+things omitted here, like history, storage, networking,
 security, etc.) can be found in [_Kubernetes Up and
 Running_], at [k8s.io], and at many other sites.
 
@@ -42,12 +42,16 @@ approaches to cluster apps.
 [curl]: https://github.com/curl/curl
 [docker]: https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu
 [ubuntu]: https://www.ubuntu.com
+[_tmux_]: https://github.com/tmux/tmux/wiki
 
 [Go], [curl], and [docker].  Command blocks use bash syntax.
 
-__The tutorial is tested on [ubuntu].__  It's not (yet)
-tested on OSX; some commands may require edits to work
-due to bash and coreutil (sed, grep, etc.) differences.
+__The tutorial is [tested](/testing) on [ubuntu].__
+It's not yet tested on OSX; some commands may require
+edits due to small bash and coreutil differences.
+
+See the [about](/about) section for instructions on
+using [_tmux_] to speed tutorial flow.
 
 <!-- @checkPrerequisites @env @test -->
 ```

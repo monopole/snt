@@ -103,7 +103,7 @@ spec:
   # Pod must have at least one container.
   containers:
     - name: cnt-carrot
-      image: $TUT_IMG_TAG:1
+      image: $TUT_IMG_REPO:1
       imagePullPolicy: IfNotPresent
       resources:
         limits:

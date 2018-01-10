@@ -156,8 +156,7 @@ fi
 
 ## Start the cluster
 
-This downloads an OS image, and can thus take many
-minutes.
+This downloads an OS image; it's the slowest step in the tutorial.
 
 <!-- @stopMkCluster @test -->
 ```

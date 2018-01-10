@@ -3,17 +3,17 @@
 This is a shell command tutorial written in markdown.
 
 [mdrip]: https://github.com/monopole/mdrip
-[raw content]: https://github.com/monopole/snt
+[content]: https://github.com/monopole/snt
 
-To do the tutorial from its [raw content],
+To do the tutorial from its raw [content],
 start with the `README.md` in any directory, then
 consult `README_ORDER.txt` to see the order in which to
 visit remaining content.
 
 ## For a better experience
 
-
-Serve the content locally with [mdrip]:
+Instead of working from the raw [content] at github,
+serve the content locally with [mdrip]:
 
 <!-- @serveLocally -->
 ```
@@ -26,12 +26,12 @@ presented with a navigation sidebar,
 one-click copying of code blocks,
 and check marks to show completion.
 
-Hit `?` to see all key bindings.
+__Hit `?` to see all key bindings.__
 
 ## For an even better experience
 
-Install and run [tmux](https://github.com/tmux/tmux/wiki),
-e.g.
+On top of serving the content locally, also install and
+run [tmux](https://github.com/tmux/tmux/wiki):
 
 <!-- @installTmux -->
 ```
@@ -47,4 +47,4 @@ Then, with focus constantly in the browser, just hit
 the `Enter` key to succesively execute code blocks in
 `tmux` without using the mouse.
 
-Hit `?` to see all (FPS influenced) bindings.
+__Hit `?` to see all key bindings.__

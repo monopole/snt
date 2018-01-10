@@ -30,19 +30,19 @@ Kubernetes adds layers to avoid toil.
 ## A pod and a count
 
 A deployment is a pod template, a pod instance count,
-and the machinery to manages these instances.  If fewer
-instances are found, k8s starts some.  If more are
-found, k8s stops them.  There's a notion of managing
-configuration changes n pods at a time.
+and the machinery to manage these instances -
+maintaining the pod count in the face of failing pods.
 
-Create some deployment YAML, putting it on
-disk for later editting, instead of piping it directly
-to `kubectl apply`:
+Create some deployment YAML, putting it on disk for
+later editting, instead of piping it directly to
+`kubectl apply`:
 
 <!-- @deploymentYaml @test -->
 ```
-mkdir -p $TUT_DIR/raw
-cat <<EOF >$TUT_DIR/raw/dep-kale.yaml
+export TUT_APP_DIR=$TUT_DIR/tutApp
+mkdir -p $TUT_APP_DIR
+
+cat <<EOF >$TUT_APP_DIR/dep-kale.yaml
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -56,7 +56,7 @@ spec:
     spec:
       containers:
       - name: cnt-carrot
-        image: $TUT_IMG_TAG:1
+        image: $TUT_IMG_REPO:1
         resources:
           limits:
             cpu: 100m
@@ -81,7 +81,7 @@ Create the deployment:
 
 <!-- @createDeployment @test -->
 ```
-cat $TUT_DIR/raw/dep-kale.yaml | kubectl apply -f -
+cat $TUT_APP_DIR/dep-kale.yaml | kubectl apply -f -
 ```
 
 Queries should work (again):
@@ -98,13 +98,14 @@ Moreover, there are three pods serving them:
 kubectl get pods
 ```
 
-Now "upgrade" the app, by changing the deployment's
-image from version 1 of tuthello to version 2:
+Upgrade the app by simply changing the deployment's
+image from version 1 of `tuthello` to version 2:
 
 <!-- @applyUpgrade @test -->
 ```
-cat $TUT_DIR/raw/dep-kale.yaml |\
-    sed 's/:1/:2/' |kubectl apply -f -
+cat $TUT_APP_DIR/dep-kale.yaml |\
+    sed 's/:1/:2/' |\
+    kubectl apply -f -
 ```
 
 Optionally watch the rollout.  Queries are still served
@@ -115,7 +116,7 @@ at this time, but they could hit an old or new image.
 kubectl rollout status deployment dep-kale
 ```
 
-Confirm the version change (it's in the HTML of the response):
+Confirm the version change; it's in the HTML of the response:
 <!-- @queryService @test -->
 ```
 tut_query svc-eggplant tangerine

@@ -11,7 +11,7 @@
  * Whereas raw k8s has a means to collectively operate
    on an app's resource set (via labels), helm enforces
    a notion of a atomic app since its resource set is
-   created, tracked and deleted as a unit by tiller.
+   created, tracked and deleted as a unit by _tiller_.
 
  * Whereas raw k8s doesn't prevent one from treating
    github as an app store and downloading named resource
@@ -24,9 +24,15 @@
 
 [power]: https://golang.org/pkg/text/template
 
-helm uses Go templates, and a helm template author
-can bring its full [power] in "rendering" a resource -
-branching, loops, callouts to custom Go functions, etc.
+A helm template author can
+bring the full [power] of Go templates -
+branching, loops, callouts to custom Go functions,
+etc - to creating k8s resources.
 
 It's up to a user to decide how much of their deployment
 process they wish to express via Go template features.
+
+[approach]: /review/configuration/lifecycle
+
+For a simple case like `tuthello`, a syntax and
+type-unaware [approach] using _sed_ proved sufficient.

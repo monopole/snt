@@ -4,7 +4,7 @@
 >
 > _Time: 1m_
 
-Apply a change to `cfg-parsley` that changes the greeting:
+Apply a change to `cfg-french` that changes the greeting:
 
 <!-- @applyMapChange @test -->
 ```
@@ -12,7 +12,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cfg-parsley
+  name: cfg-french
 data:
   altGreeting: "Bienvenue"
   enableRisky: "false"
@@ -21,7 +21,7 @@ EOF
 
 <!-- @descConfigMap @test -->
 ```
-kubectl describe configmap cfg-parsley
+kubectl describe configmap cfg-french
 ```
 
 A query shows that `tuthello` is still using
@@ -61,7 +61,8 @@ tut_deleteRandomPod
 sleep 2
 ```
 
-Repeat this query ten or so times to hit different pods:
+Repeat this query enough times to hit all pods
+shows emit both a _Bonjour_ and a _Bienvenue_:
 
 <!-- @tryQuery  -->
 ```

@@ -12,7 +12,7 @@ disposable directory:
 
 <!-- @defineIt @env @test -->
 ```
-export TUT_DIR=$TMPDIR/k8s_config_tutorial
+export TUT_DIR=$HOME/k8s_config_tutorial
 ```
 
 <!-- @optionallyClearIt @test -->
@@ -33,7 +33,6 @@ Cleanup is just
 > rm -rf $TUT_DIR
 > ```
 
-which your OS will eventually do on its own.
 
 ## Tutorial error handling
 
@@ -66,25 +65,26 @@ function tut_restoreErrorOnExit {
 }
 
 function tut_retry {
-  local code=0
-  local i=$1
+  local limit=$1
+  local k=1
   shift
   local cmd="$@"
   set +e
-  while [ $i -gt 0 ]; do
+  while [ $k -le $limit ]; do
     $cmd
-    code=$?
+    local code=$?
     if [ $code -eq 0 ]; then
       tut_restoreErrorOnExit
       return
     fi
-    i=$((i - 1))
-    if [ $i -gt 0 ]; then
-      echo "Exit status $code - retrying..."
+    printf "Attempt $k/$limit exitted with $code.  "
+    k=$((k + 1))
+    if [ $k -le $limit ]; then
+      echo "Retrying..."
       sleep 2;
     fi
   done
-  echo Failed with ${code}: $cmd
+  printf "\nFailed: $cmd \n"
   tut_restoreErrorOnExit
   /bin/false # Fail.
 }

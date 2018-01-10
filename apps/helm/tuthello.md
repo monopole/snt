@@ -131,7 +131,7 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
 data:
-  altGreeting: "{{ .Values.greeting }}"
+  altGreeting: "{{ .Values.altGreeting }}"
   enableRisky: "{{ .Values.enableRisk }}"
 EOF
 ```
@@ -158,10 +158,11 @@ EOF
 
 The remaining two files hold the differences.
 
+This is what we'll use to initialize production:
 <!-- @makeProductionValues @test -->
 ```
-cat << EOF >$TUT_DIR/tuthello/production.yaml
-greeting: "Production Hello"
+cat << EOF >$TUT_DIR/tuthello/release-1.yaml
+altGreeting: "你好"
 enableRisk: "false"
 EOF
 ```
@@ -171,8 +172,8 @@ and enablement of the risky feature:
 
 <!-- @makeStagingValues @test -->
 ```
-cat << EOF >$TUT_DIR/tuthello/staging.yaml
-greeting: "Staging Hello"
+cat << EOF >$TUT_DIR/tuthello/release-2.yaml
+altGreeting: "Ciao!"
 enableRisk: "true"
 image:
   tag: 2

@@ -1,6 +1,7 @@
 # Clean up
 
-For optional entertainment, wipe the entire namespace:
+Optionally, wipe the entire namespace (merely to show
+that this is possible):
 
 <!-- @deleteNamespace @test -->
 ```
@@ -19,11 +20,11 @@ else
 fi
 ```
 
-Recover diskspace - or just wait, the system
-will reclaim it eventually:
+Optionally, delete the tutorial work directory.
 
-> ```
-> if [ -n "$TUT_DIR" ]; then
->  rm -rf $TUT_DIR
-> fi
-> ```
+<!-- @wipeDirectory -->
+```
+if [ -d "$TUT_DIR" ]; then
+  rm -rf $TUT_DIR
+fi
+```

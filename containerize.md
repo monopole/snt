@@ -1,14 +1,14 @@
 # Containerize the Server
 
-> _Learn to put a Go server into a container._
+> _Put a Go server into a container._
 >
 > _Time: 3m_
 
 k8s exclusively runs containers (tar balls with metadata),
 pulling them as needed from a container registry.
 
-The following puts `tuthello` into a container, and
-in turn puts the container into a registry.
+The following puts `tuthello` into a container,
+then puts the container into a registry.
 
  * If you're using minikube for your cluster, you'll use a
    registry built into minikube.
@@ -29,16 +29,16 @@ in kubernetes pod definitions.
 
 <!-- @defineImageTag @env @test -->
 ```
-export TUT_IMG_TAG=tuthello
+export TUT_IMG_REPO=tuthello
 if tut_isMinikube; then
   # use local registry
   eval $($MINIKUBE_HOME/minikube docker-env)
   echo "DOCKER_HOST=$DOCKER_HOST"
 else
   # Use GCR, which requires a longer tag.
-  TUT_IMG_TAG=gcr.io/$TUT_PROJECT_ID/tuthello
+  TUT_IMG_REPO=gcr.io/$TUT_PROJECT_ID/tuthello
 fi
-echo "TUT_IMG_TAG=$TUT_IMG_TAG"
+echo "TUT_IMG_REPO=$TUT_IMG_REPO"
 ```
 
 > _TODO_: maybe use non-VM but local registry via `minikube start --insecure-registry`
@@ -51,8 +51,8 @@ a previous pass through these commands.
 <!-- @rmDockerImages -->
 ```
 # docker rm $(docker stop $(docker ps -aq))
-docker rmi $TUT_IMG_TAG:1
-docker rmi $TUT_IMG_TAG:2
+docker rmi $TUT_IMG_REPO:1
+docker rmi $TUT_IMG_REPO:2
 ```
 
 See what processes are running in the container.
@@ -68,7 +68,7 @@ docker ps -a
 <!-- @funcCreateImage @env @test -->
 ```
 function tut_buildDockerImage {
-  local tag=$TUT_IMG_TAG:$1  # Add version to tag
+  local tag=$TUT_IMG_REPO:$1  # Add version to tag
   local dockerFile=$TUT_DIR/src/Dockerfile
   cat <<EOF >$dockerFile
 FROM scratch
@@ -94,8 +94,8 @@ Sanity check the container image by running it:
 
 <!-- @runDockerImage @test -->
 ```
-docker run -d -p 8080:8080 $TUT_IMG_TAG:1
-docker ps | grep $TUT_IMG_TAG
+docker run -d -p 8080:8080 $TUT_IMG_REPO:1
+docker ps | grep $TUT_IMG_REPO
 
 if tut_isMinikube; then
   host=$($MINIKUBE_HOME/minikube ip)
@@ -141,8 +141,8 @@ Optionally start by deleting old images (if any):
 <!-- @deleteImages -->
 ```
 if ! tut_isMinikube; then
-  gcloud --quiet container images delete $TUT_IMG_TAG:1
-  gcloud --quiet container images delete $TUT_IMG_TAG:2
+  gcloud --quiet container images delete $TUT_IMG_REPO:1
+  gcloud --quiet container images delete $TUT_IMG_REPO:2
 fi
 ```
 
@@ -155,8 +155,8 @@ Then upload:
 <!-- @uploadImages -->
 ```
 if ! tut_isMinikube; then
-  gcloud docker -- push $TUT_IMG_TAG:1
-  gcloud docker -- push $TUT_IMG_TAG:2
+  gcloud docker -- push $TUT_IMG_REPO:1
+  gcloud docker -- push $TUT_IMG_REPO:2
 fi
 ```
 
@@ -169,25 +169,21 @@ if ! tut_isMinikube; then
   gcloud container images list \
     --repository gcr.io/$TUT_PROJECT_ID
   echo "--------------------"
-  gcloud container images list-tags $TUT_IMG_TAG
+  gcloud container images list-tags $TUT_IMG_REPO
   echo "--------------------"
   gcloud container images list-tags \
-    --format='get(digest)' $TUT_IMG_TAG
+    --format='get(digest)' $TUT_IMG_REPO
   )
 fi
 ```
 
 ## Cleanup
 
-The container images and source code in `$TUT_DIR` are no longer needed:
+The images are now in the registry.
 
-<!-- @lsSrc @test -->
-```
-ls -C1 $TUT_DIR/src
-```
+Optionally remove the container images and source code in `$TUT_DIR`.
 
 <!-- @removeSrc @test -->
 ```
 rm -rf $TUT_DIR/src
-ls $TUT_DIR
 ```

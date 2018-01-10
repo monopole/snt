@@ -34,48 +34,51 @@ Each instance will need
    to change in the deployment.
 
 Labels will be used to partition instance resources.
-The tradeoffs between using labels and namespaces to
+The differences between using labels and namespaces to
 partition resources was discussed
-[earlier](/review/namespaces) (e.g., as the instance
-count increases, using namespaces make less sense).
+[earlier](/review/namespaces).
 
 The deployment and service resources will be almost
 identical, so we'll use a cheap template to make them.
 
 ### Cheap templating for deployment and service
 
-Write two files.  One will serve as a template for a
-deployment, the other as a template for a service.
+Wipe the app directory:
 
-The image tag is immediately "templated" into the
-former via the env var `TUT_IMG_TAG`, to accomodate
+<!-- @wipeAppDir @test -->
+```
+/bin/rm $TUT_APP_DIR/*
+```
+
+Now write the deployment and service resource files.
+
+The image repo path is "templated" into the
+former via the env var `TUT_IMG_REPO`, to accomodate
 minikube vs GKE differences.
 
-<!-- @clearDirectory @test -->
-```
-/bin/rm -rf $TUT_DIR/raw
-mkdir -p $TUT_DIR/raw
-```
+The deployment and service defined below are completely
+functional - one could immediately `kubectl apply` them
+to a cluster.
 
 <!-- @writeDeploymentTemplate @test -->
 ```
-cat <<EOF >$TUT_DIR/raw/dep-instance.yaml
+cat <<EOF >$TUT_APP_DIR/dep-instance.yaml
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: tuthello-myInst
+  name: tuthello-theInst
 spec:
   replicas: 3
   template:
     metadata:
-      name: tuthello-myInst
+      name: tuthello-theInst
       labels:
         app: tuthello
-        instance: myInst
+        instance: theInst
     spec:
       containers:
       - name: cnt-carrot
-        image: $TUT_IMG_TAG:imgVersion
+        image: $TUT_IMG_REPO:theImgVersion
         command: ["/tuthello",
                   "--port=8080",
                   "--enableRiskyFeature=\$(ENABLE_RISKY)"]
@@ -92,27 +95,27 @@ spec:
         - name: ALT_GREETING
           valueFrom:
             configMapKeyRef:
-              name: tuthello-cfgmap
+              name: tuthello-theConfigMap
               key: altGreeting
         - name: ENABLE_RISKY
           valueFrom:
             configMapKeyRef:
-              name: tuthello-cfgmap
+              name: tuthello-theConfigMap
               key: enableRisky
 EOF
 ```
 
 <!-- @writeServiceTemplate @test -->
 ```
-cat <<EOF >$TUT_DIR/raw/svc-instance.yaml
+cat <<EOF >$TUT_APP_DIR/svc-instance.yaml
 kind: Service
 apiVersion: v1
 metadata:
-  name: tuthello-myInst
+  name: tuthello-theInst
 spec:
   selector:
     app: tuthello
-    instance: myInst
+    instance: theInst
   type: LoadBalancer
   ports:
   - protocol: TCP
@@ -123,10 +126,14 @@ EOF
 
 ### Make the configMaps
 
-Write two files, representing _most_ of the differences
-between a first release of the app and a second
-release.  The remaining diffence is _the version of the
-underlying binary_.
+Write two files (one configMap to each), representing
+most of the difference between a first release of the
+app and a second release.
+
+The remaining diffence is _the version of the
+underlying binary_, specified in the
+`containers.image:` field of the deployment spec, a
+field not configurable via a configMap.
 
 These maps are just data, so they aren't given instance
 labels.  They do get app labels, since they are data
@@ -134,7 +141,7 @@ for `tuthello`.
 
 <!-- @mapForRelease1 @test -->
 ```
-cat <<EOF >$TUT_DIR/raw/cfg-release-1.yaml
+cat <<EOF >$TUT_APP_DIR/cfg-release-1.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -149,7 +156,7 @@ EOF
 
 <!-- @mapForRelease2 @test -->
 ```
-cat <<EOF >$TUT_DIR/raw/cfg-release-2.yaml
+cat <<EOF >$TUT_APP_DIR/cfg-release-2.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -162,18 +169,19 @@ data:
 EOF
 ```
 
-For use in concatenating YAML, make a tiny separator file:
+For use in concatenating YAML, make a small separator
+file:
 
 
 <!-- @mapForRelease2 @test -->
 ```
-echo '---' >$TUT_DIR/raw/sep.yaml
+echo '---' >$TUT_APP_DIR/sep.yaml
 ```
 
 The resource templates and configMaps are in place:
 <!-- @list @test -->
 ```
-ls -C1 $TUT_DIR/raw
+ls -C1 $TUT_APP_DIR
 ```
 
 Next configure the cluster.

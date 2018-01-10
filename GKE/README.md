@@ -5,17 +5,16 @@
 > _Time: 5min (assuming prerequisites)_
 
 [minikube]: /hosting/minikube
+[GKE]: https://cloud.google.com/kubernetes-engine/
 
-__This is a drop-in replacement for the
-[minikube] section, to let one run the tutorial
-on Google Kubernetes Engine rather than minikube.__
+> __This is a drop-in replacement for the
+> [minikube] section.  Use it to run the tutorial
+> on [Google Kubernetes Engine][GKE] rather than on minikube.__
 
-__Go to [confirmation](/hosting/confirm) if you
-just set up a minikube cluster and came here by mistake.__
-
-__Warning: Not under CI/CD testing (due to auth and billing issues).__
+__Warning__: _Not under CI/CD testing yet, due to auth and billing issues._
 
 ## Prerequisites
+
 
 [gcloud downloads]: https://cloud.google.com/sdk/downloads#versioned
 [gcloud]: https://cloud.google.com/sdk/

@@ -5,10 +5,11 @@
 > _Time: 5min_
 
 
-__Skip this if using minikube - this section about
-exposing a service from GKE to the outside world__
+> __Skip this if using minikube - this section about
+> exposing a service from GKE to the outside world__
 
-__Warning: Not under CI/CD testing (due to auth and billing issues).__
+
+__Warning__: _Not under CI/CD testing yet due to auth and billing issues._
 
 The loadbalancer defined in the
 [services](/review/services) section is [not designed]

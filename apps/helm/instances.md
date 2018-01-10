@@ -41,7 +41,7 @@ helm install $TUT_DIR/potato --name production
 
 Print the difference between the two service instances:
 
-<!-- @diffService @test -->
+<!-- @diffService  -->
 ```
 diff \
   <(kubectl describe service production-potato) \

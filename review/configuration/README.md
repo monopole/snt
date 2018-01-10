@@ -14,9 +14,7 @@ variables or command line arguments.
 The following inject values into the container via a
 [ConfigMap]; it's a named set of key:value pairs.
 
-Create a map called _cfg-parsley_ to continue the
-pattern of using _resourceHint-vegetable_ to make names
-stand out from overused terms like service, release, etc.
+Create a map called _cfg-french_:
 
 <!-- @applyConfigMap @test -->
 ```
@@ -24,7 +22,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cfg-parsley
+  name: cfg-french
 data:
   altGreeting: "Bonjour"
   enableRisky: "false"
@@ -33,16 +31,24 @@ EOF
 
 <!-- @descConfigMap @test -->
 ```
-kubectl describe configmap cfg-parsley
+kubectl describe configmap cfg-french
+```
+
+Create a directory to store _app_ resources:
+
+<!-- @defineAppDir @test -->
+```
+export TUT_APP_DIR=$TUT_DIR/tutApp
+/bin/rm -rf $TUT_APP_DIR
+mkdir -p $TUT_APP_DIR
 ```
 
 Modify the deployment so that it
-uses `cfg-parsley`:
+uses `cfg-french`:
 
 <!-- @writeDepWithMap @test -->
 ```
-mkdir -p $TUT_DIR/raw
-cat <<EOF >$TUT_DIR/raw/dep-kale.yaml
+cat <<EOF >$TUT_APP_DIR/dep-kale.yaml
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -56,7 +62,7 @@ spec:
     spec:
       containers:
       - name: cnt-carrot
-        image: $TUT_IMG_TAG:1
+        image: $TUT_IMG_REPO:1
         # --port value must match containerPort
         command: ["/tuthello",
                   "--port=8080",
@@ -74,12 +80,12 @@ spec:
         - name: ALT_GREETING
           valueFrom:
             configMapKeyRef:
-              name: cfg-parsley
+              name: cfg-french
               key: altGreeting
         - name: ENABLE_RISKY
           valueFrom:
             configMapKeyRef:
-              name: cfg-parsley
+              name: cfg-french
               key: enableRisky
 EOF
 ```
@@ -87,7 +93,7 @@ EOF
 Create it:
 <!-- @createDep @test -->
 ```
-cat $TUT_DIR/raw/dep-kale.yaml | kubectl apply -f -
+cat $TUT_APP_DIR/dep-kale.yaml | kubectl apply -f -
 ```
 
 Describe it to see the new _Environment_ section:

@@ -23,11 +23,11 @@ template errors:
 helm install \
     --dry-run --debug \
     --name production \
-    -f $TUT_DIR/tuthello/production.yaml \
+    -f $TUT_DIR/tuthello/release-1.yaml \
     $TUT_DIR/tuthello
 ```
 
-If the above fails, fix your templates.
+If the above fails, fix your Go templates.
 
 ## Run the instances
 
@@ -37,7 +37,7 @@ Install the production instance:
 ```
 helm install \
     --name production \
-    -f $TUT_DIR/tuthello/production.yaml \
+    -f $TUT_DIR/tuthello/release-1.yaml \
     $TUT_DIR/tuthello
 ```
 
@@ -46,17 +46,68 @@ Install the staging instance:
 ```
 helm install \
     --name staging \
-    -f $TUT_DIR/tuthello/staging.yaml \
+    -f $TUT_DIR/tuthello/release-2.yaml \
     $TUT_DIR/tuthello
 ```
 
-Query them:
+[before]: review/configuration/lifecycle
 
-<!-- @queryInstances @test -->
+Confirm the existence of the two instances
+by doing the same queries used [before]:
+
+<!-- @queryInstances1 @test -->
+```
+tut_query tuthello-production mango
+tut_query tuthello-staging papaya
+```
+## Upgrade and rollback
+
+[before]: review/configuration/lifecycle
+
+As [before], assume QA certifies the release-2
+configuration on the staging instance, meaning
+it's time to push release-2 to production:
+
+<!-- @helmUpgrade @test -->
+```
+helm upgrade production \
+    -f $TUT_DIR/tuthello/release-2.yaml \
+    $TUT_DIR/tuthello
+```
+
+Confirm that the behavior of the instances is identical:
+
+<!-- @queryInstances2 @test -->
 ```
 tut_query tuthello-production mango
 tut_query tuthello-staging papaya
 ```
 
-These queries are the same as those done in
-[/review/configuration/instances]([/review/configuration/instances].)
+Again assume our unhappy user found a bug, and we have
+to do a rollback:
+
+<!-- @helmRollback @test -->
+```
+helm rollback production 1
+```
+
+Did the rollback work?  Try this a few times:
+
+<!-- @queryInstances3 @test -->
+```
+tut_query tuthello-production mango
+```
+
+Helm's _tiller_ retains information about these
+changes.
+
+What the operator does with source control to track
+these changes is up to them.
+
+That all; clean up:
+
+<!-- @cleanup @test -->
+```
+helm delete --purge staging || true
+helm delete --purge production || true
+```

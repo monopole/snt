@@ -1,0 +1,4 @@
+manifest
+resources
+instances
+lifecycle
