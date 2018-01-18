@@ -7,12 +7,15 @@
 Global shell variables and functions
 start with `TUT_` or `tut_` (an informal namespace).
 
-All file system use is confined to the following
-disposable directory:
+All file system use is confined to the
+disposable directory defined in `TUT_DIR`:
 
 <!-- @defineIt @env @test -->
 ```
-export TUT_DIR=$HOME/k8s_config_tutorial
+export TUT_DIR=$TMPDIR/k8s_config_tutorial
+export TUT_TMP=$TUT_DIR/tmp
+export TUT_BIN=$TUT_DIR/bin
+PATH=$TUT_BIN:$PATH
 ```
 
 <!-- @optionallyClearIt @test -->
@@ -24,7 +27,7 @@ fi
 
 <!-- @makeIt @test -->
 ```
-mkdir -p $TUT_DIR
+mkdir -p $TUT_TMP $TUT_BIN
 ```
 
 Cleanup is just
@@ -33,19 +36,19 @@ Cleanup is just
 > rm -rf $TUT_DIR
 > ```
 
+which your OS will eventually do on its own.
 
 ## Tutorial error handling
 
 In CI/CD [testing](/appendix/testing) of this tutorial,
 one wants a command block error to cause process exit
 with a reportable error code.  In interactive use, one
-obviously doesn't want that (it closes the terminal).
+obviously doesn't want that because it closes the
+terminal.
 
 For the benefit of either scenario, the following
 stores the initial _exit on error_ behavior in a
 shell variable and defines a function to reset it.
-The latter is used in a retry function that provides
-some flexibility throughout the tutorial.
 
 <!-- @exitOnErrStatus @env @test -->
 ```
@@ -63,12 +66,24 @@ function tut_restoreErrorOnExit {
     set +e
   fi
 }
+```
+## Retry
 
+Clust manipulation commands are asynchronous; they
+don't wait for the cluster to 'obey' the command before
+returning.
+
+Subsequent actions may need to wait, or more robustly,
+be prepared to retry.  The following count-limited
+retry function is used through the tutorial.
+
+<!-- @funcRetry @env @test -->
+```
 function tut_retry {
   local limit=$1
-  local k=1
   shift
   local cmd="$@"
+  local k=1
   set +e
   while [ $k -le $limit ]; do
     $cmd

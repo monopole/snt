@@ -11,7 +11,7 @@ Launch an instance of potato, naming it _staging_:
 
 <!-- @installStaging @test -->
 ```
-helm install $TUT_DIR/potato --name staging
+helm install $TUT_TMP/potato --name staging
 ```
 
 As noted earlier, the `potato/templates` directory has
@@ -36,7 +36,7 @@ Install one more instance, calling it _production_:
 
 <!-- @installProduction @test -->
 ```
-helm install $TUT_DIR/potato --name production
+helm install $TUT_TMP/potato --name production
 ```
 
 Print the difference between the two service instances:

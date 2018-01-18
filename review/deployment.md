@@ -39,10 +39,7 @@ later editting, instead of piping it directly to
 
 <!-- @deploymentYaml @test -->
 ```
-export TUT_APP_DIR=$TUT_DIR/tutApp
-mkdir -p $TUT_APP_DIR
-
-cat <<EOF >$TUT_APP_DIR/dep-kale.yaml
+cat <<EOF >$TUT_TMP/dep-kale.yaml
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -81,7 +78,7 @@ Create the deployment:
 
 <!-- @createDeployment @test -->
 ```
-cat $TUT_APP_DIR/dep-kale.yaml | kubectl apply -f -
+cat $TUT_TMP/dep-kale.yaml | kubectl apply -f -
 ```
 
 Queries should work (again):
@@ -103,7 +100,7 @@ image from version 1 of `tuthello` to version 2:
 
 <!-- @applyUpgrade @test -->
 ```
-cat $TUT_APP_DIR/dep-kale.yaml |\
+cat $TUT_TMP/dep-kale.yaml |\
     sed 's/:1/:2/' |\
     kubectl apply -f -
 ```

@@ -14,12 +14,12 @@ Call it _potato_:
 
 <!-- @makeSample @test -->
 ```
-helm create $TUT_DIR/potato
+helm create $TUT_TMP/potato
 ```
 
 <!-- @listFiles @test -->
 ```
-find $TUT_DIR/potato
+find $TUT_TMP/potato
 ```
 
 ## The Chart
@@ -33,7 +33,7 @@ well.
 
 <!-- @showChart @test -->
 ```
-cat $TUT_DIR/potato/Chart.yaml
+cat $TUT_TMP/potato/Chart.yaml
 ```
 
 ## Templates
@@ -50,13 +50,13 @@ The templates hold the commonality instances will share.
 <!-- @showService @test -->
 ```
 clear
-cat $TUT_DIR/potato/templates/service.yaml
+cat $TUT_TMP/potato/templates/service.yaml
 ```
 
 <!-- @showDeployment @test -->
 ```
 clear
-cat $TUT_DIR/potato/templates/deployment.yaml
+cat $TUT_TMP/potato/templates/deployment.yaml
 ```
 
 ## Values
@@ -67,7 +67,7 @@ make instances different.
 <!-- @showValues @test -->
 ```
 clear
-cat $TUT_DIR/potato/values.yaml
+cat $TUT_TMP/potato/values.yaml
 ```
 
 Installation of an app via helm means using these

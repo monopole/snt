@@ -8,14 +8,14 @@
 
 [mdrip]: https://github.com/monopole/mdrip
 
-[mdrip] rips command blocks from markdown for execution.
+Tutorial testing uses [mdrip] to rip command blocks
+from markdown for execution.
 
 <!-- @installMdrip -->
 ```
 GOBIN=$TMPDIR go install github.com/monopole/mdrip
 alias mdrip=$TMPDIR/mdrip
 ```
-
 
 The tutorial content lives on github.
 It's convenient for what follows to explicitly

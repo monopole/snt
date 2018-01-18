@@ -34,21 +34,23 @@ EOF
 kubectl describe configmap cfg-french
 ```
 
-Create a directory to store _app_ resources:
+Create a directory to store some resource files
+that will be editted shortly:
 
-<!-- @defineAppDir @test -->
+<!-- @mkTmpAppDir @test -->
 ```
-export TUT_APP_DIR=$TUT_DIR/tutApp
-/bin/rm -rf $TUT_APP_DIR
-mkdir -p $TUT_APP_DIR
+export TUT_TMP=$TUT_DIR/tmp
+/bin/rm -rf $TUT_TMP
+mkdir -p $TUT_TMP
 ```
 
-Modify the deployment so that it
-uses `cfg-french`:
+Re-create the deployment [used
+earlier](/review/deployment) so that it uses
+`cfg-french`:
 
 <!-- @writeDepWithMap @test -->
 ```
-cat <<EOF >$TUT_APP_DIR/dep-kale.yaml
+cat <<EOF >$TUT_TMP/dep-kale.yaml
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -90,10 +92,9 @@ spec:
 EOF
 ```
 
-Create it:
 <!-- @createDep @test -->
 ```
-cat $TUT_APP_DIR/dep-kale.yaml | kubectl apply -f -
+cat $TUT_TMP/dep-kale.yaml | kubectl apply -f -
 ```
 
 Describe it to see the new _Environment_ section:

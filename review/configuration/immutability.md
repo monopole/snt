@@ -45,12 +45,11 @@ Write a function to change the configMap:
 <!-- @funcSwapAndApply @test -->
 ```
 function tut_swapAndApply {
-  cat $TUT_APP_DIR/dep-kale.yaml |\
+  cat $TUT_TMP/dep-kale.yaml |\
     sed "s/$1/$2/" |\
     kubectl apply -f -
 }
 ```
-
 
 Apply the change:
 

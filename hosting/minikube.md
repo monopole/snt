@@ -37,9 +37,6 @@ export MINIKUBE_WANTREPORTERRORPROMPT=false
 # See https://github.com/kubernetes/minikube/
 #        blob/master/cmd/minikube/cmd/start.go#L315
 export CHANGE_MINIKUBE_NONE_USER=true
-
-export TUT_BIN=$TUT_DIR/bin
-PATH=$TUT_BIN:$PATH
 ```
 
 ## Clean up VMs
@@ -132,7 +129,6 @@ ready to talk to it.
 <!-- @downloadKubectl @env @test -->
 ```
 function tut_installKubectl {
-  mkdir -p $TUT_BIN
   local apis=https://storage.googleapis.com
   local version=$(curl -s \
       $apis/kubernetes-release/release/stable.txt)
@@ -167,7 +163,9 @@ then
 fi
 ```
 
-Start minikube, piping download progress meter to /dev/null:
+Start minikube, piping download progress meter to
+`/dev/null`:
+
 <!-- @startMkCluster @test -->
 ```
 $MINIKUBE_HOME/minikube \

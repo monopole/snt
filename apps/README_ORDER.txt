@@ -1,3 +1,2 @@
 instances
-helm
-kinflate
+examples

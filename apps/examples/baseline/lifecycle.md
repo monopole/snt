@@ -1,7 +1,6 @@
-# Instance lifecyle
+# Instance lifecycle
 
-> _Create instances, perform an upgrade, and
-> delete them._
+> _Create instances, then do an upgrade and a rollback._
 >
 > _Time: 2m_
 
@@ -35,7 +34,7 @@ Apply the resources to the cluster to create the instances:
 <!-- @renderProduction @test -->
 ```
 # renderProduction script
-pushd $TUT_APP_DIR
+pushd $TUT_BASELINE
 cat dep-instance.yaml sep.yaml svc-instance.yaml |\
   tut_renderRelease1 production |\
   kubectl apply -f -
@@ -45,7 +44,7 @@ popd
 <!-- @renderStaging @test -->
 ```
 # renderStaging script
-pushd $TUT_APP_DIR
+pushd $TUT_BASELINE
 cat dep-instance.yaml sep.yaml svc-instance.yaml |\
   tut_renderRelease2 staging |\
   kubectl apply -f -
@@ -57,8 +56,8 @@ apply them:
 
 <!-- @makeServices @test -->
 ```
-kubectl apply -f $TUT_APP_DIR/cfg-release-1.yaml
-kubectl apply -f $TUT_APP_DIR/cfg-release-2.yaml
+kubectl apply -f $TUT_BASELINE/cfg-release-1.yaml
+kubectl apply -f $TUT_BASELINE/cfg-release-2.yaml
 ```
 
 The order in which these resources hit the cluster
@@ -127,7 +126,7 @@ Modify the _renderProduction_ script and run it:
 <!-- @renderProduction @test -->
 ```
 # renderProduction script (modified)
-pushd $TUT_APP_DIR
+pushd $TUT_BASELINE
 cat dep-instance.yaml sep.yaml svc-instance.yaml |\
   tut_renderRelease2 production |\
   kubectl apply -f -
@@ -215,5 +214,3 @@ Observations
  * The configMap cannot help with non-container
    aspects of app instance configuration like resource
    names, labels and port specifications.
-
-Much more on app instances in the next section.

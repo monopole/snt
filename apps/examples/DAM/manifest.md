@@ -15,16 +15,20 @@ mkdir -p $TUT_DAM/instance/staging
 mkdir -p $TUT_DAM/instance/production
 ```
 
-The top level directory, here called `tuthello_dam`, contains the subdirectories
-`manifest` and `instances`.
+The top level directory, here called `tuthello_dam`,
+contains the subdirectories `manifest` and `instances`.
 
-The manifest directory contains the manifest file with the fixed name
-`Kube-manifest.yaml`.  It has the fields one would expect in a manifest -
-description, version, maintainer, etc.
+The manifest directory contains the manifest file with
+the fixed name
+
+> `Kube-manifest.yaml`
+
+It has the fields one would expect in a manifest - description, version,
+maintainer, etc.
 
 [k8s API style]: https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/#required-fields
 
-The file also follows [k8s API style], defining
+The manifest follows [k8s API style], defining
 
  * apiVersion - which version of the k8s API is used to create this object
  * kind - the object type
@@ -40,14 +44,14 @@ kind: Package
 metadata:
   name: tuthello
 
-description: Mungegithub package
-keywords: [github, bot, kubernetes]
+description: Tuthello offers greetings as a service.
+keywords: [github, kubernetes]
 appVersion: 0.1.0
 
-home: https://github.com/monopole/snt
+home: https://github.com/monopole/doesNotExistYet
 
 sources:
-- https://github.com/monopole/snt
+- https://github.com/monopole/tbd
 
 icon: https://www.pexels.com/photo/nature-summer-yellow-petals-36728/
 
@@ -58,8 +62,10 @@ maintainers:
 
 resources:
 - deployment.yaml
+- service.yaml
 
 EOF
 ```
 
-Next to this file (as siblings in the `manifest` directory) are the app's resources.
+Next to this file (as siblings in the `manifest`
+directory) are the app's base resources.

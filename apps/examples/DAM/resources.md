@@ -10,16 +10,14 @@ cluster to create working services.
 
 The difference is
 
- * The file names are even more generic. The name
-   matches the kind - e.g. a _deployment_ is defined in
-   a file called `deployment.yaml`.  The file names
-   could be anything, e.g. vegetables, but its simplest
-   to match the kinds.
+ * The file names are even more generic, named simply
+   after the single k8s resource (_deployment_,
+   _service_, etc.) they define.
 
  * The values in the file lack special strings
    (_theInst_, _theConfigMap_, _theImgVersion_) that
-   were used before as _sed_ replacement targets to
-   generate the instances.
+   were used before as _sed_ targets to generate unique
+   instances.
 
 [GCR]: https://cloud.google.com/container-registry/
 
@@ -29,6 +27,7 @@ the way to writing the file, appears here (as before)
 soley to let this let this tutorial work with either a local
 container registry or [GCR].
 
+
 <!-- @writeDeploymentTemplate @test -->
 ```
 cat <<EOF >$TUT_DAM/manifest/deployment.yaml
@@ -36,20 +35,16 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: tuthello
-  labels:
-    app: tuthello
 spec:
   replicas: 3
   template:
     metadata:
-      name: tuthello
       labels:
         app: tuthello
-        instance: theInst
     spec:
       containers:
       - name: cnt-carrot
-        image: $TUT_IMG_REPO:theImgVersion
+        image: $TUT_IMG_REPO:1
         command: ["/tuthello",
                   "--port=8080",
                   "--enableRiskyFeature=\$(ENABLE_RISKY)"]
@@ -62,19 +57,22 @@ spec:
             memory: 10Mi
         ports:
         - containerPort: 8080
-        env:
-        - name: ALT_GREETING
-          valueFrom:
-            configMapKeyRef:
-              name: tuthello-theConfigMap
-              key: altGreeting
-        - name: ENABLE_RISKY
-          valueFrom:
-            configMapKeyRef:
-              name: tuthello-theConfigMap
-              key: enableRisky
 EOF
 ```
+
+> ```
+>         env:
+>         - name: ALT_GREETING
+>           valueFrom:
+>             configMapKeyRef:
+>               name: mymap
+>               key: altGreeting
+>         - name: ENABLE_RISKY
+>           valueFrom:
+>             configMapKeyRef:
+>               name: mymap
+>               key: enableRisky
+> ```
 
 <!-- @writeServiceTemplate @test -->
 ```
@@ -82,11 +80,10 @@ cat <<EOF >$TUT_DAM/manifest/service.yaml
 kind: Service
 apiVersion: v1
 metadata:
-  name: tuthello-theInst
+  name: tuthello
 spec:
   selector:
     app: tuthello
-    instance: theInst
   type: LoadBalancer
   ports:
   - protocol: TCP

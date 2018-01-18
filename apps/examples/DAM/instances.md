@@ -15,15 +15,15 @@ cat <<'EOF' >$TUT_DAM/instance/staging/Kube-manifest.yaml
 apiVersion: manifest.k8s.io/v1alpha1
 kind: Package
 metadata:
-  name: staging-tuthello
+  name: makes-staging-tuthello
+
 description: Tuthello configured for staging
+
 namePrefix: staging-
 
-# Labels to add to all objects and selectors.
 objectLabels:
-  app: tuthello
+  instance: staging
   org: acmeCorporation
-  repo: yadayada
 
 objectAnnotations:
   note: Clear is better than clever.
@@ -32,15 +32,29 @@ resources:
 - ../../manifest
 
 patches:
-- deployment.yaml
-
-configmaps:
-- type: env
-  namePrefix: app-env
-  file: app.env
+# - release-1.yaml
+# - deployment.yaml
+# - service.yaml
 
 EOF
 ```
+
+<!-- @mapForRelease1 @test -->
+```
+cat <<EOF >$TUT_DAM/instance/staging/release-1.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mymap
+  labels:
+    app: tuthello
+data:
+  altGreeting: "你好"
+  enableRisky: "false"
+EOF
+```
+
+## TODO: Here be dragons
 
 Define a patch, creating a specific instance to merge with base resources.
 

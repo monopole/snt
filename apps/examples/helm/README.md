@@ -14,19 +14,19 @@ Try the following (or visit the canonical [install doc]):
 
 <!-- @installHelm @test -->
 ```
-apis=https://storage.googleapis.com
-tarball=helm-v2.7.0-linux-amd64.tar.gz
-
-mkdir -p $TUT_DIR/bin
-pushd $TUT_DIR
-curl --fail --location --silent \
-    -o helm.tgz $apis/kubernetes-helm/$tarball
-gunzip <helm.tgz | tar xvf -
-rm helm.tgz
-mv linux-amd64/helm $TUT_DIR/bin
-/bin/rm -rf linux-amd64
-popd
-alias helm=$TUT_DIR/bin/helm
+function tut_installHelm {
+  local tarball=$1
+  local apis=https://storage.googleapis.com
+  pushd $TUT_TMP
+  curl --fail --location --silent \
+      -o helm.tgz $apis/kubernetes-helm/$tarball
+  gunzip <helm.tgz | tar xvf -
+  rm helm.tgz
+  mv linux-amd64/helm $TUT_BIN
+  /bin/rm -rf linux-amd64
+  popd
+}
+tut_installHelm helm-v2.7.0-linux-amd64.tar.gz
 ```
 
 ## Install in the cluster

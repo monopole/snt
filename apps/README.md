@@ -1,5 +1,4 @@
-# Cluster App Configuration
-
+# Cluster Apps
 
 [Google Maps API]: https://enterprise.google.com/maps/products/mapsapi.html
 
