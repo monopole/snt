@@ -9,7 +9,7 @@ helm's linter:
 
 <!-- @lintApp @test -->
 ```
-helm lint $TUT_DIR/tuthello
+helm lint $TUT_HELM/tuthello
 ```
 
 The linter doesn't actually render the templates, so
@@ -23,8 +23,8 @@ template errors:
 helm install \
     --dry-run --debug \
     --name production \
-    -f $TUT_DIR/tuthello/release-1.yaml \
-    $TUT_DIR/tuthello
+    -f $TUT_HELM/tuthello/release-1.yaml \
+    $TUT_HELM/tuthello
 ```
 
 If the above fails, fix your Go templates.
@@ -37,8 +37,8 @@ Install the production instance:
 ```
 helm install \
     --name production \
-    -f $TUT_DIR/tuthello/release-1.yaml \
-    $TUT_DIR/tuthello
+    -f $TUT_HELM/tuthello/release-1.yaml \
+    $TUT_HELM/tuthello
 ```
 
 Install the staging instance:
@@ -46,8 +46,8 @@ Install the staging instance:
 ```
 helm install \
     --name staging \
-    -f $TUT_DIR/tuthello/release-2.yaml \
-    $TUT_DIR/tuthello
+    -f $TUT_HELM/tuthello/release-2.yaml \
+    $TUT_HELM/tuthello
 ```
 
 [before]: review/configuration/lifecycle
@@ -71,8 +71,8 @@ it's time to push release-2 to production:
 <!-- @helmUpgrade @test -->
 ```
 helm upgrade production \
-    -f $TUT_DIR/tuthello/release-2.yaml \
-    $TUT_DIR/tuthello
+    -f $TUT_HELM/tuthello/release-2.yaml \
+    $TUT_HELM/tuthello
 ```
 
 Confirm that the behavior of the instances is identical:

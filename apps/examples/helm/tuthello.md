@@ -24,15 +24,15 @@ directory to hold it all:
 
 <!-- @makeAppDir @test -->
 ```
-export TUT_HELM=$TUT_DIR/tuthello_helm
-mkdir -p $TUT_HELM/templates
+export TUT_HELM=$TUT_DIR/apps/helm
+mkdir -p $TUT_HELM/tuthello/templates
 ```
 
 Next make the manifest, which helm calls a _chart_:
 
 <!-- @makeManifest @test -->
 ```
-cat << EOF >$TUT_HELM/Chart.yaml
+cat << EOF >$TUT_HELM/tuthello/Chart.yaml
 apiVersion: v1
 name: tuthello
 description: A server that says hello.
@@ -47,7 +47,7 @@ helm convention, calling the instance a _release_:
 
 <!-- @makeDeploymentTemplate @test -->
 ```
-cat << EOF >$TUT_HELM/templates/deployment.yaml
+cat << EOF >$TUT_HELM/tuthello/templates/deployment.yaml
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -97,7 +97,7 @@ EOF
 
 <!-- @makeServiceTemplate @test -->
 ```
-cat << EOF >$TUT_HELM/templates/service.yaml
+cat << EOF >$TUT_HELM/tuthello/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -122,7 +122,7 @@ The ConfigMap template will get it's data from helm Values:
 
 <!-- @makeConfigMapTemplate @test -->
 ```
-cat << EOF >$TUT_HELM/templates/configmap.yaml
+cat << EOF >$TUT_HELM/tuthello/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -145,7 +145,7 @@ to extract from the resource template:
 
 <!-- @makeCommonValues @test -->
 ```
-cat << EOF >$TUT_HELM/values.yaml
+cat << EOF >$TUT_HELM/tuthello/values.yaml
 replicaCount: 3
 image:
   repository: tuthello
@@ -162,7 +162,7 @@ The remaining two files hold the differences.
 This is what we'll use to initialize production:
 <!-- @makeProductionValues @test -->
 ```
-cat << EOF >$TUT_HELM/release-1.yaml
+cat << EOF >$TUT_HELM/tuthello/release-1.yaml
 altGreeting: "你好"
 enableRisk: "false"
 EOF
@@ -173,7 +173,7 @@ and enablement of the risky feature:
 
 <!-- @makeStagingValues @test -->
 ```
-cat << EOF >$TUT_HELM/release-2.yaml
+cat << EOF >$TUT_HELM/tuthello/release-2.yaml
 altGreeting: "Ciao!"
 enableRisk: "true"
 image:

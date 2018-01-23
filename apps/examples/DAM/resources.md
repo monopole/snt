@@ -20,10 +20,11 @@ The difference is
    instances.
 
 [GCR]: https://cloud.google.com/container-registry/
+[before]: /apps/examples/baseline/README
 
 The remarkable thing is that there's nothing
 remarkable.  The `$TUT_IMG_REPO` variable, replaced on
-the way to writing the file, appears here (as before)
+the way to writing the file, appears here (as [before])
 soley to let this let this tutorial work with either a local
 container registry or [GCR].
 

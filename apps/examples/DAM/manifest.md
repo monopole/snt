@@ -9,13 +9,13 @@ in a particular directory structure:
 
 <!-- @makeTree @test -->
 ```
-export TUT_DAM=$TUT_DIR/tuthello_dam
+export TUT_DAM=$TUT_DIR/apps/dam/tuthello
 mkdir -p $TUT_DAM/manifest
 mkdir -p $TUT_DAM/instance/staging
 mkdir -p $TUT_DAM/instance/production
 ```
 
-The top level directory, here called `tuthello_dam`,
+The top level directory, here called `tuthello`,
 contains the subdirectories `manifest` and `instances`.
 
 The manifest directory contains the manifest file with

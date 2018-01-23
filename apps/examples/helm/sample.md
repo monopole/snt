@@ -4,7 +4,6 @@
 >
 > _Time: 2m_
 
-
 Helm has a `create` command that makes a directory
 populated with the files necessary to make a helm app.
 The argument to `create` is the name given to the new
@@ -14,12 +13,14 @@ Call it _potato_:
 
 <!-- @makeSample @test -->
 ```
-helm create $TUT_TMP/potato
+export TUT_HELM=$TUT_DIR/apps/helm
+mkdir -p $TUT_HELM
+helm create $TUT_HELM/potato
 ```
 
 <!-- @listFiles @test -->
 ```
-find $TUT_TMP/potato
+find $TUT_HELM/potato
 ```
 
 ## The Chart
@@ -33,7 +34,7 @@ well.
 
 <!-- @showChart @test -->
 ```
-cat $TUT_TMP/potato/Chart.yaml
+cat $TUT_HELM/potato/Chart.yaml
 ```
 
 ## Templates
@@ -50,13 +51,13 @@ The templates hold the commonality instances will share.
 <!-- @showService @test -->
 ```
 clear
-cat $TUT_TMP/potato/templates/service.yaml
+cat $TUT_HELM/potato/templates/service.yaml
 ```
 
 <!-- @showDeployment @test -->
 ```
 clear
-cat $TUT_TMP/potato/templates/deployment.yaml
+cat $TUT_HELM/potato/templates/deployment.yaml
 ```
 
 ## Values
@@ -67,7 +68,7 @@ make instances different.
 <!-- @showValues @test -->
 ```
 clear
-cat $TUT_TMP/potato/values.yaml
+cat $TUT_HELM/potato/values.yaml
 ```
 
 Installation of an app via helm means using these

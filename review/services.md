@@ -140,7 +140,7 @@ function tut_query {
   local path=$2
   # See curl exit codes at
   # https://curl.haxx.se/libcurl/c/libcurl-errors.html
-  tut_retry 5 curl --fail --silent --max-time 3 $addr/$path
+  tut_retry 9 curl --fail --silent --max-time 3 $addr/$path
 }
 ```
 

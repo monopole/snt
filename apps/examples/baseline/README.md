@@ -25,7 +25,7 @@ Make an "app directory" for them:
 
 <!-- @makeAppDir @test -->
 ```
-export TUT_BASELINE=$TUT_DIR/tuthello_baseline
+export TUT_BASELINE=$TUT_DIR/apps/baseline/tuthello
 mkdir -p $TUT_BASELINE
 ```
 
