@@ -33,8 +33,7 @@ To establish context for app configuration, this
 tutorial begins by writing a small server with a
 sufficient number of configurable knobs.  It then runs
 the server through a lifecycle as a cluster app using
-raw k8s, and then moves on to use two higher level
-approaches to cluster apps.
+raw k8s and higher level approaches to cluster apps.
 
 ## Prerequisites
 
@@ -46,12 +45,13 @@ approaches to cluster apps.
 
 [Go], [curl], and [docker].  Command blocks use bash syntax.
 
-__The tutorial is [tested](/testing) on [ubuntu].__
-It's not yet tested on OSX; some commands may require
+The tutorial is [tested](/testing) on [ubuntu].
+It's not yet tested on OSX; some commands will require
 edits due to small bash and coreutil differences.
 
-See the [about](/about) section for instructions on
-using [_tmux_] to speed tutorial flow.
+To copy a block, click the block title (`checkPrerequisites` below)
+or hit _Enter_ (↵).
+A check mark indicates successful copy.
 
 <!-- @checkPrerequisites @env @test -->
 ```

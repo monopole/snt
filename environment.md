@@ -30,13 +30,11 @@ fi
 mkdir -p $TUT_TMP $TUT_BIN
 ```
 
-Cleanup is just
+Post tutorial cleanup is:
 
 > ```
 > rm -rf $TUT_DIR
 > ```
-
-which your OS will eventually do on its own.
 
 ## Tutorial error handling
 
@@ -69,13 +67,13 @@ function tut_restoreErrorOnExit {
 ```
 ## Retry
 
-Clust manipulation commands are asynchronous; they
-don't wait for the cluster to 'obey' the command before
-returning.
+Cluster manipulation commands are asynchronous.
+Subsequent actions may need to wait a bit, or more
+robustly, retry a query that confirms some state has
+been reached.
 
-Subsequent actions may need to wait, or more robustly,
-be prepared to retry.  The following count-limited
-retry function is used through the tutorial.
+The following function adds a retry loop to any
+command.
 
 <!-- @funcRetry @env @test -->
 ```

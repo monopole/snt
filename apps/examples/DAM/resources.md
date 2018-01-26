@@ -61,6 +61,8 @@ spec:
 EOF
 ```
 
+TODO: This is busted awaiting some PR's in kinflate.
+
 > ```
 >         env:
 >         - name: ALT_GREETING

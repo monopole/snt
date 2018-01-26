@@ -17,8 +17,9 @@ serve the content locally with [mdrip]:
 
 <!-- @serveLocally -->
 ```
-GOBIN=/tmp go install github.com/monopole/mdrip
-/tmp/mdrip --mode demo --port 8081 https://github.com/monopole/snt
+GOBIN=$TMPDIR go install github.com/monopole/mdrip
+$TMPDIR/mdrip --mode demo --port 8081 \
+    https://github.com/monopole/snt
 ```
 
 Visit [localhost:8081](http://localhost:8081) to see the material
@@ -26,7 +27,7 @@ presented with a navigation sidebar,
 one-click copying of code blocks,
 and check marks to show completion.
 
-__Hit `?` to see all key bindings.__
+> _Hit `?` to see all key bindings._
 
 ## For an even better experience
 
@@ -47,4 +48,4 @@ Then, with focus constantly in the browser, just hit
 the `Enter` key to succesively execute code blocks in
 `tmux` without using the mouse.
 
-__Hit `?` to see all key bindings.__
+> _Hit `?` to see all key bindings._

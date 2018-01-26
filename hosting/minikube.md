@@ -17,7 +17,6 @@ following uses the virtualbox hypervisor instead.
 
 <!-- @checkPrerequisites @test -->
 ```
-# The CLI client to virtualbox
 tut_checkProgram vboxmanage
 ```
 

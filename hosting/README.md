@@ -16,7 +16,7 @@ portable cloud.
 
 One can obtain machines and do this the [hard way],
 or one can use one of several existing hosted clusters.
-Two choices are offered here.
+Instructions for two of those follow.
 
 ## Host on a laptop
 
@@ -27,7 +27,7 @@ on your laptop.
 It avoids detours into cloud authentication and billing
 issues, and is good long term investment as it lets you
 experiment locally even after you start using corporate
-clouds.
+clouds.  You can do it first, then try a cloud.
 
 It requires installation of the software necessary to
 run VMs on your laptop.
@@ -47,6 +47,3 @@ free cloud credit, many times more than is necessary to
 complete this tutorial.
 
 -> Choose __[GKE](/appendix/GKE)__.
-
-A sensible strategy is first try the tutorial locally
-with minikube, then try it on GKE.
