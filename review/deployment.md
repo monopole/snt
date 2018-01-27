@@ -54,13 +54,6 @@ spec:
       containers:
       - name: cnt-carrot
         image: $TUT_IMG_REPO:1
-        resources:
-          limits:
-            cpu: 100m
-            memory: 10Mi
-          requests:
-            cpu: 100m
-            memory: 10Mi
         ports:
         - containerPort: 8080
 EOF
@@ -71,7 +64,6 @@ pods and that queries are therefore failing:
 <!-- @confirmNoPods -->
 ```
 kubectl delete --all pods
-tut_query svc-eggplant kiwi
 ```
 
 Create the deployment:
@@ -103,15 +95,14 @@ image from version 1 of `tuthello` to version 2:
 cat $TUT_TMP/dep-kale.yaml |\
     sed 's/:1/:2/' |\
     kubectl apply -f -
-```
 
-Optionally watch the rollout.  Queries are still served
-at this time, but they could hit an old or new image.
-
-<!-- @watchRollout @test -->
-```
+# Watch the effects of the apply:
 kubectl rollout status deployment dep-kale
 ```
+
+Queries are served during the rollout,
+but they could hit an old or new image.
+
 
 Confirm the version change; it's in the HTML of the response:
 <!-- @queryService @test -->

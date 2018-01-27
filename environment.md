@@ -12,7 +12,7 @@ disposable directory defined in `TUT_DIR`:
 
 <!-- @defineIt @env @test -->
 ```
-export TUT_DIR=$TMPDIR/k8s_config_tutorial
+export TUT_DIR=$HOME/k8s_config_tutorial
 export TUT_TMP=$TUT_DIR/tmp
 export TUT_BIN=$TUT_DIR/bin
 PATH=$TUT_BIN:$PATH
@@ -90,7 +90,7 @@ function tut_retry {
       tut_restoreErrorOnExit
       return
     fi
-    printf "Attempt $k/$limit exitted with $code.  "
+    printf "Attempt $k/$limit exits with $code.  "
     k=$((k + 1))
     if [ $k -le $limit ]; then
       echo "Retrying..."

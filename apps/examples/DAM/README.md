@@ -1,34 +1,32 @@
 # Declarative Application Management
 
 > _Configure apps using recognizable
-> k8s API types, eschewing complexity._
+> k8s API types._
 >
 > _Time: 5m_
 
-[declarative]: /apps/instances
-
-The preferred approach to managing Kubernetes
-applications is through [declarative] configuration.
-
-Doing so, however, introduces new challenges, such as
-how to reuse common pieces of configuration across
-multiple apps and how to publish partially complete
-configuration for other users to consume.
-
-[predecessors]: https://research.google.com/pubs/pub44843.html
-
-Attempts to address this (both in k8s, and its
-[predecessors]) have used notions of templating,
-inheritance, even Turing-complete configuration
-languages. This adds orthogonal complexity, and
-obscures the native API (if there is one).
 
 [here]: https://goo.gl/T66ZcD
+[baseline]: /apps/examples/baseline
+[helm]: /apps/examples/helm
+
+The set of k8s API types (deployments, services,
+configmaps, etc.), and the notion of _applying_
+instantiations of these types to a cluster, have been
+the two central themes in the previous examples of app
+configuration ([baseline] and [helm]).
 
 Declarative Application Management (DAM), described in
-detail [here], seeks to manage app instances solely
-through declarative techniques that directly use,
-rather than attempt to wrap, the k8s API.
+detail [here], seeks to add value to configuration
+management without _masking or modifying_ these central
+concepts.
+
+It uses literal resources, embracing new declarations
+rather then templating existing ones.  It facilitates
+coupling cluster state changes to version control
+commits.  It encourages forking a configuration,
+customizing it, and rebasing to capture upgrades from
+the original configuration.
 
 ## kinflate
 

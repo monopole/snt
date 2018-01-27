@@ -53,13 +53,6 @@ spec:
         command: ["/tuthello",
                   "--port=8080",
                   "--enableRiskyFeature=\$(ENABLE_RISKY)"]
-        resources:
-          limits:
-            cpu: 100m
-            memory: 10Mi
-          requests:
-            cpu: 100m
-            memory: 10Mi
         ports:
         - containerPort: 8080
         env:

@@ -1,6 +1,6 @@
 # Helm
 
-> _Configure your cluster using Go templates._
+> _Configure your cluster using Go templates and a cluster-resident service._
 >
 > _Time: 8m_
 

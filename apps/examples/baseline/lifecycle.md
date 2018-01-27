@@ -149,18 +149,22 @@ Post-rollout, users start tweeting about some new bug.
 
 Do one of the following:
 
-### Overwrite the apply
+### Declarative:  apply previous state
 
 Just go back up and reapply the commands that put
 production at _v1/release-1_.
 
-Ideally this would be automatically triggered by a `git
-revert` of the change made above to the
-_renderProduction_ script in version control.
+More formally:
 
-### Break-glass emergency imperative
+* Find the version control change to the _renderProduction_ script.
+* Make a reverting change and merge it.
+* This change automatically triggers new run of _renderProduction_.
 
-<!-- @emergencyUndo @test -->
+In this way version control remains the source of truth for the cluster state.
+
+### Imperative: rollout undo command
+
+<!-- @imperativeUndo @test -->
 ```
 kubectl rollout undo deployment tuthello-production
 ```
@@ -172,18 +176,12 @@ Confirm it worked
 tut_query tuthello-production mango
 ```
 
-This command is possible because deployments retain a
-history.
+This command is possible because (at the moment)
+deployment retain a history of their configuration.
 
 This is an _imperative command_ - it's incumbent on the
-operator to go edit files in version control to reflect
-the state of the system.
-
-If the edits are done correctly, any subsequent
-automatic application of the changes will have zero
-effect, harmlessly confirming the change is correct.
-Of course, it would be wise to use `kubectl diff`
-first.
+operator to take the time to retroactively edit files
+in version control to reflect the state of the system.
 
 ### Cleanup
 
@@ -197,7 +195,7 @@ instance at a time:
 kubectl delete all -l instance=production
 kubectl delete all -l instance=staging
 kubectl delete --all services
-kubectl get all  # See everthing marked as terminating.
+kubectl get all # Shows that everything was marked for deletion.
 ```
 
 Observations

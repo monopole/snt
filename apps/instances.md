@@ -14,13 +14,24 @@ These instances must be configured and managed.
 ## Imperative configuration
 
 > _Use imperative commands -_ __kubectl create__,
-> __kubectl run__, __kubectl delete__, _etc. - to get
+> __kubectl run__, __kubectl scale__, _etc. - to get
 > the instances into their desired state._
 
-This works, but has a handoff problem.  If someone
-gives you the keys to the cluster, how do you know
-what's been done?  The only way forward is to query
-things and try to issue more imperative commands.
+Someone new to k8s who has used docker can likely
+guess the result of the following commands:
+
+> ```
+> kubectl run tuthello --image=tuthello
+> kubectl scale --replicas 5 deploy/tuthello
+> ```
+
+These need no YAML files.  Kubernetes tutorials start
+by introducing these familar imperative examples of
+control, and eventually suggest that they be avoided.
+If someone gives you the keys to the cluster, how do
+you what imperative commands have been issued?  The
+only way forward is to query things and try to issue
+more imperative commands.
 
 It's best to eschew imperative commands entirely.
 
@@ -31,21 +42,26 @@ It's best to eschew imperative commands entirely.
 > independently, and use_ __kubectl apply__ _after file
 > changes._
 
-This is much better. There are files that can be stored
-in version control, and the declarative usage described
-(`kubectl apply`) means one need merely _read_ the
-YAML files to understand the state of the cluster.
+This is better. There are files that can be stored in
+version control, and the declarative usage described
+(`kubectl apply`) means one need merely _read_ the YAML
+files, and see lines like
 
-One can verify this state with `kubectl diff`,
-comparing the specification in the files to the actual
-cluster state.
+> ```
+> replicas: 5
+> image: tuthello
+> ```
+
+to understand the state of the cluster.  One can verify
+this state with `kubectl diff`, comparing the
+specification in the files to actual cluster state.
 
 ## The difference that matters
 
 The new problem is that only some small percentage of
 the YAML changes from one instance to the next.
-Duplicating all the YAML introduces room for mistakes and
-makes common changes hard.
+Duplicating all the YAML introduces room for mistakes
+and makes common changes hard.
 
-The following discusses two approaches to solving
-this problem - _helm_ and _kinflate_.
+The following discusses different approaches to solving
+this problem.

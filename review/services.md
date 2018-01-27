@@ -1,6 +1,6 @@
-# Expose the Pod With a Service
+# Services
 
-> _Make pod services available outside the cluster._
+> _A service is a means to find pods as they come and go._
 >
 > _Time: 5m_
 
@@ -9,11 +9,11 @@ crash or be killed, then be reanmimated.
 
 Their cluster IP and port change as they come and go,
 but their k8s _labels_ stay the same.  To reliably
-contact them, one must _select them by label_.
+contact them, one must select them by label.
 
-In k8s, the thing that does this is called a [Service].
-A k8s service is a pod label selector with a _fixed_ IP
-and port.
+In k8s, the thing that does this is called a
+[Service].  A k8s service is a _pod label selector
+with a fixed cluster IP and port_.
 
 [Service]: https://kubernetes.io/docs/concepts/services-networking/service
 

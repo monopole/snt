@@ -13,6 +13,7 @@ from markdown for execution.
 
 <!-- @installMdrip -->
 ```
+if [ -z ${TMPDIR+x} ]; then TMPDIR=/tmp; fi
 GOBIN=$TMPDIR go install github.com/monopole/mdrip
 alias mdrip=$TMPDIR/mdrip
 ```

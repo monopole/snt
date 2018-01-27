@@ -70,7 +70,7 @@ kubectl config view | grep namespace: || true
 ```
 There should be no output, implying you're in the default namespace.
 
-## Make a Namespace for your App
+## Isolate your work
 
 Before making the namespace to use in this tutorial,
 remove it if it already exists from a previous pass:

@@ -50,7 +50,7 @@ then
 fi
 ```
 
-Delete vestigial VMs:
+To enter a known state, delete vestigial VMs from previous runs:
 <!-- @funcToPurgePrevMk @env @test -->
 ```
 function tut_purgePrevVmUsage {
@@ -79,7 +79,7 @@ function tut_purgePrevVmUsage {
 tut_purgePrevVmUsage
 ```
 
-Check your list of VMs:
+Confirm no running VMs:
 
 <!-- @listVms @test -->
 ```
@@ -89,7 +89,7 @@ vboxmanage list vms
 <!-- @removeOldMkState @test -->
 ```
 rm -f $KUBECONFIG
-rm -rf $MINIKUBE_HOME/.minikube
+rm -rf $MINIKUBE_HOME
 mkdir -p $MINIKUBE_HOME
 ```
 
@@ -98,11 +98,13 @@ mkdir -p $MINIKUBE_HOME
 <!-- @funcInstallMk @env @test -->
 ```
 function tut_installMk {
+  local v=latest
+  v=v0.24.1 # Pick one, rather than use latest.
   local apis=https://storage.googleapis.com
-  echo Downloading minikube...
+  local target=$apis/minikube/releases/$v/minikube-linux-amd64
+  echo Downloading $target
   curl --fail --location --silent \
-      --output $MINIKUBE_HOME/minikube \
-      $apis/minikube/releases/latest/minikube-linux-amd64
+      --output $MINIKUBE_HOME/minikube $target
   chmod +x $MINIKUBE_HOME/minikube
 }
 ```
@@ -129,13 +131,14 @@ ready to talk to it.
 ```
 function tut_installKubectl {
   local apis=https://storage.googleapis.com
-  local version=$(curl -s \
-      $apis/kubernetes-release/release/stable.txt)
-  local path=release/$version/bin/linux/amd64/kubectl
-  echo Downloading kubectl...
+  # local v=$(curl -s \
+  #  $apis/kubernetes-release/release/stable.txt)
+  local v=v1.9.2 # Pick one, rather than use latest.
+  local path=release/$v/bin/linux/amd64/kubectl
+  local target=$apis/kubernetes-release/$path
+  echo Downloading $target
   curl --fail --location --silent \
-     --output $TUT_BIN/kubectl \
-     $apis/kubernetes-release/$path
+     --output $TUT_BIN/kubectl $target
   chmod +x $TUT_BIN/kubectl
 }
 ```
@@ -151,9 +154,8 @@ fi
 
 ## Start the cluster
 
-This downloads an OS image; it's the slowest step in the tutorial.
 
-<!-- @stopMkCluster @test -->
+<!-- @stopIfRunning @test -->
 ```
 if $MINIKUBE_HOME/minikube status  >/dev/null 2>&1
 then
@@ -162,8 +164,11 @@ then
 fi
 ```
 
+
 Start minikube, piping download progress meter to
-`/dev/null`:
+`/dev/null`.
+This downloads an OS image; it's the slowest step in the tutorial.
+
 
 <!-- @startMkCluster @test -->
 ```
@@ -176,7 +181,7 @@ Assure that minikube is up.
 
 <!-- @waitForIt @test -->
 ```
-tut_retry 4 kubectl get nodes &> /dev/null
+tut_retry 5 kubectl get nodes
 ```
 
 Print status:

@@ -32,7 +32,7 @@ resources:
 - ../../manifest
 
 patches:
-# - release-1.yaml
+- release-1.yaml
 # - deployment.yaml
 # - service.yaml
 
@@ -49,7 +49,7 @@ metadata:
   labels:
     app: tuthello
 data:
-  altGreeting: "你好"
+  altGreeting: "Sup."
   enableRisky: "false"
 EOF
 ```

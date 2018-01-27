@@ -72,13 +72,6 @@ spec:
         command: ["/{{.Values.image.repository}}",
                   "--port={{.Values.service.internalPort}}",
                   "--enableRiskyFeature=\$(ENABLE_RISKY)"]
-        resources:
-          limits:
-            cpu: 100m
-            memory: 10Mi
-          requests:
-            cpu: 100m
-            memory: 10Mi
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         env:

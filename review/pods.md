@@ -1,4 +1,4 @@
-# The App Runs as a Pod
+# Pods
 
 > _The atomic unit of kubernetes._
 >
