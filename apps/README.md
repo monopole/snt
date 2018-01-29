@@ -7,31 +7,24 @@ servers running on Google's clusters.  It backs many
 Google and third-party services.
 
 Despite its size and complexity, this set has
-properties like a phone app.
+the properties of a single app.
 
 * It has a singular description and purpose:
   _serve the Maps API_.
-
 * It can be installed and deleted.
-
 * It has a lifecycle of development, test and release,
   with docs and release notes.
-
-* It has a versioned _implementation_ - albeit likely
-  associated with a list of versions of its components
+* It has a versioned _implementation_, albeit somehow
+  associated the versions of its components
   (server, prober, monitor, static data set).
-
 * It offers a versioned _API_ allowing other server sets
   to talk to it per compatibility and deprecation
   policies.
-
 * It co-exists on its host with other server sets,
   e.g. mail servers.
-
 * It may be unaware of these sets, or it may need to
   discover and depend on them, e.g. satellite photo
   servers, road traffic update servers.
-
 * The release lifecycle of these other sets is
   unorchestrated, performed by teams that don't know
   each other, etc.

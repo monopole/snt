@@ -5,7 +5,6 @@
 >
 > _Time: 5m_
 
-
 [here]: https://goo.gl/T66ZcD
 [baseline]: /apps/examples/baseline
 [helm]: /apps/examples/helm
@@ -21,12 +20,13 @@ detail [here], seeks to add value to configuration
 management without _masking or modifying_ these central
 concepts.
 
-It uses literal resources, embracing new declarations
-rather then templating existing ones.  It facilitates
-coupling cluster state changes to version control
-commits.  It encourages forking a configuration,
-customizing it, and rebasing to capture upgrades from
-the original configuration.
+DAM wants one to use literal resources, employing new
+declarations to modify resources, rather than achieving
+modification via templates.  It facilitates coupling
+cluster state changes to version control commits.  It
+encourages forking a configuration, customizing it, and
+rebasing to capture upgrades from the original
+configuration.
 
 ## kinflate
 

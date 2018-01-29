@@ -8,9 +8,7 @@ The following sections describe making a set of instances
 of the tuthello app using three different approaches:
 
  * baseline - use no special tools other than posix coreutils.
-
  * helm
-
  * Declarative Application Management
 
 ## The Common Scenario

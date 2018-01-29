@@ -1,6 +1,6 @@
-# kinflate app format
+# kinflate App Layout
 
-> _Start creating a manifest for the tuthello app._
+> _Create a manifest for the tuthello app._
 >
 > _Time: 1m_
 
@@ -11,12 +11,12 @@ in a particular directory structure:
 ```
 export TUT_DAM=$TUT_DIR/apps/dam/tuthello
 mkdir -p $TUT_DAM/manifest
-mkdir -p $TUT_DAM/instance/staging
-mkdir -p $TUT_DAM/instance/production
 ```
 
 The top level directory, here called `tuthello`,
 contains the subdirectories `manifest` and `instances`.
+
+## The Manifest
 
 The manifest directory contains the manifest file with
 the fixed name
@@ -62,6 +62,7 @@ maintainers:
 
 resources:
 - deployment.yaml
+- configMap.yaml
 - service.yaml
 
 EOF
@@ -69,3 +70,13 @@ EOF
 
 Next to this file (as siblings in the `manifest`
 directory) are the app's base resources.
+
+
+delete:
+
+> ```
+> resources:
+> - deployment.yaml
+> - configMap.yaml
+> - service.yaml
+> ```

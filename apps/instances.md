@@ -17,21 +17,21 @@ These instances must be configured and managed.
 > __kubectl run__, __kubectl scale__, _etc. - to get
 > the instances into their desired state._
 
-Someone new to k8s who has used docker can likely
-guess the result of the following commands:
+Someone new to k8s, but familiar with docker, can
+likely guess the result of the following commands:
 
 > ```
 > kubectl run tuthello --image=tuthello
 > kubectl scale --replicas 5 deploy/tuthello
 > ```
 
-These need no YAML files.  Kubernetes tutorials start
-by introducing these familar imperative examples of
-control, and eventually suggest that they be avoided.
-If someone gives you the keys to the cluster, how do
-you what imperative commands have been issued?  The
-only way forward is to query things and try to issue
-more imperative commands.
+These commands need no YAML files.  Kubernetes
+tutorials typically start by introducing these familar
+imperative examples of control, and eventually suggest
+that they be avoided.  If someone gives you the keys to
+the cluster, how do you know what imperative commands
+have been issued?  The only way forward is to query
+things and try to issue more imperative commands.
 
 It's best to eschew imperative commands entirely.
 
