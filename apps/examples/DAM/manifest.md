@@ -16,7 +16,7 @@ Make one:
 
 <!-- @defineManifest @demo -->
 ```
-export TUT_DAM_MANIFEST=$TUT_DAM/manifest/Kube-manifest.yaml
+export TUT_DAM_MANIFEST=$TUT_DAM/Kube-manifest.yaml
 ```
 
 <!-- @makeManifest @demo -->
@@ -78,9 +78,12 @@ The manifest follows [k8s API style], defining
 
 The manifest has the fields one would expect in an app
 manifest - _description_, _version_, _home page_, _maintainers_, etc.
+These will be explained in reference documentation, but
+their purpose is relatively obvious.
 
 ### resources
 
-This field lists the k8s resource definitions one would
-expect to find accompanying the manifest, were one to
-obtain it _git clone_ or some other method.
+Per the definition of the noun _manifest_, this field
+lists relative file paths to the k8s resource
+definitions one would expect to find accompanying the
+manifest file.

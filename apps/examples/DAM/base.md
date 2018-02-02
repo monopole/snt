@@ -4,18 +4,19 @@
 >
 > _Time: 1m_
 
-The resources fully define a runnable app.  To
-optionally confirm this, apply them to your cluster
+The resources fully define a runnable app.
+
+To optionally confirm this, apply them to your cluster
 directly and try a query.
 
 <!-- @runKinflate @demo -->
 ```
-kubectl apply -f  $TUT_DAM/manifest
+kubectl apply -f $TUT_DAM
 ```
 
 <!-- @query @demo -->
 ```
-tut_query tuthello peach
+tut_query tut-service peach
 ```
 
 Delete them, to clear the cluster for the next example.

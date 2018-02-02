@@ -24,7 +24,7 @@ DAM wants one to use literal resources, employing new
 declarations to modify resources, rather than achieving
 modification via templates.  It facilitates coupling
 cluster state changes to version control commits.  It
-encourages forking a configuration, customizing it, and
+encourages forking a configuration, customizing it,
 rebasing to capture upgrades from the original
 configuration.
 

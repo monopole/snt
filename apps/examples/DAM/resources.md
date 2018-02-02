@@ -14,7 +14,8 @@ earlier, resources will be placed in a directory:
 <!-- @makeTree @test -->
 ```
 export TUT_DAM=$TUT_DIR/apps/dam/tuthello
-mkdir -p $TUT_DAM/manifest
+/bin/rm -rf $TUT_DAM
+mkdir -p $TUT_DAM
 ```
 
 Again as before, there will be a deployment, a service,
@@ -25,22 +26,22 @@ writing the file, appears here (as [before]) soley to
 let this tutorial work with either a local container
 registry or [GCR].
 
-Other than that, these resources have no special
-markup or names.
+Other than that, these resources have no special markup
+or names.  Even the resources have uncreative names.
 
 <!-- @writeDeploymentYaml @test -->
 ```
-cat <<EOF >$TUT_DAM/manifest/deployment.yaml
+cat <<EOF >$TUT_DAM/deployment.yaml
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: tuthello
+  name: tut-deployment
 spec:
   replicas: 3
   template:
     metadata:
       labels:
-        app: tuthello
+        deployment: tuthello
     spec:
       containers:
       - name: cnt-carrot
@@ -54,12 +55,12 @@ spec:
         - name: ALT_GREETING
           valueFrom:
             configMapKeyRef:
-              name: mymap
+              name: tut-map
               key: altGreeting
         - name: ENABLE_RISKY
           valueFrom:
             configMapKeyRef:
-              name: mymap
+              name: tut-map
               key: enableRisky
 EOF
 ```
@@ -69,13 +70,11 @@ map:
 
 <!-- @writeMapYaml @test -->
 ```
-cat <<EOF >$TUT_DAM/manifest/configMap.yaml
+cat <<EOF >$TUT_DAM/configMap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mymap
-  labels:
-    app: tuthello
+  name: tut-map
 data:
   altGreeting: "Good Morning!"
   enableRisky: "false"
@@ -87,14 +86,14 @@ associated with the app:
 
 <!-- @writeServiceYaml @test -->
 ```
-cat <<EOF >$TUT_DAM/manifest/service.yaml
+cat <<EOF >$TUT_DAM/service.yaml
 kind: Service
 apiVersion: v1
 metadata:
-  name: tuthello
+  name: tut-service
 spec:
   selector:
-    app: tuthello
+    deployment: tuthello
   type: LoadBalancer
   ports:
   - protocol: TCP
@@ -104,6 +103,7 @@ EOF
 ```
 
 Review the app definition so far:
+
 <!-- @listFiles @test -->
 ```
 find $TUT_DAM
