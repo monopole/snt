@@ -1,16 +1,28 @@
 # The base app
 
-The manifest and its resources fully define a runnable app.
+> _Confirm that these resources are functional._
+>
+> _Time: 1m_
 
-Try it:
+The resources fully define a runnable app.  To
+optionally confirm this, apply them to your cluster
+directly and try a query.
 
 <!-- @runKinflate @demo -->
 ```
-kinflate -f $TUT_DAM/manifest |\
-    kubectl apply -f -
+kubectl apply -f  $TUT_DAM/manifest
 ```
 
 <!-- @query @demo -->
 ```
-tut-query tuthello peach
+tut_query tuthello peach
+```
+
+Delete them, to clear the cluster for the next example.
+
+<!-- @query @demo -->
+```
+kubectl delete --all deployment
+kubectl delete --all service
+kubectl delete --all configmap
 ```

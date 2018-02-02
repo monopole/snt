@@ -4,9 +4,9 @@ In DAM, an _instance_ is yet another manifest and
 associated resources, but this time used as an
 _overlay_ on the base resource.
 
-Part of it _modifies_
-the base resource, and the remainder, in resource form,
-_merges_ with the base resource.
+Part of it _modifies_ the base resource, and the
+remainder, in resource form, _merges_ with the base
+resource.
 
 
 <!-- @makePatchManifest -->

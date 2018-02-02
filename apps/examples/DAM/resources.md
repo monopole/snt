@@ -1,23 +1,32 @@
 # Resources
 
+> _Make some unadorned resources._
+>
+> _Time: 1m_
+
 [GCR]: https://cloud.google.com/container-registry/
-[before]: /apps/examples/baseline
+[helm]: /apps/examples/helm
 [baseline]: /apps/examples/baseline
 
-The manifest just created specifies three resources - a
-deployment, a config map, and a service.
+As with the [baseline] and [helm] apps discussed
+earlier, resources will be placed in a directory:
 
-These resources differ from those used in the [baseline
-example in a minor way.  Here, the resource files have
-no special strings (_theInst_, _theConfigMap_,
-_theImgVersion_) that exist solely to be _sed_ targets
-to generate unique instances.  The names are nothing
-special, and are meant to be taken literally.
+<!-- @makeTree @test -->
+```
+export TUT_DAM=$TUT_DIR/apps/dam/tuthello
+mkdir -p $TUT_DAM/manifest
+```
+
+Again as before, there will be a deployment, a service,
+and some configmaps.
 
 The `$TUT_IMG_REPO` variable, replaced on the way to
-writing the file, appears here (as [before])
-soley to let this let this tutorial work with either a
-local container registry or [GCR].
+writing the file, appears here (as [before]) soley to
+let this tutorial work with either a local container
+registry or [GCR].
+
+Other than that, these resources have no special
+markup or names.
 
 <!-- @writeDeploymentYaml @test -->
 ```
@@ -68,7 +77,7 @@ metadata:
   labels:
     app: tuthello
 data:
-  altGreeting: "Boring"
+  altGreeting: "Good Morning!"
   enableRisky: "false"
 EOF
 ```
