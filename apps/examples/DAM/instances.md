@@ -149,5 +149,7 @@ kinflate inflate -f $TUT_DAM/production
 
 <!-- @checkDiffs @test -->
 ```
-diff $TUT_TMP/original_out $TUT_TMP/customized_out
+diff \
+  <(kinflate inflate -f $TUT_DAM/staging) \
+  <(kinflate inflate -f $TUT_DAM/production)
 ```

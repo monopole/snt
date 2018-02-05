@@ -52,16 +52,6 @@ resources:
 EOF
 ```
 
-Before going any further, save a copy of the manifest:
-
-<!-- @copyManifest @test -->
-```
-export TUT_ORG_MANIFEST=$TUT_TMP/original-manifest.yaml
-cp $TUT_DAM_MANIFEST $TUT_ORG_MANIFEST
-```
-
-## Field discussion
-
 ### K8s API fields
 
 [k8s API style]: https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/#required-fields
@@ -87,3 +77,13 @@ Per the definition of the noun _manifest_, this field
 lists relative file paths to the k8s resource
 definitions one would expect to find accompanying the
 manifest file.
+
+## Save a copy
+
+Before going any further, save a copy of the manifest:
+
+<!-- @copyManifest @test -->
+```
+export TUT_ORG_MANIFEST=$TUT_TMP/original-manifest.yaml
+cp $TUT_DAM_MANIFEST $TUT_ORG_MANIFEST
+```
