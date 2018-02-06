@@ -132,6 +132,54 @@ docker images | grep tuthello
 
 [GCR]: http://gcr.io
 
+## Optional: Push images to docker hub
+
+If, in the future, you'd like to avoid all the building
+and dockerizing of the tuthello program, you can just
+upload the tuthello images to hub.docker.com.
+
+Define your username for hub.docker.com:
+<!-- @defineDockerUser @env -->
+```
+TUT_DOCKER_USER=tazerFace
+```
+
+Likewise define a file containing your password for hub.docker.com:
+<!-- @defineFileWithDockerPasswd @env -->
+```
+TUT_DOCKER_PASSWD_FILE=~/docker.passwd
+```
+
+Obtain credentials for hub.docker.com:
+<!-- @loginToDocker -->
+```
+cat $TUT_DOCKER_PASSWD_FILE |\
+  docker login --username=$TUT_DOCKER_USER --password-stdin
+```
+
+Define function to push images:
+<!-- @pushImages -->
+```
+function tut_pushToDockerHub {
+  local v=$1
+  local id=$(docker images |\
+      grep tuthello | grep " $v " | awk '{printf $3}')
+  docker tag $id $TUT_DOCKER_USER/tuthello:$v
+  docker push $TUT_DOCKER_USER/tuthello:$v
+}
+```
+
+Push the images to hub.docker.com:
+<!-- @pushImages -->
+```
+tut_pushToDockerHub 1
+tut_pushToDockerHub 2
+```
+
+Now your local docker cache has the same image (tuthello:1) tagged two different ways.
+Either tag will work in a deployment, as will be seen later.
+
+
 ## Push images to [GCR] if using GKE.
 
 This section only applies if using GKE instead of minikube.

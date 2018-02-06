@@ -177,7 +177,7 @@ $MINIKUBE_HOME/minikube \
     --vm-driver=virtualbox > /dev/null
 ```
 
-Assure that minikube is up.
+Assure that minikube is up:
 
 <!-- @waitForIt @test -->
 ```
@@ -191,8 +191,9 @@ Print status:
 $MINIKUBE_HOME/minikube status
 ```
 
-The above steps have stored some state
-in your `KUBECONFIG` file:
+The steps above have stored state
+in your `KUBECONFIG` file.
+Optionally, take a look:
 
 <!-- @catKubeConfig @test -->
 ```
